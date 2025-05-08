@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block title %}Impressum{% endblock %}
+
+{% block content %}
+<div class="window-wrapper">
+    <div class="window-box">
+        <div class="window-header">
+          <img src="{{ url_for('static', filename='img/logo1.png') }}" alt="GrowV Colorful Logo">
+          <h2>Impressum</h2>
+        </div>
+        <div class="window-content">
+            <p class="text-center">Verantwortlich für den Inhalt dieser Seite ist:</p>
+            <dl class="impressum">
+                <dt>Name:</dt>      <dd>Pierre Schkoldow</dd>
+                <dt>Telefon:</dt>   <dd>+49 174 5881313</dd>
+                <dt>E-Mail:</dt>    <dd>pierre@growv-mail.org</dd>
+                <dt>Anschrift:</dt> <dd>Bingerhof 13</dd>
+                                    <dd>99734 Nordhausen</dd>
+                                    <dd>Deutschland</dd>
+            </dl>
+        </div>
+    </div>
+</div>
+{% endblock %}

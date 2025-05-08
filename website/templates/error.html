@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block title %}Fehler{% endblock %}
+
+{% block content %}
+<div class="window-wrapper">
+    <div class="window-box">
+        <div class="window-header">
+          <img src="{{ url_for('static', filename='img/logo1.png') }}" alt="GrowV Colorful Logo">
+          <h2>Interner Fehler</h2>
+        </div>
+        <div class="window-content text-center">
+          <p class="mb-2">
+            Auf dem Server ist ein Fehler aufgetreten.<br>
+            Bitte wende dich mit der folgenden Fehler-ID:
+          </p>
+          <div class="display-1 fw-bold my-3">{{ error_id }}</div>
+          <p>
+            an <a href="mailto:developer@growv-mail.org">developer@growv-mail.org</a>.
+          </p>
+          <a href="/" class="btn btn-dark mt-3">Zurück zur Startseite</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

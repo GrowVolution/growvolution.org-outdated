@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="de">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}GrowVolution{% endblock %}</title>
+
+    <link rel="icon" href="{{ url_for('static', filename='img/favicon.png') }}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+
+    <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
+    {% block style %}{% endblock %}
+
+    <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+
+    <script src="{{ url_for('static', filename='js/socket/socket.js') }}" id="socketScript" data-socket-domain="wss://{% if debug %}debug.{% endif %}growvolution.org"></script>
+    {% block script %}{% endblock %}
+  </head>
+  <body class="d-flex flex-column min-vh-100">
+
+    <header>
+      {% include 'nav.html' %}
+      {% include 'flash.html' %}
+    </header>
+
+    <main class="flex-grow-1">
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="bg-dark text-light pt-4 mt-auto">
+      <div class="container">
+        <div class="row text-center">
+          <div class="col-md-4 mb-3">
+            <div class="d-flex flex-column align-items-center">
+              <h5>Über diese Seite</h5>
+              <p style="text-align: justify;">
+                Die Welt verändern? Kein Problem!
+                Doch es beginnt alles bei dir. Und genau aus
+                diesem Grund wurde diese Seite allein dir gewidmet.
+              </p>
+            </div>
+          </div>
+          <div class="col-md-4 mb-3">
+            <h5>Wichtige Links</h5>
+            <ul class="list-unstyled">
+              <li><a href="/impressum">Impressum</a></li>
+              <li><a href="/privacy">Datenschutz</a></li>
+              <li><a href="/guidelines">Richtlinien</a></li>
+              <li><a href="/about">Das ist GrowVolution</a></li>
+            </ul>
+          </div>
+          <div class="col-md-4 mb-3">
+            <h5>Kontakt</h5>
+            <p>
+              <a href="tel:+491745881313">+49 174 5881313</a><br>
+              <a href="mailto:info@growv-mail.org">info@growv-mail.org</a>
+            </p>
+          </div>
+        </div>
+        <div class="text-center mt-3">
+          GrowVolution 2025 – GNU General Public License
+        </div>
+      </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.iconify.design/iconify-icon/3.0.0/iconify-icon.min.js"></script>
+  </body>
+</html>

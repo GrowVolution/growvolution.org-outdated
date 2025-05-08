@@ -1,0 +1,32 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark border-body">
+  <div class="container-fluid">
+    <a class="navbar-brand ps-0 d-flex align-items-center" href="/">
+      <img src="{{ url_for('static', filename='img/logo.png') }}" alt="GrowV Logo" width="35" height="35">
+      <span id="navTitle" class="fw-bold ms-2">GrowVolution</span>
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMain"
+            aria-controls="navbarMain" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarMain">
+      <div class="navbar-nav ms-auto">
+        <a class="nav-link {% if request.path == '/example' %}active{% endif %}" href="/example">Beiträge</a>
+        <div class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="menuDropdown" role="button" data-bs-toggle="dropdown"
+             aria-expanded="false">Account</a>
+          <div class="dropdown-menu dropdown-menu-dark dropdown-menu-end" aria-labelledby="menuDropdown">
+            {% if signed_in %}
+              <a class="dropdown-item {% if request.path == '/profile' %}active{% endif %}" href="/profile">Mein Profil</a>
+              <hr class="dropdown-divider">
+              <a class="dropdown-item" href="/logout">Ausloggen</a>
+            {% else %}
+              <a class="dropdown-item {% if request.path == '/login' %}active{% endif %}" href="/login">Anmelden</a>
+              <a class="dropdown-item {% if request.path == '/signup' %}active{% endif %}" href="/signup">Registrieren</a>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</nav>

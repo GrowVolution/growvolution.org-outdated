@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+
+{% block title %}Captcha{% endblock %}
+
+{% block content %}
+<div class="window-wrapper">
+    <div class="window-box">
+        <div class="window-header">
+          <img src="{{ url_for('static', filename='img/logo1.png') }}" alt="GrowV Colorful Logo">
+          <h2>Bot Abwehr</h2>
+        </div>
+        <div class="window-content text-center">
+            {% if not fallback %}
+                <p>Dein Gerät wird überprüft – bitte einen Moment Geduld...</p>
+            {% else %}
+                <p>Die automatische Überprüfung ist fehlgeschlagen.<br>Bitte löse das folgende Captcha:</p>
+                <div id="recaptcha-container" class="mt-3">
+                    <div class="g-recaptcha" data-sitekey="{{ captcha_id }}" data-callback="onCaptchaSuccess"
+                    data-action="verify"></div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block script %}
+{% if not fallback %}
+    <script src="https://www.google.com/recaptcha/enterprise.js?render={{ captcha_id }}"></script>
+    <script>
+      grecaptcha.enterprise.ready(function () {
+        grecaptcha.enterprise.execute('{{ captcha_id }}', { action: 'verify' }).then(function (token) {
+          fetch(window.location.href, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              credentials: 'include',
+              body: JSON.stringify({ captcha_token: token })
+          }).then(res => {
+              if (res.status === 200) console.log(res.text());
+              location.reload();
+          });
+        });
+      });
+    </script>
+  {% else %}
+    <script src="https://www.google.com/recaptcha/enterprise.js" async defer></script>
+    <script>
+      function onCaptchaSuccess(token) {
+          fetch(window.location.href, {
+              method: 'POST',
+              headers: {'Content-Type': 'application/json'},
+              credentials: 'include',
+              body: JSON.stringify({captcha_token: token})
+          }).then(res => {
+              if (res.status === 200) console.log(res.text());
+              location.reload();
+          });
+      }
+    </script>
+  {% endif %}
+{% endblock %}

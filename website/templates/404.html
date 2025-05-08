@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block title %}404 - Nicht gefunden{% endblock %}
+
+{% block content %}
+<div class="window-wrapper">
+    <div class="window-box">
+        <div class="window-header">
+          <img src="{{ url_for('static', filename='img/logo1.png') }}" alt="GrowV Colorful Logo">
+          <h2>404 – Nicht gefunden</h2>
+        </div>
+        <div class="window-content text-center">
+          <p class="mb-4">Hey, schön dich hier zu sehen!<br>
+            Jedoch scheinst du dich verlaufen zu haben.<br>
+            Diese Seite existiert leider nicht oder wurde verschoben.</p>
+          <a href="/" class="btn btn-outline-dark">Zurück zur Startseite</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

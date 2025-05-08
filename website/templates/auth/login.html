@@ -1,0 +1,49 @@
+{% extends "auth/base.html" %}
+
+{% block title %}Einloggen{% endblock %}
+
+{% block form %}
+  <div class="mb-3 input-group">
+    <input type="email" class="form-control" placeholder="E-Mail" name="email" value="{{ email }}" required>
+    <span class="input-group-text"><i class="bi bi-envelope-fill"></i></span>
+  </div>
+  <div class="mb-2 input-group">
+    <input type="password" class="form-control" placeholder="Passwort" name="password" required>
+    <span class="input-group-text"><i class="bi bi-lock-fill"></i></span>
+  </div>
+
+  <div class="d-grid mb-2">
+    <button type="submit" class="btn btn-dark">Anmelden</button>
+  </div>
+
+  <div class="mb-3 text-center">
+    <a id="forgot" class="small">Passwort vergessen?</a>
+  </div>
+
+  <div class="d-flex align-items-center text-muted my-3">
+    <div class="flex-grow-1 border-top border-dark"></div>
+    <div class="px-3 small text-center text-dark">Oder anmelden mit:</div>
+    <div class="flex-grow-1 border-top border-dark"></div>
+  </div>
+
+  <div class="d-grid gap-2">
+    <a class="btn btn-outline-dark d-flex align-items-center justify-content-start w-100" href="/oauth/google/start">
+      <div class="auth-icon-wrapper">
+        <iconify-icon inline icon="logos:google-icon" class="auth-icon"></iconify-icon>
+      </div>
+      <span class="text-center w-100">Google</span>
+    </a>
+    <a class="btn btn-outline-dark d-flex align-items-center justify-content-start w-100" href="/oauth/apple/start">
+      <div class="auth-icon-wrapper">
+        <i class="bi bi-apple auth-icon" style="padding: 0 !important;"></i>
+      </div>
+      <span class="text-center w-100">Apple</span>
+    </a>
+    <a class="btn btn-outline-dark d-flex align-items-center justify-content-start w-100" href="/oauth/microsoft/start">
+      <div class="auth-icon-wrapper">
+        <iconify-icon inline icon="logos:microsoft-icon" class="auth-icon"></iconify-icon>
+      </div>
+      <span class="text-center w-100">Microsoft</span>
+    </a>
+  </div>
+{% endblock %}
