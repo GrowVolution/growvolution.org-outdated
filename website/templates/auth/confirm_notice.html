@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block title %}E-Mail bestätigen{% endblock %}
+
+{% block content %}
+<div class="window-wrapper">
+    <div class="window-box">
+        <div class="window-header">
+          <img src="{{ url_for('static', filename='img/logo1.png') }}" alt="GrowV Colorful Logo">
+          <h2>Identität Bestätigen</h2>
+        </div>
+        <div class="window-content text-center" style="max-width:500px">
+          <p>
+              Hey {{ user }}, deine Registrierung ist bei uns eingegangen und
+              wir möchten uns für dein Vertrauen bedanken! Um dir
+              und anderen einen sicheren Rahmen zu bieten, haben wir
+              eine Bestätigungsmail an {{ mail }} gesendet. Sobald du
+              deine E-Mail Adresse bestätigt hast, kannst du dich auf unserer
+              Seite einloggen.
+          </p>
+        </div>
+    </div>
+</div>
+{% endblock %}

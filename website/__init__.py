@@ -8,6 +8,7 @@ LIMITER = Limiter(get_remote_address, default_limits=["500 per day", "100 per ho
 
 DEBUG = False
 
+
 def init_app():
     global DEBUG
 

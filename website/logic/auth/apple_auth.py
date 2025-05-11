@@ -13,6 +13,7 @@ APPLE_REDIRECT_URI = f"https://{'debug.' if DEBUG else ''}growvolution.org/oauth
 APPLE_AUTH_URI = "https://appleid.apple.com/auth/authorize"
 APPLE_TOKEN_URI = "https://appleid.apple.com/auth/token"
 
+
 def _sign_apple_jwt():
     headers = {
         "kid": APPLE_KEY_ID,
@@ -28,6 +29,7 @@ def _sign_apple_jwt():
     }
     return jwt.encode(payload, APPLE_KEY, algorithm="ES256", headers=headers)
 
+
 def start_oauth():
     state = secrets.token_urlsafe(16)
     session["state"] = state
@@ -42,6 +44,7 @@ def start_oauth():
     }
 
     return redirect(f"{APPLE_AUTH_URI}?{urlencode(params)}")
+
 
 def oauth_callback():
     code, state = start_callback()

@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block title %}E-Mail bestätigt{% endblock %}
+
+{% block content %}
+<div class="window-wrapper">
+    <div class="window-box">
+        <div class="window-header">
+          <img src="{{ url_for('static', filename='img/logo1.png') }}" alt="GrowV Colorful Logo">
+          <h2>Identität Bestätigt</h2>
+        </div>
+        <div class="window-content text-center" style="max-width:400px">
+          <p class="mb-3">
+              Danke, deine E-Mail Adresse wurde bestätigt und du kannst dich ab
+              jetzt jederzeit auf unserer Plattform
+          </p>
+            <a href="/login" class="btn btn-outline-dark">Einloggen</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

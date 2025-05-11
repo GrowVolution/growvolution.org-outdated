@@ -7,6 +7,7 @@ PROJECT_ID = os.getenv('GOOGLE_PROJECT_ID')
 CAPTCHA_ID_V3 = os.getenv('RECAPTCHA_ID_V3')
 CAPTCHA_ID_V2 = os.getenv('RECAPTCHA_ID_V2')
 
+
 def captcha_valid(token: str, fallback: bool) -> bool:
     client = RecaptchaEnterpriseServiceClient()
 
@@ -47,21 +48,29 @@ def captcha_valid(token: str, fallback: bool) -> bool:
 
     return True if response.risk_analysis.score > 0.5 else False
 
+
 def _render_self(fallback: bool):
     return render('auth/captcha.html',
                   captcha_id=CAPTCHA_ID_V2 if fallback else CAPTCHA_ID_V3,
                   fallback=fallback)
 
+
 def handle_request():
-    fallback = True if captcha_status() == 'unverified' else True
+    fallback = False if captcha_status() == 'unverified' else True
 
     if request.method == 'POST':
-        token = request.get_json().get('captcha_token')
+        request_data = request.get_json()
+        token = request_data.get('captcha_token')
         valid = captcha_valid(token, fallback)
+
+        fingerprint = request_data.get('client_fingerprint')
+
         data = {
             'status': 'valid' if valid else 'invalid' if fallback else 'pending',
+            'fingerprint': fingerprint
         }
         debug_response = f"Captcha {'v2' if fallback else 'v3'} {'passed' if valid else 'failed'}!"
+
         return token_response(data, 365, 'captcha_token', debug_response)
 
     return _render_self(fallback)

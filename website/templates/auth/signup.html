@@ -1,0 +1,54 @@
+{% extends "auth/base.html" %}
+
+{% block title %}Registrieren{% endblock %}
+
+{% block form %}
+<div class="row g-2 mb-2">
+  <div class="col-md-6">
+    <input type="text" name="first_name" class="form-control" placeholder="Vorname" required>
+  </div>
+  <div class="col-md-6">
+    <input type="text" name="last_name" class="form-control" placeholder="Nachname" required>
+  </div>
+</div>
+<div class="input-group mb-2">
+    <span class="input-group-text">@</span>
+    <input type="text" name="username" class="form-control" placeholder="Benutzername" required>
+</div>
+<div class="input-group mb-2">
+    <span class="input-group-text"><i class="bi bi-envelope-fill"></i></span>
+    <input type="email" name="email" class="form-control" placeholder="E-Mail-Adresse" required>
+</div>
+<div class="input-group mb-2">
+    <span class="input-group-text"><i class="bi bi-lock-fill"></i></span>
+    <input type="password" name="password" class="form-control" placeholder="Passwort" required>
+</div>
+<button type="submit" class="btn btn-dark w-100">Registrieren</button>
+
+<div class="d-flex align-items-center text-muted my-3">
+    <div class="flex-grow-1 border-top border-dark"></div>
+    <div class="px-3 small text-center text-dark">Oder registrieren mit:</div>
+    <div class="flex-grow-1 border-top border-dark"></div>
+</div>
+
+<div id="socialButtons" class="d-grid gap-2">
+    <a class="btn btn-outline-dark d-flex align-items-center justify-content-start w-100" href="/oauth/google/start">
+      <div class="auth-icon-wrapper">
+        <iconify-icon inline icon="logos:google-icon" class="auth-icon"></iconify-icon>
+      </div>
+      <span class="text-center w-100">Google</span>
+    </a>
+    <a class="btn btn-outline-dark d-flex align-items-center justify-content-start w-100" href="/oauth/apple/start">
+      <div class="auth-icon-wrapper">
+        <i class="bi bi-apple auth-icon" style="padding: 0 !important;"></i>
+      </div>
+      <span class="text-center w-100">Apple</span>
+    </a>
+    <a class="btn btn-outline-dark d-flex align-items-center justify-content-start w-100" href="/oauth/microsoft/start">
+      <div class="auth-icon-wrapper">
+        <iconify-icon inline icon="logos:microsoft-icon" class="auth-icon"></iconify-icon>
+      </div>
+      <span class="text-center w-100">Microsoft</span>
+    </a>
+</div>
+{% endblock %}

@@ -16,6 +16,10 @@ def log(category, message):
     print(log_str)
 
 
+def debug_msg(message):
+    log('debug', message)
+
+
 def start_session():
     import os
     log('info', "Logging started.")

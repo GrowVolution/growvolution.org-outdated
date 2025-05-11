@@ -1,5 +1,7 @@
 from LIBRARY import *
 from website import APP
+from website.data import user as udb
+
 
 def start_callback():
     if request.method == "POST":
@@ -19,12 +21,14 @@ def start_callback():
 
     return code, state
 
-def empty_token():
+
+def empty_token(name='token'):
     response = make_response(redirect(request.path))
-    response.set_cookie('token', '', expires=0)
+    response.set_cookie(name, '', expires=0)
     return response
 
-def token_response(data, expiration_days, name='token', response=redirect('/'), status=200):
+
+def token_response(data, expiration_days, name='token', response=redirect('/'), status=302):
     expiration = timedelta(days=expiration_days)
     max_age = expiration_days * 24 * 60 * 60
 
@@ -36,6 +40,7 @@ def token_response(data, expiration_days, name='token', response=redirect('/'), 
 
     return res
 
+
 def _decoded_token(token):
     try:
         return jwt.decode(token, key=APP.config['SECRET_KEY'], algorithms=['HS256'])
@@ -46,6 +51,22 @@ def _decoded_token(token):
     except jwt.InvalidSignatureError:
         return None
 
+
 def captcha_status():
     decoded_token = _decoded_token(request.cookies.get('captcha_token'))
     return decoded_token.get('status') if decoded_token else 'unverified'
+
+
+def captcha_owner_hash():
+    decoded_token = _decoded_token(request.cookies.get('captcha_token'))
+    return decoded_token.get('fingerprint') if decoded_token else None
+
+
+def get_user():
+    decoded_token = _decoded_token(request.cookies.get('token'))
+    return udb.User.query.get(decoded_token['id']) if decoded_token else None
+
+
+def user_role():
+    user = get_user()
+    return user.role if user else None

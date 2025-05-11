@@ -23,16 +23,16 @@ class User(DB.Model):
     first_name = DB.Column(DB.String(48), nullable=False)
     last_name = DB.Column(DB.String(48), nullable=False)
     username = DB.Column(DB.String(32), unique=True, nullable=False)
-
     email = DB.Column(DB.String(128), unique=True, nullable=False)
-
     picture = DB.Column(DB.String(256), nullable=False, default='default')
+
+    role = DB.Column(DB.String(8), nullable=False, default='user')
 
     def __init__(self,
                  first_name, last_name,
                  username, email, picture=None,
                  google_id=None, apple_id=None,
-                 microsoft_id=None, psw_hash=None):
+                 microsoft_id=None, password=None):
 
         self.first_name = first_name
         self.last_name = last_name
@@ -43,7 +43,7 @@ class User(DB.Model):
         self.apple_id = apple_id
         self.microsoft_id = microsoft_id
 
-        self.psw_hash = BCRYPT.generate_password_hash(psw_hash).decode() if psw_hash else None
+        self.psw_hash = BCRYPT.generate_password_hash(password).decode() if password else None
 
         if picture:
             self.picture = picture

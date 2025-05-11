@@ -3,8 +3,10 @@ from website.rendering import render
 from website.data import user as udb
 from .verification import token_response
 
+
 def _render_self(**kwargs):
     return render('auth/login.html', **kwargs)
+
 
 def handle_request():
     if request.method == "POST":

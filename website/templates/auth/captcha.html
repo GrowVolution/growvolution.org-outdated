@@ -25,36 +25,47 @@
 {% endblock %}
 
 {% block script %}
+{% include "auth/fingerprinter.html" %}
 {% if not fallback %}
     <script src="https://www.google.com/recaptcha/enterprise.js?render={{ captcha_id }}"></script>
     <script>
-      grecaptcha.enterprise.ready(function () {
-        grecaptcha.enterprise.execute('{{ captcha_id }}', { action: 'verify' }).then(function (token) {
-          fetch(window.location.href, {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              credentials: 'include',
-              body: JSON.stringify({ captcha_token: token })
-          }).then(res => {
-              if (res.status === 200) console.log(res.text());
-              location.reload();
+        getClientFingerprintHash().then(hash => {
+            grecaptcha.enterprise.ready(function () {
+                grecaptcha.enterprise.execute('{{ captcha_id }}', { action: 'verify' }).then(function (token) {
+                  fetch(window.location.href, {
+                      method: 'POST',
+                      headers: { 'Content-Type': 'application/json' },
+                      credentials: 'include',
+                      body: JSON.stringify({
+                          captcha_token: token,
+                          client_fingerprint: hash
+                      })
+                  }).then(res => {
+                      if (res.status === 200) console.log(res.text());
+                      location.reload();
+                  });
+                });
           });
-        });
-      });
+        })
     </script>
   {% else %}
     <script src="https://www.google.com/recaptcha/enterprise.js" async defer></script>
     <script>
       function onCaptchaSuccess(token) {
-          fetch(window.location.href, {
-              method: 'POST',
-              headers: {'Content-Type': 'application/json'},
-              credentials: 'include',
-              body: JSON.stringify({captcha_token: token})
-          }).then(res => {
-              if (res.status === 200) console.log(res.text());
-              location.reload();
-          });
+          getClientFingerprintHash().then(hash => {
+              fetch(window.location.href, {
+                  method: 'POST',
+                  headers: {'Content-Type': 'application/json'},
+                  credentials: 'include',
+                  body: JSON.stringify({
+                      captcha_token: token,
+                      client_fingerprint: hash
+                  })
+              }).then(res => {
+                  if (res.status === 200) console.log(res.text());
+                  location.reload();
+              });
+          })
       }
     </script>
   {% endif %}

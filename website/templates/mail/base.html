@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="DE-de">
+<head>
+  <meta charset="utf-8">
+  <title>GrowVolution Noreply System</title>
+</head>
+<body style="margin:0; padding:0; font-family:Arial, sans-serif; background-color:#cccccc;">
+
+  <table width="100%" cellpadding="0" cellspacing="0" style="background-color:#212529; padding:20px 0;">
+    <tr>
+      <td align="center">
+        <table width="600" cellpadding="0" cellspacing="0">
+          <tr>
+            <td align="center" style="color:#ffffff; font-size:20px; font-weight:bold;">
+              <img src="{{ url_for('static', filename='img/logo.png', _external=True) }}" alt="GrowV Logo" width="35" height="35" style="vertical-align:middle;">
+              <span style="margin-left:10px; vertical-align:middle;">GrowVolution</span>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+
+  <table width="100%" cellpadding="0" cellspacing="0">
+    <tr>
+      <td align="center">
+        <table width="600" cellpadding="20" cellspacing="0" style="background-color:#ffffff;">
+          <tr>
+            <td>
+              {% block content %}{% endblock %}
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+
+  <table width="100%" cellpadding="0" cellspacing="0" style="background-color:#212529; color:#ffffff; padding:20px 0;">
+    <tr>
+      <td align="center">
+        <table width="600" cellpadding="10" cellspacing="0">
+          <tr>
+            <td width="50%" valign="top" style="font-size:14px; text-align:center;">
+              <p style="margin:0 0 10px 0;">
+                <a href="mailto:info@growv-mail.org" style="color:#ddd;">info@growv-mail.org</a><br>
+                <a href="mailto:developer@growv-mail.org" style="color:#ddd;">developer@growv-mail.org</a><br>
+                <a href="tel:+491745881313" style="color:#ddd;">+49 174 5881313</a>
+              </p>
+            </td>
+            <td width="50%" valign="top" style="font-size:14px; text-align:justify;">
+              <p style="margin:0;">
+                Diese E-Mail wurde automatisch versendet. Falls es sich hierbei um einen Irrtum handelt, bitten wir um Entschuldigung.
+                Du kannst den Erhalt optionaler E-Mails jederzeit
+                  <!-- TODO: Implement Endpoint -->
+                <a href="#" style="color:#ddd; text-decoration:underline;">hier anpassen</a>.
+              </p>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="2" style="text-align:center; font-size:12px; padding-top:10px;">
+              GrowVolution 2025 – GNU General Public License
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+
+</body>
+</html>

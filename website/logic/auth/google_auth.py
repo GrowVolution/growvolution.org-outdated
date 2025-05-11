@@ -11,6 +11,7 @@ GOOGLE_SECRET = os.getenv('GOOGLE_OAUTH_SECRET')
 GOOGLE_TOKEN_URI = "https://oauth2.googleapis.com/token"
 GOOGLE_USERINFO = "https://www.googleapis.com/oauth2/v2/userinfo"
 
+
 def start_oauth():
     state = secrets.token_urlsafe(16)
     session['state'] = state

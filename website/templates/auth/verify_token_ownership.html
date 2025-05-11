@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="DE-de">
+<head>
+    <title>Verifizierung</title>
+    {% include "auth/fingerprinter.html" %}
+    <script>
+        async function verify_captcha_token() {
+            const fingerprint = await getClientFingerprintHash();
+            fetch(window.location.href, {
+                method: "POST",
+                credentials: "include",
+                headers: {
+                  "Content-Type": "application/json",
+                  "X-Client-Fingerprint": fingerprint
+                },
+                body: JSON.stringify({ verify_captcha_token: true })
+            }).then(() => {
+                location.reload();
+            });
+        }
+        verify_captcha_token();
+    </script>
+</head>
+</html>

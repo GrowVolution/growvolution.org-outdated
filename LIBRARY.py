@@ -14,7 +14,7 @@ from email.mime.multipart import MIMEMultipart
 from datetime import datetime, timezone, timedelta
 from email.utils import format_datetime
 from threading import Thread
-from debugger import log
+from debugger import log, debug_msg
 from urllib.parse import urlencode
 from markupsafe import Markup
 import subprocess, warnings, random, string,\
@@ -25,15 +25,17 @@ import subprocess, warnings, random, string,\
 
 ROOT_PATH = Path(__file__).parent
 
-class Method:
-    get = ['GET']
-    post = ['POST']
-    all = ['GET', 'POST']
+POST_METHOD = ['POST']
+ALL_METHODS = ['GET', 'POST']
 
-METHOD = Method()
 
 def back_home():
     return redirect('/')
 
+
 def back_to_login():
     return redirect('/login')
+
+
+def random_code(length=6):
+    return ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(length))
