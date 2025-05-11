@@ -3,3 +3,4 @@
 .idea
 logs
 website/auth
+__pycache__/
