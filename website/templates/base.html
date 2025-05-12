@@ -66,5 +66,20 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://code.iconify.design/iconify-icon/3.0.0/iconify-icon.min.js"></script>
+
+    <script>
+        const flashContainer = document.getElementById('flashContainer');
+
+        function flash(message, category) {
+            flashContainer.innerHTML = `
+            <div class="alert alert-${category} alert-dismissible fade show" role="alert">
+              ${message}
+              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            `
+        }
+    </script>
+
+    {% block script_afterDOM %}{% endblock %}
   </body>
 </html>

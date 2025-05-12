@@ -11,7 +11,7 @@ MICROSOFT_AUTH_URI = "https://login.microsoftonline.com/common/oauth2/v2.0/autho
 MICROSOFT_TOKEN_URI = "https://login.microsoftonline.com/common/oauth2/v2.0/token"
 
 
-def start_oauth():
+def start_oauth() -> Response:
     state = secrets.token_urlsafe(16)
     session["state"] = state
 
@@ -27,7 +27,7 @@ def start_oauth():
     return redirect(f"{MICROSOFT_AUTH_URI}?{urlencode(params)}")
 
 
-def oauth_callback():
+def oauth_callback() -> Response:
     code, state = start_callback()
 
     if not code or not state:

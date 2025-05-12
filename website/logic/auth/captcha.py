@@ -49,13 +49,13 @@ def captcha_valid(token: str, fallback: bool) -> bool:
     return True if response.risk_analysis.score > 0.5 else False
 
 
-def _render_self(fallback: bool):
+def _render_self(fallback: bool) -> str:
     return render('auth/captcha.html',
                   captcha_id=CAPTCHA_ID_V2 if fallback else CAPTCHA_ID_V3,
                   fallback=fallback)
 
 
-def handle_request():
+def handle_request() -> Response | str:
     fallback = False if captcha_status() == 'unverified' else True
 
     if request.method == 'POST':

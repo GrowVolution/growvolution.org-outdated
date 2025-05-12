@@ -1,6 +1,6 @@
 from LIBRARY import *
 
-def get_time():
+def get_time() -> str:
     offset = datetime.now().astimezone().utcoffset()
     hours = int(offset.total_seconds() // 3600)
     minutes = int((offset.total_seconds() % 3600) // 60)
@@ -11,12 +11,12 @@ def get_time():
     return f"{datetime.now().strftime('%Y-%m-%d %H:%M:%S')} {offset_str}"
 
 
-def log(category, message):
+def log(category: str, message: str):
     log_str = f"[{get_time()}] [FLASK]  [{category.upper()}] {message}"
     print(log_str)
 
 
-def debug_msg(message):
+def debug_msg(message: str):
     log('debug', message)
 
 

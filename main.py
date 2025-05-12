@@ -11,6 +11,7 @@ logs_dir.mkdir(parents=True, exist_ok=True)
 main_proc = None
 watcher = None
 
+
 def start_main():
     global main_proc
     timestamp = datetime.now().strftime("%d%m%Y%H%M%S")
@@ -22,21 +23,26 @@ def start_main():
         stderr=subprocess.STDOUT
     )
 
+
 def start_watch():
     global watcher
     watcher = start_watcher()
+
 
 def stop_watch():
     global watcher
     watcher = stop_watcher(watcher) if watcher else None
 
-start_main()
 
 def restart_main():
     if main_proc:
         main_proc.terminate()
         main_proc.wait()
     start_main()
+
+
+start_main()
+
 
 if mode == 'DEBUG':
     print("\n\nGrowVolution 2025 - GNU General Public License")

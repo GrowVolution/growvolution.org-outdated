@@ -47,3 +47,16 @@
     </a>
   </div>
 {% endblock %}
+
+{%  block script_afterDOM %}
+<script>
+    const form = document.getElementById('authForm');
+    const forgot = document.getElementById('forgot');
+
+    htmlEventHandler = defaultHtmlHandler(form);
+
+    forgot.addEventListener('click', () => {
+        emit('forgot');
+    })
+</script>
+{% endblock %}

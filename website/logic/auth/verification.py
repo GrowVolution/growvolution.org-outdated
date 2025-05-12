@@ -3,7 +3,7 @@ from website import APP
 from website.data import user as udb
 
 
-def start_callback():
+def start_callback() -> tuple[str | None, str | None]:
     if request.method == "POST":
         code = request.form.get("code")
         state = request.form.get("state")
@@ -22,26 +22,30 @@ def start_callback():
     return code, state
 
 
-def empty_token(name='token'):
-    response = make_response(redirect(request.path))
+def empty_token(name: str = 'token', path: str = '/') -> Response:
+    response = make_response(redirect(path))
     response.set_cookie(name, '', expires=0)
     return response
 
 
-def token_response(data, expiration_days, name='token', response=redirect('/'), status=302):
+def token_response(data: dict, expiration_days: int, name='token',
+                   response: Response | str | None = None, status=302) -> Response:
     expiration = timedelta(days=expiration_days)
     max_age = expiration_days * 24 * 60 * 60
-
     data['exp'] = datetime.now() + expiration
+
+    if name != 'captcha_token':
+        data['fingerprint'] = token_owner_hash('captcha_token')
+
     token = jwt.encode(data, APP.config['SECRET_KEY'], algorithm='HS256')
 
-    res = make_response(response, status)
+    res = make_response(response if response else back_home(), status)
     res.set_cookie(name, token, httponly=True, secure=True, max_age=max_age)
 
     return res
 
 
-def _decoded_token(token):
+def _decoded_token(token) -> Any | None:
     try:
         return jwt.decode(token, key=APP.config['SECRET_KEY'], algorithms=['HS256'])
     except jwt.ExpiredSignatureError:
@@ -52,21 +56,26 @@ def _decoded_token(token):
         return None
 
 
-def captcha_status():
+def captcha_status() -> str:
     decoded_token = _decoded_token(request.cookies.get('captcha_token'))
     return decoded_token.get('status') if decoded_token else 'unverified'
 
 
-def captcha_owner_hash():
-    decoded_token = _decoded_token(request.cookies.get('captcha_token'))
+def token_owner_hash(name: str = 'token') -> str | None:
+    decoded_token = _decoded_token(request.cookies.get(name))
     return decoded_token.get('fingerprint') if decoded_token else None
 
 
-def get_user():
+def get_user() -> udb.User | None:
     decoded_token = _decoded_token(request.cookies.get('token'))
     return udb.User.query.get(decoded_token['id']) if decoded_token else None
 
 
-def user_role():
+def user_role() -> str | None:
     user = get_user()
     return user.role if user else None
+
+
+def authenticated_user_request() -> bool:
+    decoded_token = _decoded_token(request.cookies.get('token'))
+    return decoded_token is not None

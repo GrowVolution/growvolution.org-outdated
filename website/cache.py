@@ -11,7 +11,7 @@ COMPARING_MAP = {
 }
 
 
-def _timestamp_valid(timestamp, valid_for, duration_type='minutes'):
+def _timestamp_valid(timestamp: datetime, valid_for: int, duration_type: str = 'minutes') -> bool:
     comparing_func = COMPARING_MAP.get(duration_type, DEFAULT_FUNC)
     return comparing_func(timestamp, valid_for)
 
@@ -27,7 +27,13 @@ def update_cache():
         APP_CACHE.pop(key)
 
 
-def add_entry(data, valid_for, duration_type='minutes'):
+def add_entry(data: Any, valid_for: int, duration_type: str = 'minutes') -> str:
+    """
+    :param data: Any data which can be stored into a dict.
+    :param valid_for: Duration for which the entry will be valid.
+    :param duration_type: Can be 'seconds', 'minutes', 'hours' or 'days'; defaults to 'minutes'.
+    :return: ID of the cache entry.
+    """
     entry_id = random_code()
     APP_CACHE[entry_id] = {
         "timestamp": datetime.now(),
@@ -38,7 +44,7 @@ def add_entry(data, valid_for, duration_type='minutes'):
     return entry_id
 
 
-def request_entry_data(entry_id):
+def request_entry_data(entry_id: str) -> Any:
     entry = APP_CACHE.get(entry_id)
     if not entry:
         return None
@@ -47,5 +53,5 @@ def request_entry_data(entry_id):
     return entry["data"]
 
 
-def pop_entry(entry_id):
+def pop_entry(entry_id: str):
     APP_CACHE.pop(entry_id, None)

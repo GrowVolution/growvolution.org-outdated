@@ -1,6 +1,7 @@
 from LIBRARY import *
 from .rendering import render, render_404
-from .logic.auth import login as login_handler, google_auth, apple_auth, microsoft_auth, signup as signup_handler, confirm as confirm_handler
+from .logic.auth import (login as login_handler, google_auth, apple_auth, microsoft_auth,
+                         signup as signup_handler, confirm as confirm_handler, reset as reset_handler)
 from .logic.auth.verification import empty_token
 
 routes = Blueprint('routes', __name__)
@@ -32,6 +33,11 @@ def confirm_notice(code):
 @auth_routes.route('/confirm/<code>')
 def confirm(code):
     return confirm_handler.handle_confirm(code)
+
+
+@auth_routes.route('/reset/<code>', methods=ALL_METHODS)
+def reset(code):
+    return reset_handler.handle_request(code)
 
 
 @auth_routes.route('/logout')

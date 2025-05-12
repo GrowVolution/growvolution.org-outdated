@@ -11,9 +11,10 @@ NOT_FOUND_ASSET = "not_found"
 DEFAULT_FOLDER = "growv_data"
 PROFILE_PIC_FOLDER = "profile_pictures"
 
-def upload_asset(file,
-                 preset='profile_pics', public_id=None,
-                 folder=DEFAULT_FOLDER, file_type='image'):
+
+def upload_asset(file: Any,
+                 preset: str = 'profile_pics', public_id: str | None = None,
+                 folder: str = DEFAULT_FOLDER, file_type: str = 'image') -> dict:
     return cloudinary_uploader.upload(
         file,
         upload_preset=preset,
@@ -23,7 +24,8 @@ def upload_asset(file,
         resource_type=file_type
     )
 
-def retrieve_asset_url(asset_id, asset_folder=DEFAULT_FOLDER):
+
+def retrieve_asset_url(asset_id: str, asset_folder: str = DEFAULT_FOLDER) -> str | None:
     public_path = f"{asset_folder}/{asset_id}"
 
     try:

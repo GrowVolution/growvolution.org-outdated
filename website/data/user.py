@@ -1,7 +1,7 @@
 from . import DB, BCRYPT, cloudinary, commit
 from LIBRARY import *
 
-def randomize_username(username_raw):
+def randomize_username(username_raw: str) -> str:
     new_username = username_raw
     username_raw = username_raw.replace('_', '')
 
@@ -29,10 +29,10 @@ class User(DB.Model):
     role = DB.Column(DB.String(8), nullable=False, default='user')
 
     def __init__(self,
-                 first_name, last_name,
-                 username, email, picture=None,
-                 google_id=None, apple_id=None,
-                 microsoft_id=None, password=None):
+                 first_name: str, last_name: str,
+                 username: str, email: str, picture: str | None = None,
+                 google_id: str | None = None, apple_id: str | None = None,
+                 microsoft_id: str | None = None, password: str | None = None):
 
         self.first_name = first_name
         self.last_name = last_name
@@ -48,13 +48,17 @@ class User(DB.Model):
         if picture:
             self.picture = picture
 
-    def check_password(self, password):
+    def check_password(self, password: str) -> bool:
         return BCRYPT.check_password_hash(self.psw_hash, password)
 
-    def set_picture(self, picture):
+    def set_password(self, password: str):
+        self.psw_hash = BCRYPT.generate_password_hash(password)
+        commit()
+
+    def set_picture(self, picture: str):
         self.picture = picture
         commit()
 
-    def get_picture_url(self):
+    def get_picture_url(self) -> str:
         pic = self.picture
         return pic if pic.startswith('http') else cloudinary.retrieve_asset_url(pic, cloudinary.PROFILE_PIC_FOLDER)

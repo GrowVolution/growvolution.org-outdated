@@ -14,7 +14,7 @@ APPLE_AUTH_URI = "https://appleid.apple.com/auth/authorize"
 APPLE_TOKEN_URI = "https://appleid.apple.com/auth/token"
 
 
-def _sign_apple_jwt():
+def _sign_apple_jwt() -> str:
     headers = {
         "kid": APPLE_KEY_ID,
         "alg": "ES256"
@@ -30,7 +30,7 @@ def _sign_apple_jwt():
     return jwt.encode(payload, APPLE_KEY, algorithm="ES256", headers=headers)
 
 
-def start_oauth():
+def start_oauth() -> Response:
     state = secrets.token_urlsafe(16)
     session["state"] = state
 
@@ -46,7 +46,7 @@ def start_oauth():
     return redirect(f"{APPLE_AUTH_URI}?{urlencode(params)}")
 
 
-def oauth_callback():
+def oauth_callback() -> Response:
     code, state = start_callback()
 
     if not code or not state:

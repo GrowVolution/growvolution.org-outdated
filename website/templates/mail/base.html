@@ -1,15 +1,36 @@
 <!DOCTYPE html>
-<html lang="DE-de">
+<html lang="de">
 <head>
   <meta charset="utf-8">
   <title>GrowVolution Noreply System</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    @media only screen and (max-width: 620px) {
+      .container {
+        width: 100% !important;
+        padding: 0 10px !important;
+      }
+      .footer-cols {
+        display: block !important;
+        width: 100% !important;
+        box-sizing: border-box;
+      }
+      .footer-cols td {
+        display: block !important;
+        width: 100% !important;
+        text-align: center !important;
+        padding-bottom: 10px !important;
+      }
+    }
+  </style>
 </head>
 <body style="margin:0; padding:0; font-family:Arial, sans-serif; background-color:#cccccc;">
 
-  <table width="100%" cellpadding="0" cellspacing="0" style="background-color:#212529; padding:20px 0;">
+  <!-- HEADER -->
+  <table width="100%" cellpadding="0" cellspacing="0" style="background-color:#212529;">
     <tr>
       <td align="center">
-        <table width="600" cellpadding="0" cellspacing="0">
+        <table class="container" width="600" cellpadding="20" cellspacing="0" style="max-width:600px; width:100%;">
           <tr>
             <td align="center" style="color:#ffffff; font-size:20px; font-weight:bold;">
               <img src="{{ url_for('static', filename='img/logo.png', _external=True) }}" alt="GrowV Logo" width="35" height="35" style="vertical-align:middle;">
@@ -21,12 +42,13 @@
     </tr>
   </table>
 
-  <table width="100%" cellpadding="0" cellspacing="0">
+  <!-- CONTENT -->
+  <table width="100%" cellpadding="0" cellspacing="0" style="background-color:#cccccc;">
     <tr>
       <td align="center">
-        <table width="600" cellpadding="20" cellspacing="0" style="background-color:#ffffff;">
+        <table class="container" width="100%" cellpadding="20" cellspacing="0" style="background-color:#000000; color:#ffffff; max-width:600px; width:100%;">
           <tr>
-            <td>
+            <td style="color:#ffffff;">
               {% block content %}{% endblock %}
             </td>
           </tr>
@@ -35,23 +57,23 @@
     </tr>
   </table>
 
-  <table width="100%" cellpadding="0" cellspacing="0" style="background-color:#212529; color:#ffffff; padding:20px 0;">
+  <!-- FOOTER -->
+  <table width="100%" cellpadding="0" cellspacing="0" style="background-color:#212529;">
     <tr>
       <td align="center">
-        <table width="600" cellpadding="10" cellspacing="0">
+        <table class="container footer-cols" width="600" cellpadding="20" cellspacing="0" style="color:#ffffff; max-width:600px; width:100%;">
           <tr>
-            <td width="50%" valign="top" style="font-size:14px; text-align:center;">
+            <td valign="top" style="font-size:14px; text-align:center;">
               <p style="margin:0 0 10px 0;">
-                <a href="mailto:info@growv-mail.org" style="color:#ddd;">info@growv-mail.org</a><br>
-                <a href="mailto:developer@growv-mail.org" style="color:#ddd;">developer@growv-mail.org</a><br>
-                <a href="tel:+491745881313" style="color:#ddd;">+49 174 5881313</a>
+                <a href="mailto:info@growv-mail.org" style="color:#ddd; text-decoration:none;">info@growv-mail.org</a><br>
+                <a href="mailto:developer@growv-mail.org" style="color:#ddd; text-decoration:none;">developer@growv-mail.org</a><br>
+                <a href="tel:+491745881313" style="color:#ddd; text-decoration:none;">+49 174 5881313</a>
               </p>
             </td>
-            <td width="50%" valign="top" style="font-size:14px; text-align:justify;">
+            <td valign="top" style="font-size:14px; text-align:justify;">
               <p style="margin:0;">
                 Diese E-Mail wurde automatisch versendet. Falls es sich hierbei um einen Irrtum handelt, bitten wir um Entschuldigung.
                 Du kannst den Erhalt optionaler E-Mails jederzeit
-                  <!-- TODO: Implement Endpoint -->
                 <a href="#" style="color:#ddd; text-decoration:underline;">hier anpassen</a>.
               </p>
             </td>

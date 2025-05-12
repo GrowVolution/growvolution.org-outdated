@@ -12,7 +12,7 @@ GOOGLE_TOKEN_URI = "https://oauth2.googleapis.com/token"
 GOOGLE_USERINFO = "https://www.googleapis.com/oauth2/v2/userinfo"
 
 
-def start_oauth():
+def start_oauth() -> Response:
     state = secrets.token_urlsafe(16)
     session['state'] = state
     params = {
@@ -27,7 +27,7 @@ def start_oauth():
     return redirect(f"{GOOGLE_AUTH_URI}?{urlencode(params)}")
 
 
-def oauth_callback():
+def oauth_callback() -> Response:
     code, state = start_callback()
 
     if not code or not state:

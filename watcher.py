@@ -60,14 +60,14 @@ def restart():
     clean_old_logs(logs_dir.parent)
     start()
 
-def start_watcher():
+def start_watcher() -> Observer:
     start()
     observer = Observer()
     observer.schedule(Handler(), str(watch_dir), recursive=True)
     observer.start()
     return observer
 
-def stop_watcher(observer):
+def stop_watcher(observer: Observer) -> None:
     observer.stop()
     process.terminate()
     observer.join()

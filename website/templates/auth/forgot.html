@@ -1,0 +1,31 @@
+<p class="text-center mb-2">
+    Hey, du hast dein Passwort vergessen? Kein Problem!
+    Gib einfach deine E-Mail Adresse ein und dann kannst
+    du ganz entspannt ein neues Passwort festlegen.
+</p>
+
+<div class="mb-3 input-group">
+    <input id="email" type="email" class="form-control" placeholder="E-Mail" required>
+    <span class="input-group-text"><i class="bi bi-envelope-fill"></i></span>
+</div>
+
+<div class="d-grid mb-2">
+    <button id="requestReset" type="button" class="btn btn-outline-dark">Link anfordern</button>
+</div>
+<div class="d-grid">
+    <button id="back" type="button" class="btn btn-dark">Zurück</button>
+</div>
+
+<script>
+    const emailInput = document.getElementById('email');
+    document.getElementById('requestReset').addEventListener('click', () => {
+        const email = emailInput.value;
+        emit('reset_request', email);
+    })
+    document.getElementById('back').addEventListener('click', () => {
+        location.reload();
+    })
+    requestSuccessHandler = (data) => {
+        setTimeout(() => { location.reload() }, 5000);
+    }
+</script>

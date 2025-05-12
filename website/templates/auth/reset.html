@@ -1,0 +1,44 @@
+{% extends "auth/base.html" %}
+
+{% block title %}Zurücksetzen{% endblock %}
+
+{% block form %}
+  <div class="mb-3 input-group">
+    <input type="email" class="form-control" placeholder="E-Mail" name="email" value="{{ email }}" disabled>
+    <span class="input-group-text"><i class="bi bi-envelope-fill"></i></span>
+  </div>
+  <div class="mb-2 input-group">
+    <input id="password" type="password" class="form-control" placeholder="Neues Passwort" name="password" required>
+    <span class="input-group-text"><i class="bi bi-lock-fill"></i></span>
+  </div>
+  <div class="input-group">
+    <input id="passwordRepeat" type="password" class="form-control" placeholder="Passwort wiederholen" required>
+    <span class="input-group-text"><i class="bi bi-repeat"></i></span>
+  </div>
+  <div id="matchingHint" class="text-danger mb-2 d-none" style="font-size: 0.875rem;">
+    Die Passwörter stimmen nicht überein.
+  </div>
+
+  <div class="d-grid">
+    <button type="submit" class="btn btn-dark">Passwort zurücksetzen</button>
+  </div>
+{% endblock %}
+
+{%  block script_afterDOM %}
+<script>
+    const password1 = document.getElementById('password');
+    const password2 = document.getElementById('passwordRepeat');
+    const hint = document.getElementById('matchingHint');
+
+    function checkPasswordMatch() {
+      if (password1.value !== password2.value) {
+        hint.classList.remove('d-none');
+      } else {
+        hint.classList.add('d-none');
+      }
+    }
+
+    password1.addEventListener('input', checkPasswordMatch);
+    password2.addEventListener('input', checkPasswordMatch);
+</script>
+{% endblock %}

@@ -3,12 +3,12 @@ from LIBRARY import *
 SMTP_URI = "smtp.strato.de"
 SMTP_PORT = 587
 
-def _nrs():
+def _noreply_service() -> SMTP:
     return SMTP(SMTP_URI, SMTP_PORT)
 
 SENDER = "noreply@growv-mail.org"
 NAME = "Team GrowVolution"
-SERVICE = _nrs()
+SERVICE = _noreply_service()
 PASSWORD = ""
 
 
@@ -21,7 +21,7 @@ def _reconnect():
     global SERVICE
 
     SERVICE.close()
-    SERVICE = _nrs()
+    SERVICE = _noreply_service()
     _connect()
 
 
@@ -30,7 +30,7 @@ def _resend(receiver, subject, html):
     send(receiver, subject, html)
 
 
-def send(receiver, subject, html):
+def send(receiver: str, subject: str, html: str):
     msg = MIMEMultipart()
     msg['From'] = f"{NAME}<{SENDER}>"
     msg['To'] = receiver
@@ -45,13 +45,18 @@ def send(receiver, subject, html):
         _resend(receiver, subject, html)
 
 
-def confirmation_mail(receiver, name, confirm_code):
+def confirmation_mail(receiver: str, name: str, confirm_code: str):
     html = render_template('mail/confirm_email.html', user=name,
                            confirm_code=confirm_code)
     send(receiver, "E-Mail Adresse bestätigen", html)
 
 
-def start(app):
+def reset_mail(receiver: str, name: str, reset_code: str):
+    html = render_template('mail/reset_mail.html', user=name, reset_code=reset_code)
+    send(receiver, "Passwort zurücksetzen", html)
+
+
+def start(app: Flask):
     global PASSWORD
     PASSWORD = app.config["NRS_PASSWORD"]
     log('info', f"Staring mail service with SMTP server: '{SMTP_URI}:{SMTP_PORT}'")

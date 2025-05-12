@@ -1,14 +1,14 @@
 from LIBRARY import *
 from website.rendering import render
 from website.data import user as udb
-from .verification import token_response
+from .verification import token_response, token_owner_hash
 
 
-def _render_self(**kwargs):
+def _render_self(**kwargs) -> str:
     return render('auth/login.html', **kwargs)
 
 
-def handle_request():
+def handle_request() -> Response | str:
     if request.method == "POST":
         email = request.form.get("email")
         password = request.form.get("password")
@@ -37,7 +37,7 @@ def handle_request():
             return _render_self(email=email)
 
         return token_response({
-            "id": user.id,
+            "id": user.id
         }, 10)
 
     return _render_self()

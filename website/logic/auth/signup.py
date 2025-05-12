@@ -4,7 +4,7 @@ from website.cache import add_entry
 from mail_service import confirmation_mail
 
 
-def handle_request():
+def handle_request() -> Response | str:
     if request.method == 'POST':
         first_name = request.form.get('first_name')
         last_name = request.form.get('last_name')
