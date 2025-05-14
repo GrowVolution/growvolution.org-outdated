@@ -1,7 +1,7 @@
-from LIBRARY import *
 from website.rendering import render
 from website.cache import add_entry
 from mail_service import confirmation_mail
+from flask import Response, request, redirect
 
 
 def handle_request() -> Response | str:

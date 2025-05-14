@@ -1,5 +1,7 @@
-from LIBRARY import *
 from . import forgot as forgot_handler
+from flask_socketio import SocketIO
+from typing import Callable
+from debugger import log
 
 SOCKET = SocketIO(async_mode='eventlet')
 HANDLERS = {}

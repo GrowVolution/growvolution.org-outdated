@@ -1,7 +1,11 @@
-from LIBRARY import *
 from website import DEBUG
 from website.data import user as udb, add_model
 from .verification import token_response, start_callback
+from LIBRARY import ROOT_PATH, back_to_login
+from datetime import datetime
+from flask import Response, session, redirect, flash, request
+from urllib.parse import urlencode
+import os, secrets, jwt, requests, json
 
 APPLE_KEY_ID = os.getenv('APPLE_KEY_ID')
 APPLE_KEY_FILE = ROOT_PATH / 'website' / 'auth' / f'AuthKey_{APPLE_KEY_ID}.p8'

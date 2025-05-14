@@ -1,7 +1,10 @@
-from LIBRARY import *
 from website import DEBUG
 from website.data import user as udb, add_model
 from .verification import token_response, start_callback
+from LIBRARY import back_to_login
+from flask import Response, session, redirect, flash
+from urllib.parse import urlencode
+import os, secrets, jwt, requests
 
 MICROSOFT_CLIENT_ID = os.getenv("MICROSOFT_CLIENT")
 MICROSOFT_CLIENT_SECRET = os.getenv("MICROSOFT_SECRET")

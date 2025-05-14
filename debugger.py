@@ -1,4 +1,4 @@
-from LIBRARY import *
+from datetime import datetime
 
 def get_time() -> str:
     offset = datetime.now().astimezone().utcoffset()

@@ -1,10 +1,12 @@
-from LIBRARY import *
 from . import APP, DEBUG
 from .socket import SOCKET, HANDLERS, no_handler
 from .rendering import render_error, render
 from .routes import auth_routes
 from .logic.auth.verification import captcha_status, token_owner_hash, empty_token, user_role, authenticated_user_request
 from .logic.auth.captcha import handle_request as captcha
+from flask import Response, request, abort, render_template, make_response, session
+from LIBRARY import back_home, random_code
+from debugger import log
 
 
 def _verify_token_ownership(name: str = 'token') -> Response | None:

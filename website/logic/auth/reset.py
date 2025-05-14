@@ -1,7 +1,7 @@
-from LIBRARY import *
 from website.rendering import render, render_404
 from website.cache import request_entry_data, pop_entry
 from website.data import user as udb
+from flask import Response, request, flash, redirect
 
 
 def handle_request(code: str) -> Response | str:

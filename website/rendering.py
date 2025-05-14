@@ -1,7 +1,5 @@
-from requests.models import Response
-
-from LIBRARY import render_template
 from .logic.auth.verification import authenticated_user_request
+from flask import render_template
 
 
 def render(template: str, **kwargs) -> str:

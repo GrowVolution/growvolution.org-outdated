@@ -1,4 +1,10 @@
-from LIBRARY import *
+from datetime import datetime
+from email.mime.text import MIMEText
+from email.utils import format_datetime
+from smtplib import SMTP, SMTPException
+from email.mime.multipart import MIMEMultipart
+from flask import render_template, Flask
+from debugger import log
 
 SMTP_URI = "smtp.strato.de"
 SMTP_PORT = 587

@@ -1,8 +1,9 @@
-from LIBRARY import *
 from .rendering import render, render_404
 from .logic.auth import (login as login_handler, google_auth, apple_auth, microsoft_auth,
                          signup as signup_handler, confirm as confirm_handler, reset as reset_handler)
 from .logic.auth.verification import empty_token
+from flask import Blueprint, redirect
+from LIBRARY import ALL_METHODS
 
 routes = Blueprint('routes', __name__)
 auth_routes = Blueprint('auth_routes', __name__)

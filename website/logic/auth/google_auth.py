@@ -1,7 +1,10 @@
-from LIBRARY import *
 from website import DEBUG
 from website.data import add_model, user as udb
 from .verification import token_response, start_callback
+from LIBRARY import back_to_login
+from flask import Response, session, redirect, flash
+from urllib.parse import urlencode
+import os, secrets, requests
 
 GOOGLE_CLIENT_ID = os.getenv('GOOGLE_OAUTH_CLIENT')
 GOOGLE_REDIRECT = f"https://{'debug.' if DEBUG else ''}growvolution.org/oauth/google/callback"

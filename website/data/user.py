@@ -1,5 +1,6 @@
 from . import DB, BCRYPT, cloudinary, commit
-from LIBRARY import *
+import random, string
+
 
 def randomize_username(username_raw: str) -> str:
     new_username = username_raw
@@ -11,6 +12,7 @@ def randomize_username(username_raw: str) -> str:
         new_username = new_username.replace(choice, new_char)
 
     return new_username
+
 
 class User(DB.Model):
     __tablename__ = 'user'

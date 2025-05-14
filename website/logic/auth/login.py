@@ -1,7 +1,8 @@
-from LIBRARY import *
 from website.rendering import render
 from website.data import user as udb
-from .verification import token_response, token_owner_hash
+from .verification import token_response
+from flask import Response, request, flash
+from markupsafe import Markup
 
 
 def _render_self(**kwargs) -> str:

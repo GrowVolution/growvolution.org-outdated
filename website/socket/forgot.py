@@ -1,7 +1,8 @@
-from LIBRARY import *
 from website.data import user as udb
 from mail_service import reset_mail
 from website.cache import add_entry
+from flask import render_template
+from markupsafe import Markup
 
 
 def handle_html_request():

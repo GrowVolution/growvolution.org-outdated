@@ -48,6 +48,8 @@
               <li><a href="/privacy">Datenschutz</a></li>
               <li><a href="/guidelines">Richtlinien</a></li>
               <li><a href="/about">Das ist GrowVolution</a></li>
+                <li><br></li>
+                <li><a href="https://github.com/GrowV211/growvolution.org/tree/master" target="_blank">Quellcode</a></li>
             </ul>
           </div>
           <div class="col-md-4 mb-3">
@@ -58,7 +60,7 @@
             </p>
           </div>
         </div>
-        <div class="text-center mt-3">
+        <div class="text-center mt-1">
           GrowVolution 2025 – GNU General Public License
         </div>
       </div>
@@ -79,6 +81,7 @@
             `
         }
     </script>
+    <script src="{{ url_for('static', filename='js/timer.js') }}"></script>
 
     {% block script_afterDOM %}{% endblock %}
   </body>
