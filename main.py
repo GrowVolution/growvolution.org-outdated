@@ -2,7 +2,8 @@ from watcher import start_watcher, stop_watcher, reload_dotenv
 from dotenv import load_dotenv
 from pathlib import Path
 from datetime import datetime
-import os, subprocess
+from types import FrameType
+import os, subprocess, signal
 
 load_dotenv()
 env = os.environ.copy()
@@ -39,12 +40,26 @@ def stop_watch():
 
 def restart_main():
     if main_proc:
+        main_proc.send_signal(signal.SIGHUP)
+    else:
+        start_main()
+
+
+def _shutdown(signum: int, frame: FrameType | None):
+    print(f"Handling signal {'SIGTERM' if signum == signal.SIGTERM else 'SIGINT'}, server will shutdown now...")
+    shutdown()
+    print("Shutdown complete! Thank you for playing the game of life.")
+
+
+def shutdown():
+    stop_watch()
+    if main_proc:
         main_proc.terminate()
-        main_proc.wait()
-    start_main()
 
 
 start_main()
+signal.signal(signal.SIGINT, _shutdown)
+signal.signal(signal.SIGTERM, _shutdown)
 
 
 if mode == 'DEBUG':
@@ -53,9 +68,10 @@ if mode == 'DEBUG':
 
     print('1 - start debug')
     print('2 - stop debug')
-    print('3 - debug to main')
-    print('4 - reload .env')
-    print('5 - exit')
+    print('3 - restart debug')
+    print('4 - debug to main')
+    print('5 - reload .env')
+    print('6 - exit')
 
     while True:
         cmd = input('> ')
@@ -66,9 +82,13 @@ if mode == 'DEBUG':
             stop_watch()
 
         elif cmd == '3':
-            restart_main()
+            stop_watch()
+            start_watch()
 
         elif cmd == '4':
+            restart_main()
+
+        elif cmd == '5':
             reload_dotenv()
             if watcher:
                 stop_watch()
@@ -79,10 +99,8 @@ if mode == 'DEBUG':
             env['INSTANCE'] = 'main'
             restart_main()
 
-        elif cmd == '5':
-            stop_watch()
-            if main_proc:
-                main_proc.terminate()
+        elif cmd == '6':
+            shutdown()
             break
 
         else:

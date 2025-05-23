@@ -1,0 +1,154 @@
+{% extends "base.html" %}
+{% block title %}Startseite{% endblock %}
+
+{% block style %}
+<style>
+section .row {
+    margin: 0;
+}
+@media (min-width: 768px) {
+    section .row {
+        max-width: 70vw;
+    }
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<section id="hero">
+  <div class="text-center text-white">
+    <div id="heroText" data-aos="fade-down">
+      <h1 class="display-4 mb-2">Dein neues Leben wartet</h1>
+      <h3 class="display-6">Auf deinen ersten Schritt</h3>
+    </div>
+    <a href="/signup" class="btn btn-outline-light btn-lg mt-4" data-aos="zoom-in" data-aos-delay="300">Jetzt loslegen</a>
+  </div>
+</section>
+
+<section id="mission" class="container py-5" data-aos="fade-up">
+  <div class="row align-items-center bg-white rounded shadow-sm mx-md-auto">
+    <div class="col-md-6 order-md-2" data-aos="fade-left">
+      <img src="/static/img/index/mission.jpg" class="img-fluid mx-auto d-block my-3 image" alt="Mission Bild">
+    </div>
+    <div class="col-md-6 order-md-1 text-center text-md-start pb-3 p-md-3 text-col">
+      <h2>Unsere Mission</h2>
+      <p>
+          Wir haben es uns zur Aufgabe gemacht, dich in deinem persönlichen Wachstum zu unterstützen.
+          Dabei entscheidest ganz allein du, wie dieses Wachstum aussieht. Wichtig ist, dass du mit deinem
+          Leben glücklich bist. Aber du darfst und sollst träumen, denn du sollst dich gut fühlen. Was
+          bedeutet, dass dein Weg nicht immer angenehm sein wird. Deshalb haben wir entschieden dir unter
+          die Arme zu greifen, wo wir nur können. Damit du dich in aller Ruhe auf deine Ziele konzentrieren kannst.
+      </p>
+        <a href="/about" class="btn btn-outline-dark mt-3">Mehr erfahren</a>
+    </div>
+  </div>
+</section>
+
+<section id="community" class="container py-5" data-aos="fade-up">
+  <div class="row align-items-center bg-white rounded shadow-sm mx-md-auto">
+    <div class="col-md-6" data-aos="fade-right">
+      <img src="/static/img/index/community.jpg" class="img-fluid mx-auto d-block my-3 image" alt="Community Bild">
+    </div>
+    <div class="col-md-6 text-center text-md-start pb-3 p-md-3 text-col">
+      <h2>Sei Teil dieser Bewegung</h2>
+      <p>
+          Denn wir wollen die Welt verändern<br class="d-md-none"> und du bist der Schlüssel!<br><br>
+          Bist du auch unzufrieden damit, wie in unserem Land Entscheidungen getroffen werden?
+          Stört dich, wie mit Steuergeldern umgegangen wird?
+          Findest du es unfair, dass harte Arbeit oft schlechter entlohnt wird als politische Posten?
+          Oder fragst du dich, wie KI deinen Job verändern wird – und was du tun kannst?<br><br>
+          Dann geht es dir wie vielen von uns. Lass uns gemeinsam Verantwortung übernehmen.
+          Denn Veränderung beginnt immer im Kleinen – bei dir und deinem Leben.
+          Wir reichen dir unsere Hand – bist du bereit, sie zu ergreifen?
+      </p>
+        <a href="/signup" class="btn btn-outline-success mt-3">Jetzt starten</a>
+    </div>
+  </div>
+</section>
+
+<section id="blog" class="container py-5" data-aos="fade-up">
+  <h2 class="text-center mb-4">Updates & Blog</h2>
+  <div class="row mx-md-auto">
+    {% for i in range(3) %}
+    <div class="col-md-4 mb-4" data-aos="zoom-in" data-aos-delay="{{ i*100 }}">
+      <div class="card h-100">
+        <div class="card-body text-center">
+          <h5 class="card-title">Blogtitel {{ i+1 }}</h5>
+          <p class="card-text">Kurze Vorschau des Blogeintrags …</p>
+          <a href="/blog/{{ i }}" class="btn btn-outline-secondary">Mehr lesen</a>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  <div class="text-center mt-3">
+    <a href="/blog" class="btn btn-outline-dark">Zum Blog</a>
+  </div>
+</section>
+
+<section id="opensource" class="container py-5" data-aos="fade-up">
+  <div class="row align-items-center bg-white rounded shadow-sm mx-md-auto">
+    <div class="col-md-6 order-md-2" data-aos="fade-left">
+      <img src="/static/img/index/code.jpg" class="img-fluid mx-auto d-block my-3 image" alt="Code Bild">
+    </div>
+    <div class="col-md-6 order-md-1 text-center text-md-start pb-3 p-md-3 text-col">
+      <h2>Open Source</h2>
+      <p>
+          Weil du wichtiger bist als die Ideen anderer!<br><br>
+          Wie können wir dich mit dieser Seite optimal unterstützen, ohne
+          dich mit einzubeziehen? Du sollst die Chance haben dich aktiv an
+          unserem Projekt und der Entwicklung dieser Seite zu beteiligen.
+          Denn echte Veränderung gelingt nur, wenn du aktiv mitgestaltest.
+          Dafür braucht es dein Engagement und Vertrauen. Beides erreichen
+          wir durch Transparenz. Deshalb sind der Code und alle Inhalte
+          dieser Seite öffentlich zugänglich.<br><br>
+          Wir freuen uns auf deine Beteiligung!
+      </p>
+        <a href="https://github.com/GrowV211/growvolution.org/tree/master" class="btn btn-outline-primary" target="_blank">Zum Quellcode</a>
+    </div>
+  </div>
+</section>
+
+<section id="aboutme" class="container py-5" data-aos="fade-up">
+  <div class="row align-items-center bg-white rounded shadow-sm mx-md-auto">
+    <div class="col-md-6" data-aos="fade-right">
+      <img src="/static/img/index/initiator.png" class="img-fluid mx-auto d-block my-3 image" alt="Gründer Bild">
+    </div>
+    <div class="col-md-6 text-center text-md-start pb-3 p-md-3 text-col">
+      <h2>Der Gründer</h2>
+        <p>
+            Die Idee hinter der GrowVolution ist, dass sie sich – einmal ins Leben gerufen – auch unabhängig von ihrem Gründer entfalten kann.
+            Trotzdem willst du sicher wissen, wer dahintersteht.
+            <br><br>
+            Also: Hey, ich bin Pierre und freue mich, dich auf dieser Seite begrüßen zu dürfen!
+            Vielleicht hast du bis heute noch nie von mir gehört und das wäre auch gut so.
+            Denn ich bin ein Mensch mit Ecken, Kanten und extrem vielen Fehlern.
+            Doch gerade diese Unzufriedenheit mit mir selbst war der Antrieb, dieses Projekt zu starten.
+            <br><br>
+            Es ist meine Chance, die Dinge besser zu machen – nicht alleine, sondern gemeinsam.
+            Ich kann meine Vergangenheit nicht ungeschehen machen. Aber ich kann sie offenlegen.
+            Auf meinem Profil findest du deshalb einen Beitrag, in dem ich ehrlich und selbstkritisch zurückblicke.
+            <br><br>
+            Ich hoffe, dass meine Schwächen der Wirkung dieses Projekts nicht im Weg stehen – sondern es menschlicher machen.
+        </p>
+        <!-- TODO: Implement Endpoint -->
+        <a href="#aboutme" class="btn btn-outline-secondary">Erfahre mehr</a>
+    </div>
+  </div>
+</section>
+{% endblock %}
+
+{% block script_afterDOM %}
+<script>
+    document.querySelectorAll('section').forEach((section) => {
+        if (['hero', 'blog', 'aboutme'].includes(section.id)) return;
+
+        const imageCol = section.querySelector('.image');
+        const textCol = section.querySelector('.text-col');
+
+        if (imageCol && textCol && window.innerWidth >= 768) {
+            imageCol.style.height = `${textCol.offsetHeight}px`;
+        }
+    });
+</script>
+{% endblock %}

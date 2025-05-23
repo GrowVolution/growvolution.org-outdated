@@ -8,7 +8,7 @@
         hardwareConcurrency: navigator.hardwareConcurrency,
         deviceMemory: navigator.deviceMemory || "unknown",
         timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
-        screen: `${screen.width}x${screen.height}@${window.devicePixelRatio}`,
+        screen: `${screen.width}x${screen.height}@${window.devicePixelRatio}`
       };
 
       const json = JSON.stringify(fpData);

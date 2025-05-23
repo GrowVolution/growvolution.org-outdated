@@ -14,9 +14,11 @@ function getRemainingMinutesToday() {
 function changeNavTitle() {
     if (showsTimer) {
         navTitle.textContent = "GrowVolution";
+        showsTimer = false;
     } else {
-        navTitle.textContent = `Noch ${getRemainingMinutesToday()} vom Tag übrig.`;
+        navTitle.textContent = `${getRemainingMinutesToday()} Minuten vom Tag übrig.`;
+        showsTimer = true;
     }
 }
 
-setInterval(changeNavTitle, 3000);
+setInterval(changeNavTitle, 5000);

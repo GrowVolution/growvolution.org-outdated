@@ -12,7 +12,7 @@ auth_routes = Blueprint('auth_routes', __name__)
 # Main Routes
 @routes.route('/')
 def index():
-    return render("site/home.html")
+    return render("site/index.html")
 
 
 # Authentication routes

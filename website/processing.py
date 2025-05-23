@@ -37,8 +37,7 @@ def before_request():
     agent = request.headers.get('User-Agent')
     agent = agent if agent else 'no-agent'
 
-    log('request', f"{method} '{path}'{''.join(' ' for _ in range(32 - len(path)))} "
-                   f"from {ip}{''.join(' ' for _ in range(15 - len(ip)))} via ({agent}).")
+    log('request', f"{method} '{path:48}' from {ip:15} via ({agent}).")
 
     response = _verify_token_ownership()
     if response:

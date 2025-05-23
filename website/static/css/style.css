@@ -1,9 +1,30 @@
 /* Basic Styles */
+[data-aos] {
+  transition: transform 0.6s ease, opacity 0.6s ease;
+  will-change: transform, opacity;
+}
+
 body {
   font-family: Arial, sans-serif;
   background-color: #ccc;
   overflow-y: auto;
   margin: 0;
+}
+
+body, html {
+  overflow-x: hidden;
+}
+
+main {
+  max-width: 100dvw !important;
+}
+
+header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1500 !important;
 }
 
 footer a {
@@ -151,4 +172,38 @@ footer a:hover {
 .impressum dd {
   margin-left: 100px;
   margin-bottom: 0.4rem;
+}
+
+/* Index Styles */
+#hero {
+  height: 90vh;
+  background: url('/static/img/index/hero.jpg') center/cover no-repeat;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: white;
+}
+
+#heroText {
+  background-color: rgba(0, 0, 0, 0.5);
+  padding: 1rem 2rem;
+  border-radius: 10px;
+}
+
+@media (max-width: 768px) {
+  #heroText .display-4 {
+    font-size: 1.75rem;
+    font-weight: bold;
+  }
+
+  #heroText .display-6 {
+    font-size: 1.5rem;
+    font-weight: bold;
+  }
+}
+
+.card {
+  position: static !important;
+  z-index: auto !important;
 }
