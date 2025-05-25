@@ -1,14 +1,81 @@
 {% extends "base.html" %}
 
-{% block title %}Über uns{% endblock %}
+{% block title %}Über GrowVolution{% endblock %}
 
 {% block content %}
-<div class="window-wrapper">
-    <div class="window-box">
-        <div class="window-header">
-          <img src="{{ url_for('static', filename='img/logo1.png') }}" alt="GrowV Colorful Logo">
-          <h2>...</h2>
-        </div>
+<section class="text-white text-center py-5" style="background: linear-gradient(135deg, #2c3e50, #34495e);">
+  <div class="container" data-aos="fade-down">
+    <h1 class="display-4 mb-3">Veränderung beginnt bei dir</h1>
+    <p class="lead">Und genau deshalb gibt es GrowVolution – eine Plattform, die dir hilft, mehr aus dir und deiner Zeit zu machen.</p>
+  </div>
+</section>
+
+<section class="container py-5">
+  <div class="row align-items-center mb-5" data-aos="fade-up">
+    <div class="col-md-6">
+      <h2>Warum diese Seite?</h2>
+      <p>
+        Wir leben in einer Welt voller Ablenkungen, voller Leistungsdruck, voller Oberflächlichkeit. GrowVolution ist unser Gegenentwurf:
+        eine ruhige, klare Plattform für echte Entwicklung, Reflexion und Gemeinschaft.
+      </p>
+      <ul class="list-unstyled">
+        <li>✨ Fokus auf persönliche Veränderung statt Likes</li>
+        <li>⏳ Zeit als wertvollste Ressource erkennen</li>
+        <li>🤝 Unterstützung statt Vergleich</li>
+        <li>🧭 Klarheit finden – ohne Druck</li>
+      </ul>
     </div>
-</div>
+    <div class="col-md-6 text-center">
+      <img src="/static/img/about/vision.jpg" alt="Vision" class="img-fluid rounded">
+    </div>
+  </div>
+
+  <div class="row align-items-center mb-5" data-aos="fade-up">
+    <div class="col-md-6 order-md-2">
+      <h2>Wer dahinter steckt</h2>
+      <p>
+        Hey, ich bin Pierre – kein Coach, kein Guru, kein Startup-Typ. Ich bin einfach jemand, der selbst gemerkt hat:
+        So wie es ist, reicht es mir nicht. Ich wollte eine Plattform schaffen, die ehrlich ist. Unfertig, wie wir selbst.
+        Aber bereit zu wachsen – mit dir gemeinsam.
+      </p>
+    </div>
+    <div class="col-md-6 order-md-1 text-center">
+      <img src="/static/img/about/pierre.jpg" alt="Pierre Schkoldow" class="img-fluid rounded-circle" style="max-width: 200px;">
+    </div>
+  </div>
+
+  <div class="mb-5" data-aos="fade-up">
+    <h2 class="text-center mb-4">Wie GrowVolution funktioniert</h2>
+    <div class="row text-center">
+      <div class="col-md-4 mb-3">
+        <i class="bi bi-person-plus display-5"></i>
+        <h5 class="mt-2">1. Registrieren</h5>
+        <p>Leg dein Profil an und mach den ersten Schritt in deine Veränderung.</p>
+      </div>
+      <div class="col-md-4 mb-3">
+        <i class="bi bi-journal-check display-5"></i>
+        <h5 class="mt-2">2. Reflektieren & dokumentieren</h5>
+        <p>Halte fest, was dich bewegt, und finde heraus, was du wirklich willst.</p>
+      </div>
+      <div class="col-md-4 mb-3">
+        <i class="bi bi-people display-5"></i>
+        <h5 class="mt-2">3. In der Community wachsen</h5>
+        <p>Finde Menschen, die dich stärken und die du mit deiner Reise inspirierst.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="text-center" data-aos="fade-up">
+    <h4 class="mb-3">Was kommt als Nächstes?</h4>
+    <p class="text-muted">Blog-Interaktionen, Challenges, ein nutzergeführter Kalender, eigene Themenräume – und hoffentlich: dein Beitrag.</p>
+  </div>
+</section>
+
+<section class="text-center py-5 bg-light" data-aos="fade-up">
+  <div class="container">
+    <h2 class="mb-3">Du musst nicht perfekt sein, um anzufangen.</h2>
+    <p class="mb-4">Du musst nur anfangen, dich selbst ernst zu nehmen.</p>
+    <a href="/signup" class="btn btn-success btn-lg">Jetzt loslegen</a>
+  </div>
+</section>
 {% endblock %}

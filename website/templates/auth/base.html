@@ -1,5 +1,41 @@
 {% extends "base.html" %}
 
+{% block style %}
+<style>
+    #recaptcha-container {
+      width: 100%;
+      max-width: 400px;
+      display: flex;
+      justify-content: center;
+    }
+
+    #authForm #forgot {
+      color: rgba(33, 37, 41, 0.75);
+      text-decoration: none;
+    }
+
+    #authForm #forgot:hover {
+      color: rgba(33, 37, 41, 0.9);
+    }
+
+    #authForm #socialButtons .btn {
+      height: 2.65rem;
+    }
+
+    .auth-icon-wrapper {
+      display: flex;
+      justify-content: center;
+      width: 1.3rem;
+      margin-right: 0.5rem;
+    }
+
+    .auth-icon {
+      padding: 0.28rem 0;
+      font-size: 1.2rem;
+    }
+</style>
+{% endblock %}
+
 {% block content %}
 <div class="window-wrapper">
   <div class="window-box" style="padding: 0 !important; width: 100%; max-width: 400px;">

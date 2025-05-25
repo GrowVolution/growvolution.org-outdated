@@ -3,14 +3,48 @@
 
 {% block style %}
 <style>
-section .row {
-    margin: 0;
-}
-@media (min-width: 768px) {
-    section .row {
-        max-width: 70vw;
+    #hero {
+      height: 90vh;
+      background: url('/static/img/index/hero.jpg') center/cover no-repeat;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      color: white;
     }
-}
+
+    #heroText {
+      background-color: rgba(0, 0, 0, 0.5);
+      padding: 1rem 2rem;
+      border-radius: 10px;
+    }
+
+    @media (max-width: 768px) {
+      #heroText .display-4 {
+        font-size: 1.75rem;
+        font-weight: bold;
+      }
+
+      #heroText .display-6 {
+        font-size: 1.5rem;
+        font-weight: bold;
+      }
+
+      section .row {
+        margin: 0;
+      }
+    }
+
+    @media (min-width: 768px){
+        section .row {
+            max-width: 70vw;
+        }
+    }
+
+    .card {
+      position: static !important;
+      z-index: auto !important;
+    }
 </style>
 {% endblock %}
 
@@ -35,9 +69,10 @@ section .row {
       <p>
           Wir haben es uns zur Aufgabe gemacht, dich in deinem persönlichen Wachstum zu unterstützen.
           Dabei entscheidest ganz allein du, wie dieses Wachstum aussieht. Wichtig ist, dass du mit deinem
-          Leben glücklich bist. Aber du darfst und sollst träumen, denn du sollst dich gut fühlen. Was
-          bedeutet, dass dein Weg nicht immer angenehm sein wird. Deshalb haben wir entschieden dir unter
-          die Arme zu greifen, wo wir nur können. Damit du dich in aller Ruhe auf deine Ziele konzentrieren kannst.
+          Leben glücklich bist. Aber du darfst und sollst auch träumen, denn du sollst dich gut fühlen. Das
+          bedeutet jedoch: Dein Weg wird nicht immer angenehm sein. Deshalb haben wir entschieden dir unter
+          die Arme zu greifen, wo wir nur können. Damit du dich in aller Ruhe auf dich und deine Ziele
+          konzentrieren kannst.
       </p>
         <a href="/about" class="btn btn-outline-dark mt-3">Mehr erfahren</a>
     </div>
@@ -56,10 +91,10 @@ section .row {
           Bist du auch unzufrieden damit, wie in unserem Land Entscheidungen getroffen werden?
           Stört dich, wie mit Steuergeldern umgegangen wird?
           Findest du es unfair, dass harte Arbeit oft schlechter entlohnt wird als politische Posten?
-          Oder fragst du dich, wie KI deinen Job verändern wird – und was du tun kannst?<br><br>
+          Oder fragst du dich, wie KI deinen Job verändern wird und was du tun kannst?<br><br>
           Dann geht es dir wie vielen von uns. Lass uns gemeinsam Verantwortung übernehmen.
-          Denn Veränderung beginnt immer im Kleinen – bei dir und deinem Leben.
-          Wir reichen dir unsere Hand – bist du bereit, sie zu ergreifen?
+          Denn Veränderung beginnt immer im Kleinen: bei <i>dir</i> und <i>deinem Leben</i>.
+          Wir reichen dir also unsere Hand. Bist du bereit, sie zu ergreifen?
       </p>
         <a href="/signup" class="btn btn-outline-success mt-3">Jetzt starten</a>
     </div>
@@ -69,17 +104,7 @@ section .row {
 <section id="blog" class="container py-5" data-aos="fade-up">
   <h2 class="text-center mb-4">Updates & Blog</h2>
   <div class="row mx-md-auto">
-    {% for i in range(3) %}
-    <div class="col-md-4 mb-4" data-aos="zoom-in" data-aos-delay="{{ i*100 }}">
-      <div class="card h-100">
-        <div class="card-body text-center">
-          <h5 class="card-title">Blogtitel {{ i+1 }}</h5>
-          <p class="card-text">Kurze Vorschau des Blogeintrags …</p>
-          <a href="/blog/{{ i }}" class="btn btn-outline-secondary">Mehr lesen</a>
-        </div>
-      </div>
-    </div>
-    {% endfor %}
+    {{ posts }}
   </div>
   <div class="text-center mt-3">
     <a href="/blog" class="btn btn-outline-dark">Zum Blog</a>

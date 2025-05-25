@@ -1,8 +1,10 @@
 from .rendering import render, render_404
 from .logic.auth import (login as login_handler, google_auth, apple_auth, microsoft_auth,
                          signup as signup_handler, confirm as confirm_handler, reset as reset_handler)
-from .logic.auth.verification import empty_token
-from flask import Blueprint, redirect
+from .logic.auth.verification import empty_token, is_admin
+from .logic.blog import preview as blog_preview, create as blog_creator, post as blog_post_handler
+from .logic import index as index_handler
+from flask import Blueprint, redirect, flash
 from LIBRARY import ALL_METHODS
 
 routes = Blueprint('routes', __name__)
@@ -12,7 +14,27 @@ auth_routes = Blueprint('auth_routes', __name__)
 # Main Routes
 @routes.route('/')
 def index():
-    return render("site/index.html")
+    return index_handler.handle_request()
+
+
+# Blog routes
+@routes.route('/blog')
+def blog():
+    return blog_preview.handle_request()
+
+
+@routes.route('/blog/<blog_id>')
+def blog_post(blog_id):
+    return blog_post_handler.handle_request(blog_id)
+
+
+@routes.route('/blog/new', methods=ALL_METHODS)
+def new_blog_post():
+    if not is_admin():
+        flash("Du bist leider nicht für das Erstellen von Blogeinträgen berechtigt.", 'danger')
+        return redirect('/blog')
+
+    return blog_creator.handle_request()
 
 
 # Authentication routes

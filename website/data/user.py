@@ -17,6 +17,7 @@ def randomize_username(username_raw: str) -> str:
 class User(DB.Model):
     __tablename__ = 'user'
     id = DB.Column(DB.Integer, primary_key=True)
+
     google_id = DB.Column(DB.String(128), unique=True)
     apple_id = DB.Column(DB.String(128), unique=True)
     microsoft_id = DB.Column(DB.String(128), unique=True)

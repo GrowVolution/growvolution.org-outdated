@@ -52,7 +52,7 @@ def send(receiver: str, subject: str, html: str):
 
 
 def confirmation_mail(receiver: str, name: str, confirm_code: str):
-    html = render_template('mail/confirm_email.html', user=name,
+    html = render_template('mail/confirm_mail.html', user=name,
                            confirm_code=confirm_code)
     send(receiver, "E-Mail Adresse bestätigen", html)
 

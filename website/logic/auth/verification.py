@@ -80,6 +80,11 @@ def user_role() -> str | None:
     return user.role if user else None
 
 
+def is_admin() -> bool:
+    role = user_role()
+    return role == 'admin' or role == 'dev'
+
+
 def authenticated_user_request() -> bool:
     decoded_token = _decoded_token(request.cookies.get('token'))
     return decoded_token is not None

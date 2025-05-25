@@ -16,6 +16,7 @@ body, html {
 }
 
 main {
+  min-height: 60dvh;
   max-width: 100dvw !important;
 }
 
@@ -127,83 +128,4 @@ footer a:hover {
 
 .window-content {
   padding: 1rem 2rem;
-}
-
-/* Auth */
-#recaptcha-container {
-  width: 100%;
-  max-width: 400px;
-  display: flex;
-  justify-content: center;
-}
-
-#authForm #forgot {
-  color: rgba(33, 37, 41, 0.75);
-  text-decoration: none;
-}
-
-#authForm #forgot:hover {
-  color: rgba(33, 37, 41, 0.9);
-}
-
-#authForm #socialButtons .btn {
-  height: 2.65rem;
-}
-
-.auth-icon-wrapper {
-  display: flex;
-  justify-content: center;
-  width: 1.3rem;
-  margin-right: 0.5rem;
-}
-
-.auth-icon {
-  padding: 0.28rem 0;
-  font-size: 1.2rem;
-}
-
-/* Legal Stuff */
-.impressum dt {
-  float: left;
-  width: 90px;
-  font-weight: bold;
-}
-
-.impressum dd {
-  margin-left: 100px;
-  margin-bottom: 0.4rem;
-}
-
-/* Index Styles */
-#hero {
-  height: 90vh;
-  background: url('/static/img/index/hero.jpg') center/cover no-repeat;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  color: white;
-}
-
-#heroText {
-  background-color: rgba(0, 0, 0, 0.5);
-  padding: 1rem 2rem;
-  border-radius: 10px;
-}
-
-@media (max-width: 768px) {
-  #heroText .display-4 {
-    font-size: 1.75rem;
-    font-weight: bold;
-  }
-
-  #heroText .display-6 {
-    font-size: 1.5rem;
-    font-weight: bold;
-  }
-}
-
-.card {
-  position: static !important;
-  z-index: auto !important;
 }

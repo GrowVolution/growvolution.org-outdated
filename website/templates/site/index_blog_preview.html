@@ -1,0 +1,9 @@
+<div class="col-md-4 mb-4" data-aos="zoom-in" data-aos-delay="{{ delay }}">
+  <div class="card h-100">
+    <div class="card-body text-center">
+      <h5 class="card-title"><b>{{ title }}</b></h5>
+      <p class="card-text text-start">{{ preview_text[:500] }}{{ '...' if preview_text|length > 500 else '' }}</p>
+      <a href="/blog/{{ id }}" class="btn btn-outline-secondary">Zum Beitrag</a>
+    </div>
+  </div>
+</div>

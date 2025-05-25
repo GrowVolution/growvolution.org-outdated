@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+
+{% block title %}Eintrag {{ id }}{% endblock %}
+
+{% block style %}
+<style>
+@media (min-width: 768px) {
+    .max-vw-md-75 {
+        max-width: 75vw;
+    }
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="container py-5">
+  <div class="window-box mx-auto mb-5 max-vw-md-75">
+      <div class="window-header">
+        <h2>{{ title }}</h2>
+      </div>
+      <div class="window-content">
+        <img src="{{ image }}" alt="Beitragsbild" class="img-fluid rounded mb-4 w-100" style="object-fit: cover; max-height: 50vh;">
+        <div>
+          {{ content }}
+        </div>
+        <div class="d-flex justify-content-between align-items-center">
+            <span class="text-muted small">
+                 {{ author }}, {{ timestamp }}
+            </span>
+            <a href="/blog" class="btn btn-outline-secondary"><i class="bi bi-arrow-left"></i> Zurück</a>
+        </div>
+      </div>
+  </div>
+
+  <div class="d-flex justify-content-between align-items-center mb-2 max-vw-md-75 mx-auto">
+    <h4 class="mb-0">Kommentare</h4>
+    <div class="d-flex gap-2">
+      <button class="btn btn-outline-secondary btn-sm">
+        <i class="bi bi-sliders"></i> Filter
+      </button>
+      {% if signed_in %}
+      <button class="btn btn-outline-primary btn-sm">
+        <i class="bi bi-chat-left-text"></i> Kommentar verfassen
+      </button>
+      {% endif %}
+    </div>
+  </div>
+
+  {% if not signed_in %}
+  <div class="text-center mb-4 text-muted">
+    Um mit uns zu interagieren, musst du dich <a href="/login">hier einloggen</a>.
+  </div>
+  {% endif %}
+
+  {% for comment in [
+    {'user': 'Anna Schmidt', 'avatar': 'https://i.pravatar.cc/50?u=anna', 'timestamp': '23. Mai 2025, 14:31', 'text': 'Ein wunderschöner Beitrag! Vielen Dank für deine Offenheit.'},
+    {'user': 'Jonas Weber', 'avatar': 'https://i.pravatar.cc/50?u=jonas', 'timestamp': '23. Mai 2025, 15:02', 'text': 'Ich habe mich in vielen Punkten wiedererkannt. GrowVolution ist etwas Besonderes.'},
+    {'user': 'Gast', 'avatar': 'https://i.pravatar.cc/50?u=gast', 'timestamp': '23. Mai 2025, 16:47', 'text': 'Kann man Beiträge auch anonym kommentieren?'}
+  ] %}
+  <div class="window-box p-3 w-100 mb-2 max-vw-md-75 mx-auto" data-aos="fade-up" data-aos-delay="{{ loop.index0 * 100 }}">
+    <div class="d-flex">
+      <img src="{{ comment.avatar }}" alt="Profilbild" class="rounded me-3" style="width: 50px; height: 50px; object-fit: cover;">
+      <div class="flex-grow-1">
+        <div class="d-flex justify-content-between align-items-center">
+          <strong>{{ comment.user }}</strong>
+          <small class="text-muted">{{ comment.timestamp }}</small>
+        </div>
+        <p class="mb-0">{{ comment.text }}</p>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</section>
+{% endblock %}

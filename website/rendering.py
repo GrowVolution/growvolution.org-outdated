@@ -1,9 +1,9 @@
-from .logic.auth.verification import authenticated_user_request
+from .logic.auth.verification import authenticated_user_request, is_admin
 from flask import render_template
 
 
 def render(template: str, **kwargs) -> str:
-    return render_template(template, signed_in=authenticated_user_request(), **kwargs)
+    return render_template(template, signed_in=authenticated_user_request(), is_admin=is_admin(), **kwargs)
 
 
 def render_404():

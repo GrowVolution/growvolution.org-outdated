@@ -15,23 +15,22 @@ PROFILE_PIC_FOLDER = "profile_pictures"
 
 
 def upload_asset(file: Any,
-                 preset: str = 'profile_pics', public_id: str | None = None,
-                 folder: str = DEFAULT_FOLDER, file_type: str = 'image') -> dict:
+                 preset: str = 'default', public_id: str | None = None,
+                 folder: str = DEFAULT_FOLDER, overwrite: bool | None = None,
+                 file_type: str = 'image') -> dict:
     return uploader.upload(
         file,
         upload_preset=preset,
         public_id=public_id,
         folder=folder,
-        overwrite=True,
+        overwrite=overwrite,
         resource_type=file_type
     )
 
 
-def retrieve_asset_url(asset_id: str, asset_folder: str = DEFAULT_FOLDER) -> str | None:
-    public_path = f"{asset_folder}/{asset_id}"
-
+def retrieve_asset_url(asset_id: str) -> str | None:
     try:
-        result = api.resource(public_path)
+        result = api.resource(asset_id)
         return result.get("secure_url")
 
     except cloudinary.exceptions.NotFound:

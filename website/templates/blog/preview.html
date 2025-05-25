@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block title %}Blog{% endblock %}
+
+{% block content %}
+<section class="container py-5" data-aos="fade-up">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="mb-0">Updates & Blog</h2>
+    <div class="d-flex gap-2">
+      <button class="btn btn-outline-secondary">
+        <i class="bi bi-sliders"></i> Filter
+      </button>
+      {% if is_admin %}
+      <a href="/blog/new" class="btn btn-outline-primary">
+        <i class="bi bi-plus-circle"></i> Neuer Beitrag
+      </a>
+      {% endif %}
+    </div>
+  </div>
+
+  <div id="post-list">
+      {{ posts }}
+  </div>
+
+</section>
+{% endblock %}
