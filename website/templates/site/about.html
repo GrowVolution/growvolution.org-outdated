@@ -2,79 +2,150 @@
 
 {% block title %}Über GrowVolution{% endblock %}
 
+{% block style %}
+<style>
+    @media (max-width: 768px) {
+        .display-4 {
+            font-weight: bold;
+            font-size: 1.75rem;
+        }
+
+        .cta {
+            font-size: 1.2rem;
+        }
+    }
+</style>
+{% endblock %}
+
 {% block content %}
 <section class="text-white text-center py-5" style="background: linear-gradient(135deg, #2c3e50, #34495e);">
   <div class="container" data-aos="fade-down">
     <h1 class="display-4 mb-3">Veränderung beginnt bei dir</h1>
-    <p class="lead">Und genau deshalb gibt es GrowVolution – eine Plattform, die dir hilft, mehr aus dir und deiner Zeit zu machen.</p>
+    <p class="lead">Und das ist alles, wofür <i>GrowVolution</i> steht.</p>
   </div>
 </section>
 
 <section class="container py-5">
   <div class="row align-items-center mb-5" data-aos="fade-up">
+    <div class="col-12 text-center d-md-none mb-3">
+      <img src="/static/img/about/why.jpg" alt="Warum" class="img-fluid rounded">
+    </div>
     <div class="col-md-6">
       <h2>Warum diese Seite?</h2>
       <p>
-        Wir leben in einer Welt voller Ablenkungen, voller Leistungsdruck, voller Oberflächlichkeit. GrowVolution ist unser Gegenentwurf:
-        eine ruhige, klare Plattform für echte Entwicklung, Reflexion und Gemeinschaft.
+          Wir leben in einer Welt voller Ablenkungen, Leistungsdruck und Oberflächlichkeit.
+          Das Schlimmste daran? Die Menschen mit der nötigen Macht unserem gesamt-gesellschaftlichen
+          Versagen entgegenzusteuern, machen es nicht. Stattdessen muss jeder unbedingt seinen Willen
+          bekommen, seine Ansichten fest etablieren und seinen Einfluss ausweiten. 🙄<br><br>
+          Doch wir können an dem, was andere Menschen tun, nichts ändern. Und wir sollten uns vielleicht
+          auch kein Urteil darüber erlauben. Denn sind wir selbst wirklich besser? Nur, weil wir uns anders
+          entwickelt haben? 🤔<br><br>
+          Lass uns lieber die Verantwortung für unser eigenes Leben übernehmen! Statt von anderen mehr Reife
+          zu erwarten, können wir auch einfach selbst heranreifen. Und deshalb gibt es diese Seite. Sie ist
+          der Gegenpol zu allem, was da draußen passiert. - Kein Bullshit, keine Werbung und keine Paywall!
+          Ein Ort, an dem Gemeinschaft noch etwas zählt und du wirklich im Mittelpunkt stehst. 🙏🏼💯
       </p>
-      <ul class="list-unstyled">
-        <li>✨ Fokus auf persönliche Veränderung statt Likes</li>
-        <li>⏳ Zeit als wertvollste Ressource erkennen</li>
-        <li>🤝 Unterstützung statt Vergleich</li>
-        <li>🧭 Klarheit finden – ohne Druck</li>
-      </ul>
     </div>
-    <div class="col-md-6 text-center">
+    <div class="col-md-6 d-none d-md-block text-center">
+      <img src="/static/img/about/why.jpg" alt="Warum" class="img-fluid rounded">
+    </div>
+  </div>
+
+  <div class="row align-items-center mb-5 flex-md-row-reverse" data-aos="fade-up">
+    <div class="col-12 text-center d-md-none mb-3">
+      <img src="/static/img/about/vision.jpg" alt="Vision" class="img-fluid rounded">
+    </div>
+    <div class="col-md-6 pt-md-2">
+      <h2>Die Vision dahinter</h2>
+      <p>
+          Zwei Worte verbergen sich im Namen <i>GrowVolution</i>: Growth (Wachstum) & Revolution.
+          Und das ist auch der Gedanke hinter diesem Projekt. Eine Revolution die aus der (Weiter-)
+          Entwicklung vieler verschiedener Menschen hervorgeht. Friedlich, still und in aller Ruhe.
+          Denn es eilt nicht. Wir wollen hier keinen Sprint hinlegen, sondern unser gesamtes Verhalten
+          grundlegend ändern - jeder in seinem Tempo. 🌱<br><br>
+          Unsere Vision ist es, nicht nur eine Plattform wie diese hier zu schaffen. Sondern eine
+          Gemeinschaft zu formen, die sich bewusst entscheidet einen Schlussstrich zu ziehen und Dinge
+          völlig neu anzugehen. Eine Gemeinschaft, die von ihren Mitgliedern lebt, in der jeder von
+          Bedeutung ist und von der jeder profitiert. 🤝🏼<br><br>
+          Du sollst in dem Wissen leben können, dass wir da sind, wenn du uns brauchst. Dass dort
+          jemand ist, der dir Aufgaben abnimmt und dir in jeder erdenklichen Weise unter die Arme
+          greift. Damit du die Chance hast dich ungestört auf dein Leben, deine Ziele und deine
+          ganz persönlichen Wünsche zu konzentrieren. Alles, was du uns im Gegenzug versprechen musst,
+          ist, dass du Verantwortung übernimmst und aktiv daran arbeitest. 💪🏼
+      </p>
+    </div>
+    <div class="col-md-6 d-none d-md-block text-center pb-2">
       <img src="/static/img/about/vision.jpg" alt="Vision" class="img-fluid rounded">
     </div>
   </div>
 
   <div class="row align-items-center mb-5" data-aos="fade-up">
-    <div class="col-md-6 order-md-2">
-      <h2>Wer dahinter steckt</h2>
-      <p>
-        Hey, ich bin Pierre – kein Coach, kein Guru, kein Startup-Typ. Ich bin einfach jemand, der selbst gemerkt hat:
-        So wie es ist, reicht es mir nicht. Ich wollte eine Plattform schaffen, die ehrlich ist. Unfertig, wie wir selbst.
-        Aber bereit zu wachsen – mit dir gemeinsam.
-      </p>
+    <div class="col-12 text-center d-md-none mb-3">
+      <img src="/static/img/about/mission.jpg" alt="Mission" class="img-fluid rounded">
     </div>
-    <div class="col-md-6 order-md-1 text-center">
-      <img src="/static/img/about/pierre.jpg" alt="Pierre Schkoldow" class="img-fluid rounded-circle" style="max-width: 200px;">
+    <div class="col-md-6">
+      <h2>Unsere Mission</h2>
+      <p>
+          Wir machen es uns zur Aufgabe, dich in allen Bereichen deines Lebens zu unterstützen.
+          Diese Seite hier zu entwickeln und bereitzustellen ist der Anfang. Ziel ist, dadurch
+          eine Plattform aufzubauen, die das genaue Gegenteil von Social Media ist:
+      </p>
+        <ol class="list-unstyled">
+            <li>📱 Kein endloses Scrollen</li>
+            <li>📰 Keine lästige Werbung</li>
+            <li>⌛ Kein Versuch dir deine Zeit zu stehlen und</li>
+            <li>🥵 Keine unrealistischen Bilder oder Erwartungen wecken</li>
+        </ol>
+        <p>
+            Stattdessen wollen wir dich dazu inspirieren deine Ziele zu verfolgen. Dich mit
+            regelmäßigen Challenges motivieren etwas Neues auszuprobieren. Dir die Verwaltung
+            deiner wichtigsten Ressourcen - dein Geld und deine Zeit - so leicht wie möglich machen.
+            Und dich selbstverständlich dazu animieren deine Fortschritte festzuhalten. (Damit wir
+            dich, wenn du magst, an dein Vorhaben erinnern können - um gemeinsam mit dir eine Lösung
+            zu finden, wie du es schaffst dranzubleiben. 🫡)<br><br>
+            Außerdem wollen wir eine wertschätzende, motivierte Community aufbauen, die deine
+            Fortschritte würdigt und in Zeiten der Schwäche immer ein offenes Ohr für dich hat. 🫂
+        </p>
+    </div>
+    <div class="col-md-6 d-none d-md-block text-center">
+      <img src="/static/img/about/mission.jpg" alt="Mission" class="img-fluid rounded">
     </div>
   </div>
 
   <div class="mb-5" data-aos="fade-up">
-    <h2 class="text-center mb-4">Wie GrowVolution funktioniert</h2>
+    <h2 class="text-center mb-4">Wie diese Seite funktioniert</h2>
     <div class="row text-center">
-      <div class="col-md-4 mb-3">
+      <div class="col-md-4 mb-3" data-aos="fade-up" data-aos-delay="100">
         <i class="bi bi-person-plus display-5"></i>
         <h5 class="mt-2">1. Registrieren</h5>
-        <p>Leg dein Profil an und mach den ersten Schritt in deine Veränderung.</p>
+        <p>Leg dein Profil an und mache den ersten Schritt.</p>
       </div>
-      <div class="col-md-4 mb-3">
+      <div class="col-md-4 mb-3" data-aos="fade-up" data-aos-delay="200">
         <i class="bi bi-journal-check display-5"></i>
         <h5 class="mt-2">2. Reflektieren & dokumentieren</h5>
-        <p>Halte fest, was dich bewegt, und finde heraus, was du wirklich willst.</p>
+        <p>Schau dir an, wo du stehst, lege deine Ziele fest und führe Buch über deinen Fortschritt.</p>
       </div>
-      <div class="col-md-4 mb-3">
+      <div class="col-md-4 mb-3" data-aos="fade-up" data-aos-delay="300">
         <i class="bi bi-people display-5"></i>
         <h5 class="mt-2">3. In der Community wachsen</h5>
-        <p>Finde Menschen, die dich stärken und die du mit deiner Reise inspirierst.</p>
+        <p>Nimm an Challenges teil, lass dir helfen dran zu bleiben, tausche deine Erfahrungen aus, finde Inspiration und inspiriere andere.</p>
       </div>
     </div>
   </div>
 
   <div class="text-center" data-aos="fade-up">
-    <h4 class="mb-3">Was kommt als Nächstes?</h4>
-    <p class="text-muted">Blog-Interaktionen, Challenges, ein nutzergeführter Kalender, eigene Themenräume – und hoffentlich: dein Beitrag.</p>
+    <h4 class="mb-3">Und das Beste?</h4>
+    <p class="text-muted">
+        Alles ist völlig kostenlos. Wir laden dich lediglich ein zu spenden.
+        - Aber auch nur, wenn du dank uns massive Fortschritte machen durftest!
+    </p>
   </div>
 </section>
 
 <section class="text-center py-5 bg-light" data-aos="fade-up">
   <div class="container">
-    <h2 class="mb-3">Du musst nicht perfekt sein, um anzufangen.</h2>
-    <p class="mb-4">Du musst nur anfangen, dich selbst ernst zu nehmen.</p>
+    <h2 class="cta mb-2">Du musst nicht perfekt sein, um anzufangen.</h2>
+      <p class="mb-4">Du musst nur anfangen, dich selbst ernst zu nehmen.</p>
     <a href="/signup" class="btn btn-success btn-lg">Jetzt loslegen</a>
   </div>
 </section>
