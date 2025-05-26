@@ -19,7 +19,7 @@ Keine Dopaminfallen, keine Likes, keine Ablenkung – sondern ein digitaler Ort,
 ## 💻 Über den Code
 
 Dieses Projekt ist in meiner Freizeit entstanden.  
-Ich (Pierre) bin kein Profi-Entwickler, sondern ein Hobby-Tüftler mit einer großen Vision – und sehr dankbar für die Hilfe von [ChatGPT](https://chat.openai.com), der mir besonders im Frontend sehr unterstützt. 😅
+Ich (Pierre) bin kein Profi-Entwickler, sondern ein Hobby-Tüftler mit einer großen Vision – und sehr dankbar für die Hilfe von [ChatGPT](https://chat.openai.com), der mich besonders im Frontend sehr unterstützt. 😅
 
 ---
 
