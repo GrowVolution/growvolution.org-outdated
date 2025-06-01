@@ -17,3 +17,7 @@ def add_model(model: DB.Model):
 def delete_model(model: DB.Model):
     DB.session.delete(model)
     commit()
+
+
+def init_models():
+    from . import user, blog, comment, reply

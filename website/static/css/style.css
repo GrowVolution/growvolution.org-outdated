@@ -20,14 +20,6 @@ main {
   max-width: 100dvw !important;
 }
 
-header {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 1500 !important;
-}
-
 footer a {
   color: #fff;
   text-decoration: underline;
@@ -44,6 +36,56 @@ footer a:hover {
   border-color: darkseagreen;
   box-shadow: 0 0 0 0.2rem rgba(143, 188, 143, 0.25);
   outline: none;
+}
+
+.highlight-flash {
+  animation: flash-highlight 1.5s ease-out;
+}
+
+@keyframes flash-highlight {
+  0%   { background-color: lightskyblue; }
+  50%  { background-color: rgba(135, 206, 250, 0.5); }
+  100% { background-color: transparent; }
+}
+
+.text-hover-primary:hover {
+  color: var(--bs-primary) !important;
+}
+
+.text-hover-secondary:hover {
+  color: var(--bs-secondary) !important;
+}
+
+.text-hover-success:hover {
+  color: var(--bs-success) !important;
+}
+
+.text-hover-danger:hover {
+  color: var(--bs-danger) !important;
+}
+
+.text-hover-warning:hover {
+  color: var(--bs-warning) !important;
+}
+
+.text-hover-info:hover {
+  color: var(--bs-info) !important;
+}
+
+.text-hover-light:hover {
+  color: var(--bs-light) !important;
+}
+
+.text-hover-dark:hover {
+  color: var(--bs-dark) !important;
+}
+
+.text-hover-muted:hover {
+  color: var(--bs-secondary-color) !important;
+}
+
+.text-hover-white:hover {
+  color: #fff !important;
 }
 
 /* Nav Styles */
@@ -128,4 +170,60 @@ footer a:hover {
 
 .window-content {
   padding: 1rem 2rem;
+}
+
+/* Blog Styles */
+@media (min-width: 768px) {
+  .equal-height-row {
+    display: flex;
+    align-items: stretch;
+  }
+}
+
+.image-preview {
+  background-color: #e9ecef;
+  border-radius: 0.375rem 0.375rem 0 0;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1rem;
+  color: #6c757d;
+  overflow: hidden;
+  position: relative;
+}
+
+.image-preview img {
+  object-fit: cover;
+  width: 100%;
+  height: 100%;
+}
+
+.image-upload {
+  border-radius: 0 0 0.375rem 0.375rem;
+  border-top: none;
+}
+
+.preview-wrapper {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.ql-container {
+  border-bottom-left-radius: 0.375rem;
+  border-bottom-right-radius: 0.375rem;
+  background-color: white;
+}
+
+.ql-toolbar {
+  border-top-left-radius: 0.375rem;
+  border-top-right-radius: 0.375rem;
+  background-color: white;
+  border-bottom: 1px solid #dee2e6;
+  flex-wrap: wrap;
+}
+
+.ql-editor {
+  min-height: 200px;
 }

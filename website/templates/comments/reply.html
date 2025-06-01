@@ -1,0 +1,13 @@
+<div id="reply-{{ id }}" class="ms-4 pe-3 ps-2 py-3 {{ '' if first_reply else 'border-top' }} rounded reply">
+    <div class="d-flex">
+      <img src="{{ picture }}" alt="Profilbild" class="rounded me-3" style="width: 40px; height: 40px; object-fit: cover;">
+      <div class="flex-grow-1">
+        <div class="d-flex justify-content-between align-items-center">
+          <strong class="author">{{ author }}</strong>
+          <small class="text-muted">{{ reply_info }}</small>
+        </div>
+        <div class="text-content"><p>{{ reply_text }}</p></div>
+        {% include "comments/quick_actions.html" %}
+      </div>
+    </div>
+</div>

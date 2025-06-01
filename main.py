@@ -38,9 +38,15 @@ def stop_watch():
     watcher = stop_watcher(watcher) if watcher else None
 
 
-def restart_main():
-    if main_proc:
+def restart_main(reload: bool = False):
+    if main_proc and reload:
         main_proc.send_signal(signal.SIGHUP)
+
+    elif main_proc:
+        main_proc.terminate()
+        main_proc.wait()
+        start_main()
+
     else:
         start_main()
 
@@ -62,16 +68,21 @@ signal.signal(signal.SIGINT, _shutdown)
 signal.signal(signal.SIGTERM, _shutdown)
 
 
-if mode == 'DEBUG':
+def start_message():
     print("\n\nGrowVolution 2025 - GNU General Public License")
     print("Server Control Script: Enter the number of the action you want to perform.\n")
 
     print('1 - start debug')
     print('2 - stop debug')
-    print('3 - restart debug')
-    print('4 - debug to main')
-    print('5 - reload .env')
-    print('6 - exit')
+    print('3 - debug to main')
+    print('4 - reload .env')
+    print('5 - restart main')
+    print('6 - clear console')
+    print('7 - exit')
+
+
+if mode == 'DEBUG':
+    start_message()
 
     while True:
         cmd = input('> ')
@@ -82,13 +93,9 @@ if mode == 'DEBUG':
             stop_watch()
 
         elif cmd == '3':
-            stop_watch()
-            start_watch()
+            restart_main(True)
 
         elif cmd == '4':
-            restart_main()
-
-        elif cmd == '5':
             reload_dotenv()
             if watcher:
                 stop_watch()
@@ -99,7 +106,14 @@ if mode == 'DEBUG':
             env['INSTANCE'] = 'main'
             restart_main()
 
+        elif cmd == '5':
+            restart_main()
+
         elif cmd == '6':
+            os.system('cls' if os.name == 'nt' else 'clear')
+            start_message()
+
+        elif cmd == '7':
             shutdown()
             break
 

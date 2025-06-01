@@ -31,6 +31,9 @@ class User(DB.Model):
 
     role = DB.Column(DB.String(8), nullable=False, default='user')
 
+    comments = DB.relationship('Comment', back_populates='author', cascade='all, delete-orphan')
+    replies = DB.relationship('Reply', back_populates='author', cascade='all, delete-orphan')
+
     def __init__(self,
                  first_name: str, last_name: str,
                  username: str, email: str, picture: str | None = None,
@@ -64,4 +67,4 @@ class User(DB.Model):
 
     def get_picture_url(self) -> str:
         pic = self.picture
-        return pic if pic.startswith('http') else cloudinary.retrieve_asset_url(pic, cloudinary.PROFILE_PIC_FOLDER)
+        return pic if pic.startswith('http') else cloudinary.retrieve_asset_url(pic)

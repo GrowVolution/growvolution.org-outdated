@@ -3,10 +3,17 @@
 {% block title %}Eintrag {{ id }}{% endblock %}
 
 {% block style %}
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+    <link href="/static/css/style.css" rel="stylesheet">
 <style>
 @media (min-width: 768px) {
     .max-vw-md-75 {
         max-width: 75vw;
+    }
+}
+@media (max-width: 768px) {
+    #back {
+        font-size: 0.6rem;
     }
 }
 </style>
@@ -15,20 +22,55 @@
 {% block content %}
 <section class="container py-5">
   <div class="window-box mx-auto mb-5 max-vw-md-75">
+  <span id="id" class="d-none">{{ id }}</span>
       <div class="window-header">
-        <h2>{{ title }}</h2>
+        <h2 id="title">{{ title }}</h2>
+          <input id="titleEdit" type="text" class="form-control w-100 d-none" value="{{ title }}">
       </div>
       <div class="window-content">
-        <img src="{{ image }}" alt="Beitragsbild" class="img-fluid rounded mb-4 w-100" style="object-fit: cover; max-height: 50vh;">
-        <div>
-          {{ content }}
-        </div>
-        <div class="d-flex justify-content-between align-items-center">
-            <span class="text-muted small">
-                 {{ author }}, {{ timestamp }}
-            </span>
-            <a href="/blog" class="btn btn-outline-secondary"><i class="bi bi-arrow-left"></i> Zurück</a>
-        </div>
+          <div id="content">
+            <img src="{{ image }}" alt="Beitragsbild" class="img-fluid rounded mb-4 w-100" style="object-fit: cover; max-height: 50vh;">
+            <div id="postContent">
+              {{ content }}
+            </div>
+            <div class="d-flex justify-content-between align-items-center">
+                <span class="text-muted small">
+                     {{ post_info }}
+                </span>
+                <a id="back" href="/blog" class="btn btn-outline-secondary">
+                    <i class="bi bi-arrow-left"></i> Zurück
+                </a>
+            </div>
+          </div>
+          <div id="contentEdit" class="d-none">
+              <div class="row g-3 equal-height-row mb-3">
+                <div class="col-md-4 preview-wrapper">
+                  <label class="form-label">Vorschaubild</label>
+                  <div class="image-preview">
+                    <img id="preview" src="{{ image }}" alt="Vorschau" class="img-fluid rounded">
+                  </div>
+                  <input class="form-control image-upload" type="file" id="imageInput" name="image_file" accept="image/*">
+                </div>
+                <div class="col-md-8 d-flex flex-column">
+                  <label for="summary" class="form-label">Kurzbeschreibung</label>
+                  <textarea class="form-control h-100" id="summary" name="summary" placeholder="Worum geht es in diesem Beitrag?">{{ summary }}</textarea>
+                </div>
+              </div>
+
+              <div class="mb-4">
+                <label for="content" class="form-label">Beitrag</label>
+                <div id="editor" style="height: 300px;"></div>
+                <input type="hidden" name="content" id="content">
+              </div>
+          </div>
+          {% if creator %}
+              <button id="reset" type="button" class="btn btn-outline-warning w-100 mt-3 d-none">
+                  <i class="bi bi-arrow-counterclockwise"></i> Zurücksetzen
+              </button>
+              <button id="edit" type="button" class="btn btn-outline-primary w-100 mt-3">
+                  <i class="bi bi-pencil"></i> Bearbeiten
+              </button>
+          {% endif %}
       </div>
   </div>
 
@@ -39,7 +81,7 @@
         <i class="bi bi-sliders"></i> Filter
       </button>
       {% if signed_in %}
-      <button class="btn btn-outline-primary btn-sm">
+      <button id="addComment" class="btn btn-outline-primary btn-sm">
         <i class="bi bi-chat-left-text"></i> Kommentar verfassen
       </button>
       {% endif %}
@@ -48,27 +90,32 @@
 
   {% if not signed_in %}
   <div class="text-center mb-4 text-muted">
-    Um mit uns zu interagieren, musst du dich <a href="/login">hier einloggen</a>.
+    Um mit uns zu interagieren, musst du dich <br class="d-md-none"><a href="/login">hier einloggen</a>.
   </div>
   {% endif %}
 
-  {% for comment in [
-    {'user': 'Anna Schmidt', 'avatar': 'https://i.pravatar.cc/50?u=anna', 'timestamp': '23. Mai 2025, 14:31', 'text': 'Ein wunderschöner Beitrag! Vielen Dank für deine Offenheit.'},
-    {'user': 'Jonas Weber', 'avatar': 'https://i.pravatar.cc/50?u=jonas', 'timestamp': '23. Mai 2025, 15:02', 'text': 'Ich habe mich in vielen Punkten wiedererkannt. GrowVolution ist etwas Besonderes.'},
-    {'user': 'Gast', 'avatar': 'https://i.pravatar.cc/50?u=gast', 'timestamp': '23. Mai 2025, 16:47', 'text': 'Kann man Beiträge auch anonym kommentieren?'}
-  ] %}
-  <div class="window-box p-3 w-100 mb-2 max-vw-md-75 mx-auto" data-aos="fade-up" data-aos-delay="{{ loop.index0 * 100 }}">
-    <div class="d-flex">
-      <img src="{{ comment.avatar }}" alt="Profilbild" class="rounded me-3" style="width: 50px; height: 50px; object-fit: cover;">
-      <div class="flex-grow-1">
-        <div class="d-flex justify-content-between align-items-center">
-          <strong>{{ comment.user }}</strong>
-          <small class="text-muted">{{ comment.timestamp }}</small>
-        </div>
-        <p class="mb-0">{{ comment.text }}</p>
-      </div>
-    </div>
+  <div id="comments">
+      {{ comments }}
   </div>
-  {% endfor %}
+
 </section>
+{% endblock %}
+
+{% block modal %}
+    {% if signed_in %}
+        {% include "comments/write_modal.html" %}
+    {% endif %}
+{% endblock %}
+
+{% block script_afterDOM %}
+    {% if signed_in %}
+        <script src="/static/js/comments/modal.js"></script>
+        <script src="/static/js/comments/comment.js"></script>
+        <script src="/static/js/comments/reply.js"></script>
+    {% endif %}
+    {% if creator %}
+        <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
+        <script src="/static/js/blog/editor.js"></script>
+        <script src="/static/js/blog/edit.js"></script>
+    {% endif %}
 {% endblock %}

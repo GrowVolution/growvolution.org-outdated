@@ -1,0 +1,19 @@
+<div class="d-flex gap-3 mb-0">
+  <a class="text-dark text-decoration-none {{ 'active' if signed_in else '' }} like" data-liked="{{ 'true' if liked else 'false' }}">
+      <i class="bi {{ 'bi-heart-fill text-danger' if liked else 'bi-heart' }}"></i>
+      <span class="like-count">{{ like_count }}</span>
+  </a>
+  {% if signed_in %}
+      <a class="text-dark text-decoration-none text-hover-primary reply">
+          <i class="bi bi-reply"></i> <span class="d-md-inline d-none">Antworten</span>
+      </a>
+  {% endif %}
+  {% if is_author %}
+      <a class="text-dark text-decoration-none text-hover-warning rounded edit">
+          <i class="bi bi-pencil"></i> <span class="d-md-inline d-none">Bearbeiten</span>
+      </a>
+      <a class="text-dark text-decoration-none text-hover-danger rounded delete">
+          <i class="bi bi-trash"></i> <span class="d-md-inline d-none">Löschen</span>
+      </a>
+  {% endif %}
+</div>

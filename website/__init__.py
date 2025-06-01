@@ -35,9 +35,10 @@ def init_app():
     APP.register_blueprint(routes)
     APP.register_blueprint(auth_routes)
 
-    from .data import DB, BCRYPT
+    from .data import DB, BCRYPT, init_models
     DB.init_app(APP)
     BCRYPT.init_app(APP)
+    init_models()
 
     from .socket import SOCKET
     SOCKET.init_app(APP)

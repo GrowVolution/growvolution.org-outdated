@@ -3,6 +3,7 @@ from watchdog.events import FileSystemEventHandler
 from dotenv import load_dotenv
 from pathlib import Path
 from datetime import datetime
+from threading import Timer
 import os, subprocess, signal
 
 load_dotenv()
@@ -36,19 +37,34 @@ def clean_old_logs(log_dir: Path, max_files: int = 10, delete_count: int = 10):
 
 
 class Handler(FileSystemEventHandler):
+
+    reload_blocked = False
+    reload_scheduled = False
+
+    def reload(self):
+        restart()
+        self.reload_blocked = True
+        Timer(3, self.reload_timeout).start()
+
+    def reload_timeout(self):
+        if self.reload_scheduled:
+            self.reload()
+            return
+        self.reload_blocked = False
+
     def on_any_event(self, event):
+        if self.reload_blocked:
+            self.reload_scheduled = True
+            return
         if not event.src_path.endswith(('.py', '.html', '.css', '.js')):
             return
-        if event.event_type not in ["modified", "deleted"]:
+        if event.event_type not in ["modified", "deleted", "moved"]:
             return
-        restart()
+        self.reload()
 
 
 def start():
     global process
-
-    clean_old_logs(logs_dir)
-    clean_old_logs(logs_dir.parent)
 
     timestamp = datetime.now().strftime("%d%m%Y%H%M%S")
     logs_dir.mkdir(parents=True, exist_ok=True)
@@ -67,6 +83,9 @@ def restart():
         process.send_signal(signal.SIGHUP)
     else:
         start()
+
+    clean_old_logs(logs_dir)
+    clean_old_logs(logs_dir.parent)
 
 
 def start_watcher() -> Observer:
