@@ -1,0 +1,41 @@
+{% extends 'modal_base.html' %}
+
+{% block id %}phoneChangeModal{% endblock %}
+
+{% block title %}Telefonnummer ändern{% endblock %}
+
+{% block body %}
+  <div class="form-check mb-3">
+    <input class="form-check-input" type="checkbox" role="switch" id="phoneUnset" checked>
+    <label class="form-check-label" for="phoneUnset">Keine Angabe</label>
+  </div>
+
+  <div class="row g-2" id="phoneFields">
+    <div class="col-4">
+      <label for="phonePrefix" class="form-label">Vorwahl</label>
+      <select id="phonePrefix" class="form-select">
+        <option value="+49" selected>🇩🇪 +49</option>
+        <option value="+43">🇦🇹 +43</option>
+        <option value="+41">🇨🇭 +41</option>
+        <option value="+33">🇫🇷 +33</option>
+        <option value="+39">🇮🇹 +39</option>
+      </select>
+    </div>
+    <div class="col-8">
+      <label for="phoneNumber" class="form-label">Nummer</label>
+      <input type="number" class="form-control" id="phoneNumber">
+    </div>
+  </div>
+
+  <p class="mt-3 text-muted small">
+    Mit der Angabe meiner Telefonnummer stimme ich zu, vom GrowVolution Team kontaktiert zu werden,
+    wenn ich seit mehr als 7 Tagen keine Fortschritte dokumentiert habe.
+  </p>
+{% endblock %}
+
+{% block footer %}
+  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Abbrechen</button>
+  <button id="savePhone" type="button" class="btn btn-primary" disabled>
+    <i class="bi bi-check-circle me-1"></i> Speichern
+  </button>
+{% endblock %}

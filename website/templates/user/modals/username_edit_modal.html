@@ -1,0 +1,27 @@
+{% extends 'modal_base.html' %}
+
+{% block id %}usernameEditModal{% endblock %}
+
+{% block title %}Benutzernamen ändern{% endblock %}
+
+{% block body %}
+  {% if not user.can_change_username %}
+    <div class="alert alert-info">
+      Dein Benutzername kann erst in {{ user.days_until_username_change }} Tagen erneut geändert werden.
+    </div>
+    <input class="form-control" type="text" value="{{ user.username }}" disabled>
+  {% else %}
+    <label for="newUsername" class="form-label">Neuer Benutzername</label>
+    <input type="text" class="form-control" id="newUsername" placeholder="@neuername" value="{{ user.username }}">
+    <div id="usernameHint" class="form-text d-none">
+      <i class="bi me-1"></i><span></span>
+    </div>
+  {% endif %}
+{% endblock %}
+
+{% block footer %}
+  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Abbrechen</button>
+  <button id="saveUsername" type="button" class="btn btn-primary" {% if not user.can_change_username %}disabled{% endif %}>
+    <i class="bi bi-check-circle me-1"></i> Speichern
+  </button>
+{% endblock %}

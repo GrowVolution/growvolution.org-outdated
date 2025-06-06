@@ -35,9 +35,9 @@ def handle_reset_request(email: str):
         code = add_entry(user.id, 10)
         reset_mail(email, user.first_name, code)
 
-        from . import SOCKET, emit_html
+        from . import emit, emit_html
         emit_html(Markup("<div class='text-center'><b class='text-success'>"
                          "Wir haben dir einen Link zum Zurücksetzen deines Passworts geschickt! "
                          "Dieser ist 10 Minuten gültig."
                          "</b></div>"))
-        SOCKET.emit('success', None)
+        emit('success')

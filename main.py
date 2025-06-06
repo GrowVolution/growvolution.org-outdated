@@ -51,6 +51,19 @@ def restart_main(reload: bool = False):
         start_main()
 
 
+def update_database():
+    msg = input("Enter migration message: ").strip()
+    if not msg:
+        print("Abgebrochen – keine Nachricht eingegeben.\n")
+        return
+
+    db_env = os.environ.copy()
+    db_env['FLASK_APP'] = 'db_manage.py'
+    subprocess.run(["flask", "db", "migrate", "-m", msg], env=db_env)
+    subprocess.run(["flask", "db", "upgrade"], env=db_env)
+    print()
+
+
 def _shutdown(signum: int, frame: FrameType | None):
     print(f"Handling signal {'SIGTERM' if signum == signal.SIGTERM else 'SIGINT'}, server will shutdown now...")
     shutdown()
@@ -76,9 +89,10 @@ def start_message():
     print('2 - stop debug')
     print('3 - debug to main')
     print('4 - reload .env')
-    print('5 - restart main')
-    print('6 - clear console')
-    print('7 - exit')
+    print('5 - update database')
+    print('6 - restart main')
+    print('7 - clear console')
+    print('8 - exit')
 
 
 if mode == 'DEBUG':
@@ -107,13 +121,16 @@ if mode == 'DEBUG':
             restart_main()
 
         elif cmd == '5':
-            restart_main()
+            update_database()
 
         elif cmd == '6':
+            restart_main()
+
+        elif cmd == '7':
             os.system('cls' if os.name == 'nt' else 'clear')
             start_message()
 
-        elif cmd == '7':
+        elif cmd == '8':
             shutdown()
             break
 

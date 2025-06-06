@@ -21,11 +21,7 @@ def handle_request() -> Response | str:
                          "Möchtest du dich <a href='/signup'>hier registrieren</a>?"), 'warning')
             return _render_self()
 
-        api_flag = 'google' if user.google_id else (
-            'apple' if user.apple_id else (
-                'microsoft' if user.microsoft_id else None
-            )
-        )
+        api_flag = user.oauth_provider
 
         if api_flag:
             api = api_flag.capitalize()

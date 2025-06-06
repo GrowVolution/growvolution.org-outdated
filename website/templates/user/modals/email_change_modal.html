@@ -1,0 +1,29 @@
+{% extends 'modal_base.html' %}
+
+{% block id %}emailChangeModal{% endblock %}
+
+{% block title %}E-Mail-Adresse ändern{% endblock %}
+
+{% block body %}
+  {% if user.oauth_provider %}
+    <div class="alert alert-info">
+      Dein Account ist mit <strong>{{ user.oauth_provider.capitalize() }}</strong> verknüpft. Die E-Mail-Adresse kann deshalb nicht geändert werden.
+    </div>
+    <input class="form-control" type="email" value="{{ user.email }}" disabled>
+  {% else %}
+    {% if user.email_change_pending %}
+      <div class="alert alert-warning">
+        Eine E-Mail-Adressänderung ist derzeit ausstehend. Bitte bestätige die Änderung in der dir zugesandten E-Mail.
+      </div>
+    {% endif %}
+    <label for="newEmail" class="form-label">Neue E-Mail-Adresse</label>
+    <input type="email" class="form-control" id="newEmail" value="{{ user.email }}">
+  {% endif %}
+{% endblock %}
+
+{% block footer %}
+  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Abbrechen</button>
+  <button id="saveEmail" type="button" class="btn btn-primary" {% if user.oauth_provider %}disabled{% endif %}>
+    <i class="bi bi-check-circle me-1"></i> Speichern
+  </button>
+{% endblock %}

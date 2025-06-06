@@ -68,13 +68,11 @@ def oauth_callback() -> Response:
     if not user:
         user = udb.User.query.filter_by(email=email).first()
         if user:
-            api_flag = 'Google' if user.google_id else (
-                'Apple' if user.apple_id else None
-            )
-            flash(f"Deine E-Mail Adresse ist bereits mit einem {api_flag} Account verknüpft.",
+            api_flag = user.oauth_provider
+            flash(f"Deine E-Mail Adresse ist bereits mit einem {api_flag.capitalize()} Account verknüpft.",
                   "warning") if api_flag \
-                else flash("Es existiert bereits ein Account mit deiner E-Mail Adresse.",
-                           "warning")
+            else flash("Es existiert bereits ein Account mit deiner E-Mail Adresse.","warning")
+
             return back_to_login()
 
         name = decoded.get("name")

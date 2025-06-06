@@ -18,8 +18,10 @@
           <div class="dropdown-menu dropdown-menu-dark dropdown-menu-end" aria-labelledby="menuDropdown">
             {% if signed_in %}
               <a class="dropdown-item {% if request.path == '/profile' %}active{% endif %}" href="/profile">Mein Profil</a>
+                <!--
                 <a class="dropdown-item {% if request.path == '/progress' %}active{% endif %}" href="/progress">Fortschritt</a>
                 <a class="dropdown-item {% if request.path == '/finances' %}active{% endif %}" href="/finances">Finanzen</a>
+                -->
               <hr class="dropdown-divider">
               <a class="dropdown-item" href="/logout">Ausloggen</a>
             {% else %}

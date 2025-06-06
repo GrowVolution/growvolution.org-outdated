@@ -1,0 +1,26 @@
+{% extends 'modal_base.html' %}
+
+{% block id %}profilePictureModal{% endblock %}
+
+{% block title %}Profilbild ändern{% endblock %}
+
+{% block body %}
+  <div class="d-flex justify-content-center align-items-center">
+    <div class="preview-wrapper" style="max-width: 350px">
+      <div class="image-preview" id="imagePreview">
+        <img id="profilePreview" src="{{ user.get_picture_url() }}" alt="Vorschau" class="img-fluid rounded">
+      </div>
+      <input class="form-control image-upload" type="file" id="image_file" name="image_file" accept="image/*">
+    </div>
+    <div class="progress mt-3 d-none" id="uploadProgress">
+      <div class="progress-bar progress-bar-striped progress-bar-animated bg-info" role="progressbar" style="width: 0%;"></div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block footer %}
+  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Abbrechen</button>
+  <button id="saveProfilePicture" type="button" class="btn btn-primary" disabled>
+    <i class="bi bi-check-circle me-1"></i> Speichern
+  </button>
+{% endblock %}

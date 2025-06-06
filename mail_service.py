@@ -57,6 +57,12 @@ def confirmation_mail(receiver: str, name: str, confirm_code: str):
     send(receiver, "E-Mail Adresse bestätigen", html)
 
 
+def email_change_mail(receiver: str, name: str, confirm_code: str):
+    html = render_template('mail/confirm_change_mail.html', user=name,
+                           confirm_code=confirm_code)
+    send(receiver, "Neue E-Mail Adresse", html)
+
+
 def reset_mail(receiver: str, name: str, reset_code: str):
     html = render_template('mail/reset_mail.html', user=name, reset_code=reset_code)
     send(receiver, "Passwort zurücksetzen", html)

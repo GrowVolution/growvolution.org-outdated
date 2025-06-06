@@ -1,0 +1,43 @@
+{% extends 'modal_base.html' %}
+
+{% block id %}addressChangeModal{% endblock %}
+
+{% block title %}Anschrift ändern{% endblock %}
+
+{% block body %}
+  <div class="form-check mb-3">
+    <input class="form-check-input" type="checkbox" id="addressUnset" {% if not user.address %}checked{% endif %}>
+    <label class="form-check-label" for="addressUnset">Keine Angabe</label>
+  </div>
+
+  {% set address = user.get_address_dict() or {} %}
+
+  <div class="row">
+    <div class="col-8 mb-2">
+      <label for="addressStreet" class="form-label">Straße</label>
+      <input type="text" class="form-control" id="addressStreet" value="{{ address.street or '' }}">
+    </div>
+    <div class="col-4 mb-2">
+      <label for="addressNumber" class="form-label">Nr.</label>
+      <input type="text" class="form-control" id="addressNumber" value="{{ address.number or '' }}">
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-4 mb-2">
+      <label for="addressZip" class="form-label">PLZ</label>
+      <input type="text" class="form-control" id="addressZip" value="{{ address.postal or '' }}">
+    </div>
+    <div class="col-8 mb-2">
+      <label for="addressCity" class="form-label">Ort</label>
+      <input type="text" class="form-control" id="addressCity" value="{{ address.city or '' }}">
+    </div>
+  </div>
+{% endblock %}
+
+{% block footer %}
+  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Abbrechen</button>
+  <button id="saveAddress" type="button" class="btn btn-primary" disabled>
+    <i class="bi bi-check-circle me-1"></i> Speichern
+  </button>
+{% endblock %}

@@ -1,0 +1,22 @@
+{% extends 'modal_base.html' %}
+
+{% block id %}genderChangeModal{% endblock %}
+
+{% block title %}Geschlecht ändern{% endblock %}
+
+{% block body %}
+  <label for="gender" class="form-label">Geschlecht</label>
+  <select id="gender" class="form-select" data-original="{{ user.gender or '' }}">
+    <option value="" {{ 'selected' if not user.gender }}>Keine Angabe</option>
+    <option value="m" {{ 'selected' if user.gender == 'm' }}>Männlich</option>
+    <option value="w" {{ 'selected' if user.gender == 'w' }}>Weiblich</option>
+    <option value="d" {{ 'selected' if user.gender == 'd' }}>Divers</option>
+  </select>
+{% endblock %}
+
+{% block footer %}
+  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Abbrechen</button>
+  <button id="saveGender" type="button" class="btn btn-primary" disabled>
+    <i class="bi bi-check-circle me-1"></i> Speichern
+  </button>
+{% endblock %}

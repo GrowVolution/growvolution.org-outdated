@@ -1,0 +1,38 @@
+{% extends 'modal_base.html' %}
+
+{% block id %}twoFAModal{% endblock %}
+{% block title %}2-Faktor-Authentifizierung aktivieren{% endblock %}
+
+{% block body %}
+  <div id="twoFASetupSection" class="text-center">
+    <span>Scanne den QR-Code oder gib ihn manuell ein.</span>
+    <img id="twoFAQr" src="" alt="2FA QR Code" class="img-fluid d-none" style="max-width: 350px; height: auto;">
+    <div id="twoFASecret" class="mb-4 d-none">
+      <strong>Manueller Code:</strong>
+      <code class="user-select-all"></code>
+    </div>
+    <input id="twoFAToken" class="form-control mx-auto" maxlength="6" pattern="\d{6}" placeholder="6-stelliger Code (Authenticator App)" autocomplete="one-time-code">
+  </div>
+
+  <div id="twoFASuccessSection" class="d-none">
+    <div class="alert alert-success d-flex align-items-center" role="alert">
+      <i class="bi bi-shield-check me-2"></i>
+      Zwei-Faktor-Authentifizierung aktiviert!
+    </div>
+    <p>Diese <strong>Wiederherstellungscodes</strong> werden nur einmal angezeigt. Bitte bewahre sie sicher auf:</p>
+    <ul id="recoveryCodes" class="list-group mb-3"></ul>
+    <p class="text-muted small">Jeder Code ist nur einmal nutzbar. Sie dienen dem Zugang bei Verlust deiner App.</p>
+  </div>
+{% endblock %}
+
+{% block footer %}
+  <div id="twoFAActionButtons">
+    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Abbrechen</button>
+    <button id="complete2FA" type="button" class="btn btn-primary" disabled>
+      <i class="bi bi-check-circle me-1"></i> Abschließen
+    </button>
+  </div>
+  <button id="close2FAModal" class="btn btn-success w-100 d-none" data-bs-dismiss="modal">
+    <i class="bi bi-door-closed me-1"></i> Fenster schließen
+  </button>
+{% endblock %}

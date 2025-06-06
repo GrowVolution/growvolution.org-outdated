@@ -1,4 +1,4 @@
-const modalLabel = document.getElementById('commentModalLabel');
+const modalLabel = document.getElementById('modalLabel');
 const replyLabel = document.getElementById('replyLabel');
 const commentText = document.getElementById('commentText');
 

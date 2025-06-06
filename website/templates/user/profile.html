@@ -1,0 +1,208 @@
+{% extends 'base.html' %}
+
+{% block title %}Mein Profil{% endblock %}
+
+{% block  style %}
+<style>
+  .profile-picture-size {
+      width: 96px;
+      height: 96px;
+  }
+  .profile-picture-wrapper:hover .picture-overlay {
+    opacity: 1 !important;
+  }
+  .username:hover .bi {
+      display: block !important;
+  }
+  @media (min-width: 768px) {
+    .border-md-end {
+      border-right: 1px solid;
+    }
+  }
+  .level-label {
+      display: inline-block;
+      white-space: nowrap;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="window-wrapper flex-column gap-3">
+    <div class="window-box w-100 mx-auto" style="max-width: 900px;">
+      <div class="d-flex flex-md-row flex-column">
+        <div class="border-md-end border-bottom p-3 position-relative d-flex align-items-center justify-content-center profile-picture-wrapper" style="border-color: grey !important;">
+          <img src="{{ user.get_picture_url() }}" alt="Profilbild" class="rounded-circle profile-picture-size">
+          <div class="position-absolute d-flex flex-column justify-content-center align-items-center bg-dark bg-opacity-50 text-white opacity-0 transition picture-overlay rounded-circle profile-picture-size" style="cursor:pointer;" data-bs-toggle="modal" data-bs-target="#profilePictureModal">
+            <i class="bi bi-camera"></i>
+            <small>Bild ändern</small>
+          </div>
+        </div>
+        <div class="flex-grow-1">
+          <div class="d-flex justify-content-between align-items-center border-bottom p-3" style="border-color: grey !important;">
+            <div class="d-flex flex-column">
+              <span class="fw-bold fs-5">{{ user.get_full_name() }}</span>
+              <div class="d-flex gap-2 w-100 justify-content-start align-items-center username" role="button" data-bs-toggle="modal" data-bs-target="#usernameEditModal">
+                <span class="text-muted">@{{ user.username }}</span>
+                <i class="bi bi-pencil text-muted d-none" style="font-size: 0.9rem"></i>
+              </div>
+            </div>
+            <div class="fw-bold fs-3">{{ user.xp }} XP</div>
+          </div>
+          <div class="d-flex align-items-center p-3 border-bottom" style="border-color: grey !important;">
+            <div class="text-muted level d-flex flex-column align-items-center">
+              <span class="level-label">LEVEL {{ user.level }}</span>
+              <small class="level-status">{{ user.get_level_status() }}</small>
+            </div>
+            <div class="progress w-100 mx-3 rounded-pill overflow-hidden" style="height: 1.5rem;">
+              <div class="progress-bar progress-bar-striped progress-bar-animated bg-success" role="progressbar" style="width: {{ user.score }}%;" aria-valuenow="{{ user.score }}" aria-valuemin="0" aria-valuemax="100"></div>
+            </div>
+            <div class="text-muted level d-flex flex-column align-items-center">
+              <span class="level-label">LEVEL {{ user.level + 1 }}</span>
+              <small class="level-status">{{ user.get_next_level_status() }}</small>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="accordion-item border-bottom" style="border-color: grey !important;">
+        <div class="d-flex justify-content-between align-items-center p-3" role="button" data-bs-toggle="collapse" data-bs-target="#securityCollapse">
+          <div><i class="bi bi-shield-lock me-2"></i> Sicherheit</div>
+          <i class="bi bi-chevron-down transition"></i>
+        </div>
+        <div id="securityCollapse" class="collapse">
+          <div class="list-group list-group-flush">
+            <div class="list-group-item d-flex justify-content-between align-items-center" data-bs-toggle="modal" data-bs-target="#passwordChangeModal">
+              Passwort ändern
+              <i id="passwordRotateIcon" class="bi bi-arrow-repeat" style="transition: transform 0.3s;"></i>
+            </div>
+            <div id="twoFAControl" class="list-group-item d-flex justify-content-between align-items-center">
+              2FA aktivieren
+              <span id="twoFAStatus">
+                {% if user.twofa_enabled %}
+                  <i class="bi bi-check-circle text-success"></i>
+                {% else %}
+                  <i class="bi bi-x-circle text-danger"></i>
+                {% endif %}
+              </span>
+            </div>
+            <div id="loginNotifyToggle" class="list-group-item d-flex justify-content-between align-items-center" role="button">
+              Login Benachrichtigung
+              <span id="loginNotifyStatus">
+                {% if user.login_notify %}
+                  <i class="bi bi-check-circle text-success"></i>
+                {% else %}
+                  <i class="bi bi-x-circle text-danger"></i>
+                {% endif %}
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="accordion-item">
+        <div class="d-flex justify-content-between align-items-center p-3 border-top" role="button" data-bs-toggle="collapse" data-bs-target="#personalCollapse">
+          <div><i class="bi bi-person me-2"></i> Persönliche Daten</div>
+          <i class="bi bi-chevron-down transition"></i>
+        </div>
+        <div id="personalCollapse" class="collapse">
+          <div class="list-group list-group-flush">
+            <div class="list-group-item" data-bs-toggle="modal" data-bs-target="#emailChangeModal">
+              <i class="bi bi-envelope me-2"></i> E-Mail<br>
+              <small class="text-muted">{{ user.email }}</small>
+            </div>
+            <div class="list-group-item" data-bs-toggle="modal" data-bs-target="#phoneChangeModal">
+              <i class="bi bi-telephone me-2"></i> Telefonnummer<br>
+              <small class="text-muted">{{ user.phone or 'Keine Angabe' }}</small>
+            </div>
+            <div class="list-group-item" data-bs-toggle="modal" data-bs-target="#addressChangeModal">
+              <i class="bi bi-geo-alt me-2"></i> Anschrift<br>
+              <small class="text-muted">{{ user.get_address_str() }}</small>
+            </div>
+            <div class="list-group-item" data-bs-toggle="modal" data-bs-target="#birthdayChangeModal">
+              <i class="bi bi-calendar-event me-2"></i> Geburtstag<br>
+              <small class="text-muted">{{ user.birthdate.strftime('%d.%m.%Y') if user.birthdate else 'Keine Angabe' }}</small>
+            </div>
+            <div class="list-group-item mb-3" data-bs-toggle="modal" data-bs-target="#genderChangeModal">
+              <i class="bi bi-gender-ambiguous me-2"></i> Geschlecht<br>
+              <small class="text-muted">
+                {% if user.gender == 'm' %}Männlich
+                {% elif user.gender == 'w' %}Weiblich
+                {% elif user.gender == 'd' %}Divers
+                {% else %}Keine Angabe
+                {% endif %}
+              </small>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="window-box w-100 mx-auto mt-3" style="max-width: 900px;">
+      <div class="accordion-item">
+        <div class="d-flex justify-content-between align-items-center p-3" role="button" data-bs-toggle="collapse" data-bs-target="#privacyCollapse">
+          <div><i class="bi bi-shield-check me-2"></i> Privatsphäre & Datenschutz</div>
+          <i class="bi bi-chevron-down transition"></i>
+        </div>
+        <div id="privacyCollapse" class="collapse">
+          <!-- Inhalte folgen -->
+        </div>
+      </div>
+    </div>
+
+    <div class="window-box w-100 mx-auto mt-3" style="max-width: 900px;">
+      <div class="accordion-item">
+        <div class="d-flex justify-content-between align-items-center p-3" role="button" data-bs-toggle="collapse" data-bs-target="#accountCollapse">
+          <div><i class="bi bi-gear me-2"></i> Kontoeinstellungen</div>
+          <i class="bi bi-chevron-down transition"></i>
+        </div>
+        <div id="accountCollapse" class="collapse">
+          <!-- Inhalte folgen -->
+        </div>
+      </div>
+    </div>
+
+    <div class="window-box w-100 mx-auto mt-3" style="max-width: 900px;">
+      <div class="accordion-item">
+        <div class="d-flex justify-content-between align-items-center p-3" role="button" data-bs-toggle="collapse" data-bs-target="#accountCollapse">
+          <div><i class="bi bi-envelope me-2"></i> Newsletter</div>
+          <i class="bi bi-chevron-down transition"></i>
+        </div>
+        <div id="newsletterCollapse" class="collapse">
+          <!-- Inhalte folgen -->
+        </div>
+      </div>
+    </div>
+</div>
+{% endblock %}
+
+
+{% block modal %}
+  {% include 'user/modals/profile_picture_modal.html' %}
+  {% include 'user/modals/username_edit_modal.html' %}
+  {% include 'user/modals/password_change_modal.html' %}
+  {% include 'user/modals/2fa_modal.html' %}
+  {% include 'user/modals/email_change_modal.html' %}
+  {% include 'user/modals/phone_change_modal.html' %}
+  {% include 'user/modals/address_change_modal.html' %}
+  {% include 'user/modals/birthday_change_modal.html' %}
+  {% include 'user/modals/gender_change_modal.html' %}
+{% endblock %}
+
+{% block script_afterDOM %}
+  <script type="module" src="/static/js/shared/hint_validation.js"></script>
+  <script type="module" src="/static/js/shared/input_toggle.js"></script>
+  <script type="module" src="/static/js/shared/modal_control.js"></script>
+
+  <script type="module" src="/static/js/user/profile/profile_picture.js"></script>
+  <script type="module" src="/static/js/user/profile/username_edit.js"></script>
+  <script type="module" src="/static/js/user/profile/password_change.js"></script>
+  <script type="module" src="/static/js/user/profile/two_factor.js"></script>
+  <script type="module" src="/static/js/user/profile/login_notify.js"></script>
+  <script type="module" src="/static/js/user/profile/email_change.js"></script>
+  <script type="module" src="/static/js/user/profile/phone_change.js"></script>
+  <script type="module" src="/static/js/user/profile/address_change.js"></script>
+  <script type="module" src="/static/js/user/profile/birthday_change.js"></script>
+  <script type="module" src="/static/js/user/profile/gender_change.js"></script>
+  <script type="module" src="/static/js/user/profile/level_progress.js"></script>
+  <script type="module" src="/static/js/user/profile/accordion_toggle.js"></script>
+{% endblock %}
