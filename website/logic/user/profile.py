@@ -1,6 +1,7 @@
 from website.rendering import render, render_404
 from website.cache import request_entry_data, pop_entry, add_entry
 from website.logic.auth.verification import get_user
+from LIBRARY import back_to_login
 from flask import jsonify
 import pyotp, base64, qrcode, io
 
@@ -23,10 +24,9 @@ def twofa_setup():
         return jsonify({'error': 'Nicht authentifiziert'}), 401
 
     secret = pyotp.random_base32()
-    label = f"GrowVolution:{user.email}"
     issuer = "GrowVolution"
 
-    uri = pyotp.totp.TOTP(secret).provisioning_uri(name=label, issuer_name=issuer)
+    uri = pyotp.totp.TOTP(secret).provisioning_uri(name=user.username, issuer_name=issuer)
 
     qr_img = qrcode.make(uri)
     buffer = io.BytesIO()
@@ -44,4 +44,8 @@ def twofa_setup():
 
 
 def handle_request():
-    return render('user/profile.html', user=get_user())
+    user = get_user()
+    if not user:
+        return back_to_login()
+
+    return render('user/profile.html', user=user)

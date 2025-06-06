@@ -1,0 +1,14 @@
+{% extends "auth/base.html" %}
+
+{% block title %}2FA Bestätigen{% endblock %}
+
+{% block form %}
+  <input type="email" class="d-none" name="email" value="{{ email }}" required>
+  <div class="mb-3 input-group">
+    <span class="input-group-text"><i class="bi bi-shield-lock"></i></span>
+    <input class="form-control" maxlength="8" placeholder="Einmalpasswort (2. Faktor)" name="otp" required>
+  </div>
+  <div class="d-grid">
+    <button type="submit" class="btn btn-primary">Bestätigen</button>
+  </div>
+{% endblock %}

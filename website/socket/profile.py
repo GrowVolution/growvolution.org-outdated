@@ -74,15 +74,14 @@ def confirm_2fa(data, user):
         return
 
     pop_entry(cache_code)
-    recovery_codes = user.enable_2fa()
+    recovery_codes = user.enable_2fa(secret)
 
     emit('2fa_confirmed', {'success': True, 'recovery_codes': recovery_codes})
 
 
 @require_user
 def disable_2fa(data, user):
-    user.twofa_enabled = False
-    commit()
+    user.disable_2fa()
     emit('2fa_disabled', {'success': True})
 
 
