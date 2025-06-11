@@ -8,7 +8,7 @@
   <div class="d-flex justify-content-center align-items-center">
     <div class="preview-wrapper" style="max-width: 350px">
       <div class="image-preview" id="imagePreview">
-        <img id="profilePreview" src="{{ user.get_picture_url() }}" alt="Vorschau" class="img-fluid rounded">
+        <img id="profilePreview" src="{{ user.picture_url }}" alt="Vorschau" class="img-fluid rounded">
       </div>
       <input class="form-control image-upload" type="file" id="image_file" name="image_file" accept="image/*">
     </div>

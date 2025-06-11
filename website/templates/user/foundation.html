@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+
+{% block title %}Fundament{% endblock %}
+
+{% block content %}
+<div class="window-wrapper px-3">
+  <div class="window-box" data-aos="fade-up">
+    <div class="window-header">
+        <h3 class="fw-bold mt-2">🌱 Mein Fundament</h3>
+    </div>
+    <div class="window-content">
+      <form method="POST" action="/foundation/update" id="reflectionForm">
+        <div class="mb-4">
+          <label for="currentState" class="form-label fw-semibold">Wo stehe ich gerade?</label>
+          <textarea id="currentState" name="current" rows="4" class="form-control" placeholder="Mein Leben ist gerade... " required>{{ user.current_state }}</textarea>
+        </div>
+
+        <div class="mb-4">
+          <label for="goalState" class="form-label fw-semibold">Wie sieht mein ideales Leben aus?</label>
+          <textarea id="goalState" name="goal" rows="4" class="form-control" placeholder="Mein ideales Leben sieht so aus..." required>{{ user.basic_goal }}</textarea>
+        </div>
+
+        <div class="mb-4">
+          <label class="form-label fw-semibold">Was ist mir am wichtigsten?</label>
+          <div class="d-flex flex-wrap gap-2">
+            {% set focus_options = [
+                ('mental', '🧠 Mentale Stärke'),
+                ('health', '💪 Gesundheit'),
+                ('finance', '💸 Finanzen'),
+                ('knowledge', '🎓 Wissen'),
+                ('relationships', '🤝 Beziehungen'),
+                ('creativity', '🎨 Kreativität'),
+                ('balance', '⚖️ Gleichgewicht'),
+                ('purpose', '🎯 Sinn & Zielklarheit'),
+                ('career', '🏢 Beruf & Projekte'),
+                ('freedom', '🕊️ Freiheit & Selbstbestimmung')
+            ] %}
+
+            <div class="d-flex flex-wrap gap-2" id="focusGroup">
+              {% for key, label in focus_options %}
+                <input type="checkbox" class="btn-check" id="focus-{{ loop.index }}" name="focus" value="{{ key }}"
+                       autocomplete="off" {% if key in user.focus %}checked{% endif %}>
+                <label class="btn btn-outline-secondary btn-sm" for="focus-{{ loop.index }}">{{ label }}</label>
+              {% endfor %}
+            </div>
+          </div>
+          <div class="form-text text-muted">Wähle bis zu 3 Schwerpunkte.</div>
+        </div>
+
+        <div class="mb-2">
+          <label class="form-label fw-semibold">Was brauche ich auf meinem Weg?</label>
+          <div class="form-check">
+            {% for step in [
+                ('🧭 Klarheit über meine Ziele', 'clarity'),
+                ('🤝 Unterstützung durch andere', 'support'),
+                ('🔁 Tägliche kleine Routinen', 'routines'),
+                ('🪞 Mehr Selbstreflexion im Alltag', 'reflection'),
+                ('📅 Bessere Struktur & Planung', 'structure'),
+                ('🔥 Motivation & Dranbleiben', 'motivation')] %}
+              <input class="form-check-input" type="checkbox" id="{{ step[1] }}" name="steps"
+                     value="{{ step[1] }}" {% if step[1] in user.steps %}checked{% endif %}>
+              <label class="form-check-label me-3" for="{{ step[1] }}">{{ step[0] }}</label><br>
+            {% endfor %}
+          </div>
+        </div>
+
+        <div>
+          <label for="stepThoughts" class="form-label fw-semibold">Was sind meine eigenen Gedanken dazu?</label>
+          <textarea id="stepThoughts" name="step_thoughts" rows="3" class="form-control" placeholder="Um meine Ziele zu erreichen, brauche ich...">{{ user.step_thoughts }}</textarea>
+        </div>
+
+        <div class="text-end">
+          <button id="submitBtn" type="submit" class="btn btn-outline-success w-100 mt-4 d-none">
+            <i class="bi bi-save"></i> Änderungen speichern
+          </button>
+        </div>
+      </form>
+
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block script_afterDOM %}
+<script type="module" src="/static/js/user/foundation.js"></script>
+{% endblock %}

@@ -2,8 +2,9 @@ from .rendering import render, render_404
 from .logic.auth.verification import is_admin
 from .logic.blog import (preview as blog_preview, create as blog_creator,
                          post as blog_post_handler, edit as blog_edit_handler)
-from .logic.user import profile as profile_handler
+from .logic.user import profile as profile_handler, reflection as reflection_handler
 from .logic import index as index_handler
+from .routing import require_user, require_admin
 from flask import Blueprint, redirect, flash
 from LIBRARY import ALL_METHODS, POST_METHOD
 
@@ -28,23 +29,45 @@ def blog_post(blog_id):
 
 
 @routes.route('/blog/<blog_id>/edit', methods=POST_METHOD)
-def blog_edit(blog_id):
-    return blog_edit_handler.handle_request(blog_id)
+@require_user(True)
+def blog_edit(user, blog_id):
+    return blog_edit_handler.handle_request(user, blog_id)
 
 
 @routes.route('/blog/new', methods=ALL_METHODS)
+@require_admin(False)
 def new_blog_post():
-    if not is_admin():
-        flash("Du bist leider nicht für das Erstellen von Blogeinträgen berechtigt.", 'danger')
-        return redirect('/blog')
-
     return blog_creator.handle_request()
 
 
 # User routes
 @routes.route('/profile')
-def profile():
-    return profile_handler.handle_request()
+@require_user(False)
+def profile(user):
+    return profile_handler.handle_request(user)
+
+
+@routes.route('/confirm-mail-change/<code>')
+def confirm_mail_change(code):
+    return profile_handler.handle_mail_change(code)
+
+
+@routes.route('/initial-reflection', methods=POST_METHOD)
+@require_user(True)
+def initial_reflection(user):
+    return reflection_handler.handle_initial_reflection(user)
+
+
+@routes.route('/foundation')
+@require_user(False)
+def foundation(user):
+    return reflection_handler.foundation(user)
+
+
+@routes.route('/foundation/update', methods=POST_METHOD)
+@require_user(True)
+def foundation_update(user):
+    return reflection_handler.update_foundation(user)
 
 
 # Legal Routes

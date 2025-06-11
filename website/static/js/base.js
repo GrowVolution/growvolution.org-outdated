@@ -1,3 +1,49 @@
+const flashContainer = document.getElementById('flashContainer');
+const confirmModal = new bootstrap.Modal(document.getElementById('confirmModal'));
+const confirmText = document.getElementById('dialogeConfirmText');
+const confirmBtn = document.getElementById('dialogeConfirmBtn');
+const dismissBtn = document.getElementById('dialogeDismissBtn');
+
+
+function flash(message, category) {
+    flashContainer.innerHTML = `
+    <div class="alert alert-${category} alert-dismissible fade show" role="alert">
+      ${message}
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    `
+}
+
+
+async function confirmDialoge(message, category) {
+    confirmText.innerHTML = message.replace(/\n/g, "<br>");
+    confirmBtn.className = `btn btn-${category}`;
+
+    return new Promise((resolve) => {
+        function onConfirm() {
+            cleanup();
+            resolve(true);
+        }
+
+        function onDismiss() {
+            cleanup();
+            resolve(false);
+        }
+
+        function cleanup() {
+            confirmBtn.removeEventListener('click', onConfirm);
+            dismissBtn.removeEventListener('click', onDismiss);
+            confirmModal.hide();
+        }
+
+        confirmBtn.addEventListener('click', onConfirm);
+        dismissBtn.addEventListener('click', onDismiss);
+
+        confirmModal.show();
+    });
+}
+
+
 function updateAnchorHighlightListeners() {
     const anchorLinks = document.querySelectorAll('a[href^="#"]');
 

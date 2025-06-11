@@ -1,5 +1,7 @@
 from website.rendering import render
 from website.data import blog as blog_db
+from .auth.verification import get_user
+from .user.profile import user_dashboard
 from markupsafe import Markup
 from flask import render_template
 
@@ -27,4 +29,8 @@ def get_posts_html():
 
 
 def handle_request():
+    user = get_user()
+    if user:
+        return user_dashboard(user)
+
     return render('site/index.html', posts=get_posts_html())

@@ -33,7 +33,13 @@ class Comment(DB.Model):
         self.blog = blog
         self.content = content
 
-    def get_info(self) -> str:
+    @hybrid_property
+    def author_name(self) -> str:
+        author = self.author
+        return f"{author.first_name} {author.last_name}"
+
+    @hybrid_property
+    def info(self) -> str:
         timestamp = self.timestamp.strftime("%d.%m.%Y %H:%M")
         edited = ' (bearbeitet)' if self.edited else ''
         return f"{timestamp}{edited}"
@@ -45,23 +51,24 @@ class Comment(DB.Model):
     def update(self, new_content: str):
         self.content = new_content
         self.edited = True
-        commit()
 
-    def like(self, by_user_id: int) -> None:
+    def like(self, by_user_id: int) -> bool:
         if not self.has_liked(by_user_id):
             DB.session.execute(
                 LIKED.insert().values(uid=by_user_id, cid=self.id)
             )
             self.likes += 1
-            commit()
+            return True
+        return False
 
-    def unlike(self, by_user_id: int) -> None:
+    def unlike(self, by_user_id: int) -> bool:
         if self.has_liked(by_user_id):
             DB.session.execute(
                 LIKED.delete().where(and_(LIKED.c.uid == by_user_id, LIKED.c.cid == self.id))
             )
             self.likes = max(0, self.likes - 1)
-            commit()
+            return True
+        return False
 
     def has_liked(self, user_id: int) -> bool:
         return DB.session.query(

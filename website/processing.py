@@ -1,5 +1,6 @@
 from . import APP, DEBUG
-from .socket import SOCKET, HANDLERS, no_handler
+from .socket import SOCKET
+from .socket.events import HANDLERS, no_handler
 from .rendering import render_error, render
 from .auth_routes import auth_routes
 from .logic.auth.verification import captcha_status, token_owner_hash, empty_token, user_role, authenticated_user_request
@@ -86,7 +87,7 @@ def handle_exception(error):
 
 
 @SOCKET.on('default_event')
-def event_handler(data: dict):
+def event_handler(data: dict | str | None):
     event = data['event']
     payload = data.get('payload')
     log('request', f"Socket event: {event} - With data: {payload}")

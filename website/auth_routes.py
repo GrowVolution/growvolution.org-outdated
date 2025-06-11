@@ -33,11 +33,6 @@ def reset(code):
     return reset_handler.handle_request(code)
 
 
-@auth_routes.route('/logout')
-def logout():
-    return empty_token()
-
-
 @auth_routes.route('/oauth/<api>/start')
 def start_oauth(api):
     return google_auth.start_oauth() if api == 'google' else (
@@ -55,3 +50,8 @@ def oauth_callback(api):
             microsoft_auth.oauth_callback() if api == 'microsoft' else render_404()
         )
     )
+
+
+@routes.route('/logout')
+def logout():
+    return empty_token()

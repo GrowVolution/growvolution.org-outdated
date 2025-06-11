@@ -1,11 +1,12 @@
-from website.data import comment as comment_db, reply as reply_db, blog as blog_db, add_model, delete_model
-from website.logic.auth.verification import get_user
+from . import register_event, require_user
+from .. import emit_html, socket_flash
+from website.data import comment as comment_db, reply as reply_db, blog as blog_db, add_model, delete_model, commit
 from website.logic.comments import comment as comment_logic, reply as reply_logic
 
 
-def handle_comment(data):
-    from . import emit_html
-    user = get_user()
+@register_event('add_comment')
+@require_user(True)
+def handle_comment(user, data):
     ref_type = data.get('type')
 
     if ref_type == 'blog':
@@ -20,9 +21,9 @@ def handle_comment(data):
         pass
 
 
-def handle_reply(data):
-    from . import emit_html
-    user = get_user()
+@register_event('add_reply')
+@require_user(True)
+def handle_reply(user, data):
     comment_id = int(data.get('comment', 0))
     comment = comment_db.Comment.query.get(comment_id)
     reply = reply_db.Reply(user, comment, data.get('content'), data.get('mention'))
@@ -44,29 +45,47 @@ def _action_ref(data):
     return ref
 
 
-def handle_like(data):
-    user = get_user()
+def _ref_author(user, ref) -> bool:
+    if user != ref.author:
+        socket_flash("Hierzu bist du nicht berechtigt!", 'danger')
+        return False
+    return True
+
+
+@register_event('add_like')
+@require_user(True)
+def handle_like(user, data):
     ref = _action_ref(data)
-    ref.like(user.id)
+    if ref.like(user.id):
+        commit()
 
 
-def handle_unlike(data):
-    user = get_user()
+@register_event('remove_like')
+@require_user(True)
+def handle_unlike(user, data):
     ref = _action_ref(data)
-    ref.unlike(user.id)
+    if ref.unlike(user.id):
+        commit()
 
 
-def handle_edit(data):
+@register_event('comment_system_edit')
+@require_user(True)
+def handle_edit(user, data):
     ref = _action_ref(data)
-    ref.update(data.get('text'))
+    if _ref_author(user, ref):
+        ref.update(data.get('text'))
+        commit()
 
 
-def handle_delete(data):
+@register_event('comment_system_delete')
+@require_user(True)
+def handle_delete(user, data):
     ref = _action_ref(data)
-    delete_model(ref)
+    if _ref_author(user, ref):
+        delete_model(ref)
 
 
+@register_event('reply_request')
 def handle_reply_request(comment_id):
-    from . import emit_html
     comment = comment_db.Comment.query.get(int(comment_id))
     emit_html(reply_logic.get_replies_html(comment))

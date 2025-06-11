@@ -1,0 +1,111 @@
+{% extends "modal_base.html" %}
+
+{% block id %}reflectionModal{% endblock %}
+
+{% block title %}
+✨ Der Beginn deiner Reise
+{% endblock %}
+
+{% block body %}
+<div class="progress mb-4" style="height: 0.5rem;">
+  <div id="reflectionProgress" class="progress-bar bg-success"></div>
+</div>
+
+<div id="reflectionSteps">
+  <div class="step" data-step="1" data-aos="fade-right">
+    <h5 class="fw-bold">Dein Fundament</h5>
+    <p>
+        Wir möchten dich einladen, dir einen kurzen Moment Zeit für dich zu nehmen und
+        dir selbst ein paar kurze Fragen zu beantworten. Das soll dir dabei helfen herauszufinden,
+        wo du aktuell stehst und was für dich besonders wichtig ist. Dadurch erhältst du eine
+        solide Basis, auf der du im weiteren Verlauf deiner Reise aufbauen kannst.<br><br>
+        Selbstverständlich ist das völlig freiwillig.
+    </p>
+    <p class="mt-1 text-success small">
+        💯 Du sammelst 100 XP, wenn du diesen ersten Schritt gehst!
+    </p>
+  </div>
+
+  <div class="step d-none" data-step="2" data-aos="fade-right">
+    <h6>1. Wo stehst du gerade?</h6>
+    <p class="text-muted small">Nimm dir einen Moment – wie sieht dein Leben im Allgemeinen aus und wie fühlst du dich damit?</p>
+    <textarea id="current" class="form-control mb-3" rows="4" placeholder="Mein Leben ist gerade... "></textarea>
+  </div>
+
+  <div class="step d-none" data-step="3" data-aos="fade-left">
+    <h6>2. Wo möchtest du hin?</h6>
+    <p class="text-muted small">Was wäre für dich ein erfülltes Leben?</p>
+    <textarea id="goal" class="form-control mb-3" rows="4" placeholder="Mein ideales Leben sieht so aus..."></textarea>
+    <div>
+      <label class="form-label">Am wichtigsten ist mir:</label>
+      <div id="focusGroup" class="d-flex flex-wrap gap-2">
+        <button type="button" class="btn btn-outline-secondary btn-sm focus-option" data-value="mental">🧠 Mentale Stärke</button>
+        <button type="button" class="btn btn-outline-secondary btn-sm focus-option" data-value="health">💪 Gesundheit</button>
+        <button type="button" class="btn btn-outline-secondary btn-sm focus-option" data-value="finance">💸 Finanzen</button>
+        <button type="button" class="btn btn-outline-secondary btn-sm focus-option" data-value="knowledge">🎓 Wissen</button>
+        <button type="button" class="btn btn-outline-secondary btn-sm focus-option" data-value="relationships">🤝 Beziehungen</button>
+        <button type="button" class="btn btn-outline-secondary btn-sm focus-option" data-value="creativity">🎨 Kreativität</button>
+        <button type="button" class="btn btn-outline-secondary btn-sm focus-option" data-value="balance">⚖️ Gleichgewicht</button>
+        <button type="button" class="btn btn-outline-secondary btn-sm focus-option" data-value="purpose">🎯 Sinn & Zielklarheit</button>
+        <button type="button" class="btn btn-outline-secondary btn-sm focus-option" data-value="career">🏢 Beruf & Projekte</button>
+        <button type="button" class="btn btn-outline-secondary btn-sm focus-option" data-value="freedom">🕊️ Freiheit & Selbstbestimmung</button>
+      </div>
+      <div class="form-text text-muted">Du kannst bis zu 3 Bereiche auswählen.</div>
+    </div>
+  </div>
+
+  <div class="step d-none" data-step="4" data-aos="fade-right">
+    <h6>3. Was brauchst du dafür?</h6>
+    <p class="text-muted small">Welche Schritte könnten dir helfen?</p>
+    <div id="stepSelect" class="mb-3">
+        <div class="form-check mb-2">
+          <input class="form-check-input" type="checkbox" id="clarity">
+          <label class="form-check-label" for="klarheit">🧭 Klarheit über meine Ziele</label>
+        </div>
+        <div class="form-check mb-2">
+          <input class="form-check-input" type="checkbox" id="support">
+          <label class="form-check-label" for="unterstützung">🤝 Unterstützung durch andere</label>
+        </div>
+        <div class="form-check mb-2">
+          <input class="form-check-input" type="checkbox" id="routines">
+          <label class="form-check-label" for="routinen">🔁 Tägliche kleine Routinen</label>
+        </div>
+        <div class="form-check mb-2">
+          <input class="form-check-input" type="checkbox" id="reflection">
+          <label class="form-check-label" for="reflexion">🪞 Mehr Selbstreflexion im Alltag</label>
+        </div>
+        <div class="form-check mb-2">
+          <input class="form-check-input" type="checkbox" id="structure">
+          <label class="form-check-label" for="struktur">📅 Bessere Struktur & Planung</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" id="motivation">
+          <label class="form-check-label" for="motivation">🔥 Motivation & Dranbleiben</label>
+        </div>
+    </div>
+
+    <textarea id="stepThoughts" class="form-control mt-3" rows="3" placeholder="Meine Gedanken dazu..."></textarea>
+    <div class="mt-1 text-success small">🎉 Gleich geschafft, dann bist du 100 XP reicher!</div>
+  </div>
+
+  <div class="step d-none" data-step="5" data-aos="fade-left">
+    <h6>Bonus: Möchtest du kontaktiert werden?</h6>
+    <p class="text-muted small">Wir melden uns, wenn du seit mehr als 7 Tagen inaktiv warst.</p>
+    <input type="tel" class="form-control mb-2" placeholder="Deine Telefonnummer (optional)">
+    <div class="form-check mb-3">
+      <input class="form-check-input" type="checkbox" id="consent">
+      <label class="form-check-label" for="consent">
+        Ich bin einverstanden, bei Bedarf kontaktiert zu werden.
+      </label>
+    </div>
+    <div class="text-success small">📞 +30 XP, wenn wir dir helfen dürfen dranzubleiben!</div>
+  </div>
+</div>
+{% endblock %}
+
+{% block footer %}
+<div class="d-flex justify-content-between w-100">
+  <button type="button" class="btn btn-outline-secondary" id="prevStep" disabled>Zurück</button>
+  <button type="button" class="btn btn-success" id="nextStep">Weiter</button>
+</div>
+{% endblock %}

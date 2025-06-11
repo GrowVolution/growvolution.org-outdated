@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block style %}
+<style>
+  .dashboard-section {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 3rem 1rem;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="dashboard-section text-center" data-aos="fade-up">
+  <h1 class="fw-bold mb-4">Willkommen zurück, {{ user.first_name }}!</h1>
+  <div class="row g-3 mb-4 d-flex align-items-stretch">
+      <div class="col-md-6">
+          <div class="position-relative bg-white rounded shadow-sm p-3 w-100" style="height: 200px;">
+              <svg viewBox="0 0 200 200" width="200" height="200" class="mt-0">
+                <path
+                  d="M 45 158 A 85 85 0 1 1 155 158"
+                  fill="none"
+                  stroke="rgba(150,150,150,0.3)"
+                  stroke-width="12"
+                  stroke-linecap="round"></path>
+                <path id="progressPath"
+                    d="M 45 158 A 85 85 0 1 1 155 158"
+                    fill="none"
+                    stroke-width="12"
+                    stroke-linecap="round"></path>
+              </svg>
+
+              <div class="position-absolute top-50 start-50 translate-middle text-center">
+                <i id="icon" class="bi {{ user.level_icon }} fs-1"></i>
+                <div class="fw-bold">LEVEL <span id="level">{{ user.level }}</span></div>
+                <small id="status" class="text-muted">{{ user.level_status }}</small>
+              </div>
+          </div>
+      </div>
+      <div class="col-md-6">
+          <div class="d-flex flex-column justify-content-center bg-white rounded shadow-sm p-4 text-start h-100">
+            <h5 class="fw-bold">Warum machst du das hier?</h5>
+            <p class="mb-1"><strong>Träume:</strong> {{ user.dreams or 'Noch keine Angabe.' }}</p>
+            <p class="mb-1"><strong>Ziele:</strong> {{ user.goals or 'Noch keine Angabe.' }}</p>
+            <p><strong>Vision:</strong> {{ user.vision or 'Noch keine Angabe.' }}</p>
+          </div>
+      </div>
+  </div>
+
+  <div class="bg-white rounded shadow-sm p-4 text-start mb-4">
+    <h5 class="fw-bold">Dein Weg</h5>
+    <ul class="list-unstyled">
+      <li><i class="bi bi-check-circle text-success me-2"></i>Letzter Meilenstein: {{ user.last_milestone or 'Noch kein Fortschritt dokumentiert.' }}</li>
+      <li><i class="bi bi-hourglass-split me-2"></i>Aktueller Fokus: {{ user.current_focus or 'Noch nichts ausgewählt.' }}</li>
+      <li><i class="bi bi-stars me-2"></i>Nächstes Ziel: {{ user.next_goal or 'Noch nicht festgelegt.' }}</li>
+    </ul>
+  </div>
+
+  <div class="row g-3">
+    <div class="col-md-6">
+      <div class="bg-white rounded shadow-sm p-4 h-100">
+        <h5 class="fw-bold mb-2">Erinnerung</h5>
+        <p class="mb-0">Du musst nicht perfekt sein, um anzufangen. Du musst nur bereit sein, dich selbst ernst zu nehmen.</p>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="bg-white rounded shadow-sm p-4 h-100">
+        <h5 class="fw-bold mb-2">Kleine Reflexion</h5>
+        <p>Was war heute gut? Wo hast du liebevoll auf dich geachtet?</p>
+        <a href="/journal" class="btn btn-outline-primary">Zum Tagebuch</a>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}
+
+{% block script_afterDOM %}
+<script src="https://cdn.jsdelivr.net/npm/progressbar.js"></script>
+<script src="/static/js/user/dashboard.js" id="dashboardScript" data-score="{{ user.score }}"></script>
+{% endblock %}

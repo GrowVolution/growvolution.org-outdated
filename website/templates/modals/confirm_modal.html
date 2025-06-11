@@ -1,0 +1,14 @@
+{% extends "modal_base.html" %}
+
+{% block id %}confirmModal{% endblock %}
+
+{% block title %}Bestätigen{% endblock %}
+
+{% block body %}
+<p id="dialogeConfirmText" class="mb-0"></p>
+{% endblock %}
+
+{% block footer %}
+<button type="button" class="btn btn-outline-secondary" id="dialogeDismissBtn">Nein</button>
+<button type="button" id="dialogeConfirmBtn">Ja</button>
+{% endblock %}

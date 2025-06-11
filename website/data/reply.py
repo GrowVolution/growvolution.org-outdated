@@ -1,5 +1,6 @@
 from . import DB, commit
 from sqlalchemy import exists, and_
+from sqlalchemy.ext.hybrid import hybrid_property
 from markupsafe import Markup
 from typing import TYPE_CHECKING
 
@@ -36,6 +37,17 @@ class Reply(DB.Model):
         self.content = content
         self.mention = mention
 
+    @hybrid_property
+    def author_name(self) -> str:
+        author = self.author
+        return f"{author.first_name} {author.last_name}"
+
+    @hybrid_property
+    def info(self) -> str:
+        timestamp = self.timestamp.strftime("%d.%m.%Y %H:%M")
+        edited = ' (bearbeitet)' if self.edited else ''
+        return f"{timestamp}{edited}"
+
     def get_content(self):
         if self.mention:
             ref = self.query.get(self.mention)
@@ -48,31 +60,27 @@ class Reply(DB.Model):
 
         return self.content
 
-    def get_info(self) -> str:
-        timestamp = self.timestamp.strftime("%d.%m.%Y %H:%M")
-        edited = ' (bearbeitet)' if self.edited else ''
-        return f"{timestamp}{edited}"
-
     def update(self, new_content: str) -> None:
         self.content = new_content
         self.edited = True
-        commit()
 
-    def like(self, by_user_id: int) -> None:
+    def like(self, by_user_id: int) -> bool:
         if not self.has_liked(by_user_id):
             DB.session.execute(
                 LIKED.insert().values(uid=by_user_id, rid=self.id)
             )
             self.likes += 1
-            commit()
+            return True
+        return False
 
-    def unlike(self, by_user_id: int) -> None:
+    def unlike(self, by_user_id: int) -> bool:
         if self.has_liked(by_user_id):
             DB.session.execute(
                 LIKED.delete().where(and_(LIKED.c.uid == by_user_id, LIKED.c.rid == self.id))
             )
             self.likes = max(0, self.likes - 1)
-            commit()
+            return True
+        return False
 
     def has_liked(self, user_id: int) -> bool:
         return DB.session.query(

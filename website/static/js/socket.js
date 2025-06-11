@@ -1,6 +1,7 @@
+const socketScript = document.getElementById("socketScript");
+
 function connectSocket() {
-    const script = document.getElementById("socketScript");
-    const domain = script.dataset.socketDomain;
+    const domain = socketScript.dataset.socketDomain;
     return io(domain, {
         transports: ['websocket'],
         reconnection: true,
@@ -19,6 +20,8 @@ function emit(event, data=null) {
         payload: data
     })
 }
+
+emit('set_nav_context', socketScript.dataset.currentTemplate);
 
 // Global Event Handlers
 let htmlEventHandler

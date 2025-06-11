@@ -15,7 +15,9 @@
 
     <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
 
-    <script src="/static/js/socket/socket.js" id="socketScript" data-socket-domain="wss://{% if debug %}debug.{% endif %}growvolution.org"></script>
+    <script src="/static/js/socket.js" id="socketScript"
+            data-socket-domain="wss://{% if debug %}debug.{% endif %}growvolution.org"
+            data-current-template="{{ template }}"></script>
     {% block script %}{% endblock %}
   </head>
   <body class="min-vh-100">
@@ -68,21 +70,13 @@
     </footer>
 
     {% block modal %}{% endblock %}
-
-    <script>
-        const flashContainer = document.getElementById('flashContainer');
-
-        function flash(message, category) {
-            flashContainer.innerHTML = `
-            <div class="alert alert-${category} alert-dismissible fade show" role="alert">
-              ${message}
-              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-            `
-        }
-    </script>
-    <script src="/static/js/timer.js"></script>
-    <script src="/static/js/base.js"></script>
+    {% if initial_reflection %}
+        <span id="reflectionShown" class="d-none">{{ 'true' if reflection_shown else 'false' }}</span>
+        {% include "user/modals/reflection_modal.html" %}
+        <script type="module" src="/static/js/shared/modal_control.js"></script>
+        <script type="module" src="/static/js/user/initial_reflection.js"></script>
+    {% endif %}
+    {% include "modals/confirm_modal.html" %}
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://code.iconify.design/iconify-icon/3.0.0/iconify-icon.min.js"></script>
@@ -90,6 +84,9 @@
     <script>
       AOS.init({ once: true, duration: 1000 });
     </script>
+
+    <script src="/static/js/timer.js"></script>
+    <script src="/static/js/base.js"></script>
 
     {% block script_afterDOM %}{% endblock %}
   </body>

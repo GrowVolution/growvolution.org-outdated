@@ -7,13 +7,8 @@ from markupsafe import Markup
 
 
 def render_comment(comment: Comment, user: User, render_index: int = 1) -> str:
-    author = comment.author
-    author_name = f"{author.first_name} {author.last_name}"
-    is_author = author == user
-    return render('comments/comment.html', id=comment.id, render_index=render_index, author=author_name,
-                  picture=author.get_picture_url(), comment_info=comment.get_info(), comment_text=comment.content,
-                  like_count=comment.likes, liked=comment.has_liked(user.id), is_author=is_author,
-                  reply_count=comment.reply_count)
+    return render('comments/comment.html', comment=comment, render_index=render_index,
+                  is_author=comment.author == user, liked=comment.has_liked(user.id))
 
 
 def get_comments_html(post: Blog) -> Markup:

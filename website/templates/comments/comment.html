@@ -1,21 +1,21 @@
-<div id="comment-{{ id }}" class="window-box w-100 mb-3 max-vw-md-75 mx-auto comment" data-aos="fade-up" data-aos-delay="{{ render_index * 100 }}">
+<div id="comment-{{ comment.id }}" class="window-box w-100 mb-3 max-vw-md-75 mx-auto comment" data-aos="fade-up" data-aos-delay="{{ render_index * 100 }}">
   <div class="p-3 border-bottom border-secondary-subtle">
     <div class="d-flex">
-      <img src="{{ picture }}" alt="Profilbild" class="rounded me-3" style="width: 50px; height: 50px; object-fit: cover;">
+      <img src="{{ comment.author.picture_url }}" alt="Profilbild" class="rounded me-3" style="width: 50px; height: 50px; object-fit: cover;">
       <div class="flex-grow-1">
         <div class="d-flex justify-content-between align-items-center">
           <strong>{{ author }}</strong>
-          <small class="text-muted">{{ comment_info }}</small>
+          <small class="text-muted">{{ comment.info }}</small>
         </div>
-        <div class="text-content"><p>{{ comment_text }}</p></div>
+        <div class="text-content"><p>{{ comment.content }}</p></div>
         {% include "comments/quick_actions.html" %}
       </div>
     </div>
   </div>
   <div class="replies">
-    {% if reply_count %}
+    {% if comment.reply_count %}
     <a class="has-replies ms-4 ps-2 py-1 text-dark text-decoration-none text-hover-muted">
-        <i>({{ reply_count }}) Antwort{{ 'en' if reply_count > 1 else '' }} anzeigen</i>
+        <i>({{ comment.reply_count }}) Antwort{{ 'en' if comment.reply_count > 1 else '' }} anzeigen</i>
     </a>
     {% else %}
     <a class="no-replies ms-4 ps-2 py-1 text-muted text-decoration-none">

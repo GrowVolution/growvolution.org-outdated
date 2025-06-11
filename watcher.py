@@ -48,18 +48,21 @@ class Handler(FileSystemEventHandler):
 
     def reload_timeout(self):
         if self.reload_scheduled:
+            self.reload_scheduled = False
             self.reload()
             return
         self.reload_blocked = False
 
     def on_any_event(self, event):
-        if self.reload_blocked:
-            self.reload_scheduled = True
-            return
         if not event.src_path.endswith(('.py', '.html', '.css', '.js')):
             return
         if event.event_type not in ["modified", "deleted", "moved"]:
             return
+
+        if self.reload_blocked:
+            self.reload_scheduled = True
+            return
+
         self.reload()
 
 

@@ -18,6 +18,11 @@
           <div class="dropdown-menu dropdown-menu-dark dropdown-menu-end" aria-labelledby="menuDropdown">
             {% if signed_in %}
               <a class="dropdown-item {% if request.path == '/profile' %}active{% endif %}" href="/profile">Mein Profil</a>
+              {% if initial_reflection %}
+                  <a class="dropdown-item {% if not reflection_shown %}d-none{% endif %}" role="button" id="reflectionToggle">Fundament legen</a>
+              {% else %}
+                  <a class="dropdown-item {% if request.path == '/foundation' %}active{% endif %}" href="/foundation">Mein Fundament</a>
+              {% endif %}
                 <!--
                 <a class="dropdown-item {% if request.path == '/progress' %}active{% endif %}" href="/progress">Fortschritt</a>
                 <a class="dropdown-item {% if request.path == '/finances' %}active{% endif %}" href="/finances">Finanzen</a>

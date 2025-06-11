@@ -1,9 +1,12 @@
 from website.rendering import render, render_404
 from website.cache import request_entry_data, pop_entry, add_entry
-from website.logic.auth.verification import get_user
-from LIBRARY import back_to_login
+from website.data import commit
 from flask import jsonify
 import pyotp, base64, qrcode, io
+
+
+def user_dashboard(user):
+    return render('user/dashboard.html', user=user)
 
 
 def handle_mail_change(code: str):
@@ -12,17 +15,14 @@ def handle_mail_change(code: str):
         return render_404()
 
     user = data.get('user')
-    user.set_email(data['email'])
+    user.email = data['email']
+    commit()
     pop_entry(code)
 
     return render('user/mail_change_confirmed.html')
 
 
-def twofa_setup():
-    user = get_user()
-    if not user:
-        return jsonify({'error': 'Nicht authentifiziert'}), 401
-
+def twofa_setup(user):
     secret = pyotp.random_base32()
     issuer = "GrowVolution"
 
@@ -43,9 +43,5 @@ def twofa_setup():
     })
 
 
-def handle_request():
-    user = get_user()
-    if not user:
-        return back_to_login()
-
+def handle_request(user):
     return render('user/profile.html', user=user)

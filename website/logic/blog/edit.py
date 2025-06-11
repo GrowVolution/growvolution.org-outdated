@@ -1,16 +1,14 @@
 from website.data import blog as blog_db, cloudinary
-from ..auth.verification import get_user
-from flask import request
+from flask import request, abort
 
 
-def handle_request(blog_id: int):
+def handle_request(user, blog_id: int):
     post = blog_db.Blog.query.get(blog_id)
     if not post:
         return 'Blog ID existiert nicht!', 500
 
-    user = get_user()
-    if not user or not user.username == post.author:
-        return 'Unzulässige Anfrage!', 401
+    if not post.author == user.username:
+        return abort(401)
 
     form = request.form
 
