@@ -34,7 +34,7 @@ def handle_request():
 
         result = cloudinary.upload_asset(image)
         user = get_user()
-        blog_entry = blog_db.Blog(title, result['public_id'], summary, content, f"{user.first_name} {user.last_name}")
+        blog_entry = blog_db.Blog(title, result['public_id'], summary, content, user.username)
         add_model(blog_entry)
 
         return '', 200

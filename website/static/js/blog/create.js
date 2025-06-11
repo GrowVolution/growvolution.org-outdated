@@ -8,7 +8,7 @@ document.getElementById('reset').addEventListener('click', () => {
 });
 
 
-document.getElementById('save').addEventListener('click', () => {
+function saveEntryLocal() {
     const title = document.getElementById('title').value;
     const summary = document.getElementById('summary').value;
     const content = quill.root.innerHTML;
@@ -24,7 +24,6 @@ document.getElementById('save').addEventListener('click', () => {
         image: imageDataUrl
       };
       localStorage.setItem('blogEntryData', JSON.stringify(entry));
-      flash('Beitrag lokal zwischengespeichert.', 'info');
     };
 
     if (file) {
@@ -36,7 +35,10 @@ document.getElementById('save').addEventListener('click', () => {
     } else {
       saveData(null);
     }
-});
+}
+
+
+document.getElementById('save').addEventListener('click', saveEntryLocal);
 
 
 document.getElementById('image_file').addEventListener('change', function () {
@@ -144,3 +146,5 @@ document.getElementById('submit').addEventListener('click', function () {
 
     xhr.send(formData);
 });
+
+setInterval(saveEntryLocal, 5000);

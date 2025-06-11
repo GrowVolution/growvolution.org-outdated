@@ -8,7 +8,7 @@ def get_posts_html():
     html = ''
 
     counter = 1
-    for post in blog_db.Blog.query.all():
+    for post in blog_db.Blog.query.order_by(blog_db.Blog.id.desc()).all():
         fade_direction = 'left' if counter >= 2 and counter % 2 == 0 else 'right'
         html += render_template('blog/preview_post.html', image=post.get_image_url(),
                                 title=post.headline, post_info=post.get_info(), preview_text=post.summary,
