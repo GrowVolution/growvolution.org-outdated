@@ -1,6 +1,7 @@
 from website import DEBUG
 from website.data import user as udb, add_model
 from .verification import token_response, start_callback
+from .login import notify
 from LIBRARY import back_to_login
 from flask import Response, session, redirect, flash
 from urllib.parse import urlencode
@@ -86,6 +87,7 @@ def oauth_callback() -> Response:
         user = udb.User(first_name, last_name, username, email, microsoft_id=microsoft_id)
         add_model(user)
 
+    notify(user)
     return token_response({
         "id": user.id
     }, 10)

@@ -23,6 +23,7 @@ function updateStepDisplay() {
 
   prevBtn.disabled = currentStep === 0;
   nextBtn.textContent = currentStep === steps.length - 1 ? "Fertig" : "Weiter";
+  nextBtn.className = currentStep === steps.length - 1 ? "btn btn-success" : "btn btn-primary";
   progressBar.style.width = `${(currentStep / (steps.length - 1)) * 100}%`;
 
   validateCurrentStep();
@@ -142,6 +143,12 @@ function sendReflectionData() {
       return;
     }
     closeModal(modalId);
+    reflectionToggle.classList.remove('d-none');
+    reflectionToggle.role = "link";
+    reflectionToggle.href = "/foundation";
+    reflectionToggle.dataset.bsToggle = null;
+    reflectionToggle.dataset.bsTarget = null;
+    reflectionToggle.textContent = "Mein Fundament";
   });
 }
 
@@ -168,8 +175,6 @@ modalCloseBtn.addEventListener('click', async (e) => {
 function showModal() {
   openModal(modalId);
 }
-
-reflectionToggle.addEventListener('click', showModal);
 
 updateStepDisplay();
 if (!reflectionShown) setTimeout(showModal, 1000);

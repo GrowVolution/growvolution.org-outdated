@@ -5,6 +5,15 @@ from flask import jsonify
 import pyotp, base64, qrcode, io
 
 
+def _confirm_pending_change(user):
+    code = user.email_change_code
+    if code:
+        data = request_entry_data(code)
+        if not data:
+            user.email_change_code = None
+            commit()
+
+
 def user_dashboard(user):
     return render('user/dashboard.html', user=user)
 
@@ -16,6 +25,7 @@ def handle_mail_change(code: str):
 
     user = data.get('user')
     user.email = data['email']
+    user.email_change_code = None
     commit()
     pop_entry(code)
 
@@ -44,4 +54,5 @@ def twofa_setup(user):
 
 
 def handle_request(user):
+    _confirm_pending_change(user)
     return render('user/profile.html', user=user)

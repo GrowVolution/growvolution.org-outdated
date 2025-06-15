@@ -1,16 +1,18 @@
 import { closeModal } from '/static/js/shared/modal_control.js';
 
-const input = document.getElementById('usernameInput');
+const input = document.getElementById('newUsername');
 const hint = document.getElementById('usernameHint');
 const saveBtn = document.getElementById('saveUsername');
 
 if (input && hint && saveBtn && typeof emit !== 'undefined') {
-  const original = input.value;
+  const original = input.value.trim();
   let timeout;
 
   input.addEventListener('input', () => {
     const val = input.value.trim();
-    saveBtn.disabled = (val === original || !val);
+    const changed = val !== original;
+
+    saveBtn.disabled = !changed || !val;
 
     if (!val) {
       hint.classList.add('d-none');
@@ -44,6 +46,10 @@ if (input && hint && saveBtn && typeof emit !== 'undefined') {
   socket.on('username_updated', res => {
     if (res.success) {
       closeModal('usernameEditModal');
+      const display = document.getElementById('profileUsername');
+      if (display) {
+        display.textContent = `@${res.username}`;
+      }
     } else {
       alert(res.error || 'Fehler beim Speichern');
     }

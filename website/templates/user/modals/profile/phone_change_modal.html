@@ -1,0 +1,60 @@
+{% extends 'modal_base.html' %}
+
+{% block id %}phoneChangeModal{% endblock %}
+
+{% block title %}Telefonnummer ändern{% endblock %}
+
+{% block body %}
+  {% set phone = user.phone or '' %}
+  {% set default_prefix = '+49' %}
+  {% if phone.startswith('+') %}
+    {% set prefix = phone[:3] %}
+    {% set number = phone[3:] %}
+  {% elif phone.startswith('00') %}
+    {% set prefix = '+' + phone[2:4] %}
+    {% set number = phone[4:] %}
+  {% elif phone.startswith('0') %}
+    {% set prefix = '+49' %}
+    {% set number = phone[1:] %}
+  {% else %}
+    {% set prefix = '+49' %}
+    {% set number = phone %}
+  {% endif %}
+
+  {% set showFields = phone != '' %}
+
+  <div class="form-check mb-3">
+    <input class="form-check-input" type="checkbox" role="switch" id="phoneUnset" {% if not showFields %}checked{% endif %}>
+    <label class="form-check-label" for="phoneUnset">Keine Angabe</label>
+  </div>
+
+  <div class="row g-2" id="phoneFields">
+    <div class="col-4">
+      <label for="phonePrefix" class="form-label">Vorwahl</label>
+      <select id="phonePrefix" class="form-select" {% if not showFields %}disabled{% endif %}>
+        <option value="+49" {% if prefix == '+49' %}selected{% endif %}>🇩🇪 +49</option>
+        <option value="+43" {% if prefix == '+43' %}selected{% endif %}>🇦🇹 +43</option>
+        <option value="+41" {% if prefix == '+41' %}selected{% endif %}>🇨🇭 +41</option>
+        <option value="+33" {% if prefix == '+33' %}selected{% endif %}>🇫🇷 +33</option>
+        <option value="+39" {% if prefix == '+39' %}selected{% endif %}>🇮🇹 +39</option>
+      </select>
+    </div>
+    <div class="col-8">
+      <label for="phoneNumber" class="form-label">Nummer</label>
+      <input type="number" class="form-control" id="phoneNumber" value="{{ number }}" {% if not showFields %}disabled{% endif %}>
+    </div>
+  </div>
+
+  <p class="mt-3 text-muted">
+    Mit der Angabe meiner Telefonnummer stimme ich zu, vom GrowVolution Team kontaktiert zu werden,
+    wenn ich seit mehr als 7 Tagen keine Fortschritte dokumentiert habe.
+  </p>
+  <p class="text-success small mt-1">💯 Mit diesem Schritt sammelst du 30 XP.</p>
+{% endblock %}
+
+{% block footer %}
+  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Abbrechen</button>
+  <button id="savePhone" type="button" class="btn btn-primary">
+    <i class="bi bi-check-circle me-1"></i>Speichern
+  </button>
+{% endblock %}

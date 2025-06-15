@@ -12,8 +12,10 @@ class UserBase:
     first_name = DB.Column(DB.String(48), nullable=False)
     last_name = DB.Column(DB.String(48), nullable=False)
     username = DB.Column(DB.String(32), unique=True, nullable=False)
-    email = DB.Column(DB.String(128), unique=True, nullable=False)
     picture = DB.Column(DB.String(256), nullable=False, default='default')
+
+    email = DB.Column(DB.String(128), unique=True, nullable=False)
+    email_change_code = DB.Column(DB.String(6))
 
     role = DB.Column(DB.String(8), nullable=False, default='user')
 

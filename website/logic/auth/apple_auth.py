@@ -1,6 +1,7 @@
 from website import DEBUG
 from website.data import user as udb, add_model
 from .verification import token_response, start_callback
+from .login import notify
 from LIBRARY import ROOT_PATH, back_to_login
 from datetime import datetime
 from flask import Response, session, redirect, flash, request
@@ -108,6 +109,7 @@ def oauth_callback() -> Response:
         user = udb.User(first_name, last_name, username, email, apple_id=apple_id)
         add_model(user)
 
+    notify(user)
     return token_response({
         "id": user.id
     }, 10)

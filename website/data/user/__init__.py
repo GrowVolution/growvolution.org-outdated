@@ -12,5 +12,7 @@ class User(DB.Model, UserBase, UserInfo, UserSettings, UserReflection):
     comments = DB.relationship('Comment', back_populates='author', cascade='all, delete-orphan')
     replies = DB.relationship('Reply', back_populates='author', cascade='all, delete-orphan')
 
+    journey = DB.relationship('Journey', backref='user', lazy='dynamic')
+
     def __init__(self, *args):
         UserBase.__init__(self, *args)

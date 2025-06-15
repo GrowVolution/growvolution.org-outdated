@@ -8,6 +8,7 @@
   {% if not user.can_change_username %}
     <div class="alert alert-info">
       Dein Benutzername kann erst in {{ user.days_until_username_change }} Tagen erneut geändert werden.
+      <br><small>Nach jeder Änderung ist der Name 30 Tage gesperrt.</small>
     </div>
     <input class="form-control" type="text" value="{{ user.username }}" disabled>
   {% else %}

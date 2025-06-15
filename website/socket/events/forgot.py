@@ -8,7 +8,7 @@ from markupsafe import Markup
 
 
 @register_event('forgot')
-def handle_html_request():
+def handle_html_request(data):
     emit_html(render_template('auth/forgot.html'))
 
 

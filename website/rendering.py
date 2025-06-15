@@ -18,7 +18,7 @@ def render(template: str, **kwargs) -> str:
             commit()
 
         return inner_render(signed_in=signed_in, is_admin=is_admin(), initial_reflection=not user.reflection_done,
-                            reflection_shown=reflection_shown)
+                            reflection_shown=reflection_shown, journey_started=user.journey_started)
 
     return inner_render()
 

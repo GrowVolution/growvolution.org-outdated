@@ -1,0 +1,55 @@
+{% extends 'modal_base.html' %}
+
+{% block id %}trackModal{% endblock %}
+
+{% block title %}✅ Fortschritt festhalten{% endblock %}
+
+{% block body %}
+<form id="trackForm" action="/journey/daily_track" method="post">
+  <div class="mb-4">
+    <label for="moodRange" class="form-label">Wie ist dein letzter Tag gelaufen?</label>
+    <input type="range" class="form-range" min="1" max="5" step="1" id="moodRange" name="mood">
+    <div class="d-flex justify-content-between px-1 mt-2">
+      <span>😞</span>
+      <span>😐</span>
+      <span>🙂</span>
+      <span>😄</span>
+      <span>🚀</span>
+    </div>
+  </div>
+
+  <div class="form-check mb-4">
+    <input class="form-check-input" type="checkbox" id="workedOnGoal" name="worked">
+    <label class="form-check-label" for="workedOnGoal">
+      Ich habe heute an meinen Zielen gearbeitet
+    </label>
+  </div>
+
+  <div class="mb-4">
+    <label for="shortNote" class="form-label">Ein Satz über deinen Tag <span class="text-muted small">(optional)</span></label>
+    <textarea class="form-control" id="shortNote" rows="2" maxlength="200" placeholder="Heute war... (max. 200 Zeichen)" name="note"></textarea>
+  </div>
+
+  <div class="mb-3">
+    <label for="motivationSelect" class="form-label">Dein kleiner Motivationsschub <span class="text-muted small">(optional)</span></label>
+    <select id="motivationSelect" class="form-select" name="motivation">
+      <option value="" selected>Keine Auswahl</option>
+      <option value="proud">Worauf warst du heute stolz?</option>
+      <option value="energy">Was hat dir heute Energie gegeben?</option>
+      <option value="help">Wem konntest du heute etwas Gutes tun?</option>
+      <option value="success">Was war ein kleiner Erfolg heute?</option>
+      <option value="recognize">Was möchtest du dir selbst heute anerkennen?</option>
+    </select>
+  </div>
+
+  <div id="motivationAnswerWrapper" class="d-none mb-2">
+    <label for="motivationAnswer" class="form-label">Deine Antwort (max. 150 Zeichen)</label>
+    <textarea id="motivationAnswer" class="form-control" rows="2" maxlength="150" name="motivation_text"></textarea>
+  </div>
+</form>
+{% endblock %}
+
+{% block footer %}
+  <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Abbrechen</button>
+  <button id="submitTrack" type="submit" form="trackForm" class="btn btn-primary">Fertig</button>
+{% endblock %}

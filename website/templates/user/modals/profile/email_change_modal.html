@@ -11,11 +11,9 @@
     </div>
     <input class="form-control" type="email" value="{{ user.email }}" disabled>
   {% else %}
-    {% if user.email_change_pending %}
-      <div class="alert alert-warning">
+      <div id="emailChangePending" class="alert alert-warning {% if not user.email_change_code %}d-none{% endif %}">
         Eine E-Mail-Adressänderung ist derzeit ausstehend. Bitte bestätige die Änderung in der dir zugesandten E-Mail.
       </div>
-    {% endif %}
     <label for="newEmail" class="form-label">Neue E-Mail-Adresse</label>
     <input type="email" class="form-control" id="newEmail" value="{{ user.email }}">
   {% endif %}

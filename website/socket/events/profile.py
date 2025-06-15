@@ -27,7 +27,7 @@ def update_username(user, data):
     else:
         user.set_username(new_name)
         commit()
-        emit('username_updated', {'success': True})
+        emit('username_updated', {'success': True, 'username': user.username})
 
 
 @register_event('change_password')
@@ -85,17 +85,23 @@ def toggle_login_notify(user, data):
 @register_event('request_email_change')
 @require_user(True)
 def request_email_change(user, data):
-    email = (data.get('email') or '').strip()
-    if not email or udb.User.query.filter_by(email=email).first():
-        socket_flash("Diese E-Mail-Adresse ist ungültig oder bereits vergeben.", "danger")
-    else:
-        entry_data = {
-            'user': user,
-            'email': email
-        }
-        code = add_entry(entry_data, 10)
-        email_change_mail(email, user.first_name, code)
-        emit('email_change_requested', {'success': True})
+    new_email = (data.get('email') or '').strip()
+
+    if not new_email:
+        socket_flash("Dein Account muss mit einer E-Mail verknüpft sein.", 'warning')
+        return
+
+    if udb.User.query.filter_by(email=new_email).first():
+        socket_flash("Diese E-Mail wird bereits verwendet.", "danger")
+        return
+
+    code = add_entry(new_email, 10)
+    user.email_change_code = code
+    commit()
+
+    email_change_mail(new_email, user.first_name, code)
+    emit('email_change_requested', {'success': True, 'email': new_email})
+
 
 
 @register_event('update_phone')
@@ -104,21 +110,16 @@ def update_phone(user, data):
     phone = data.get('phone')
     if phone is None:
         user.phone = None
-    elif isinstance(phone, dict):
-        prefix = phone.get('prefix')
-        number = phone.get('number')
-        user.phone = normalize_phone(f"{prefix}{number}".strip()) if prefix and number else None
-
-    if user.phone:
-        user.contact_consent = True
-        user.add_xp(30)
-    else:
-        user.contact_consent = False
         user.remove_xp(30)
+    else:
+        prefix = phone.get('prefix', '')
+        number = phone.get('number', '').lstrip('0')
+        user.phone = normalize_phone(prefix + number)
+        user.add_xp(30)
 
     commit()
-    emit('phone_updated', {'success': True})
     send_message('score_update')
+    emit('phone_updated', {'success': True, 'phone': {'prefix': prefix, 'number': number} if phone else None})
 
 
 @register_event('update_address')
@@ -134,7 +135,7 @@ def update_address(user, data):
         city = addr.get('city')
         user.set_address(street, number, postal, city)
     commit()
-    emit('address_updated', {'success': True})
+    emit('address_updated', {'success': True, 'address': user.address_str})
 
 
 @register_event('update_birthday')
@@ -150,7 +151,7 @@ def update_birthday(user, data):
             socket_flash("Ungültiges Datumsformat.", "danger")
             return
     commit()
-    emit('birthday_updated', {'success': True})
+    emit('birthday_updated', {'success': True, 'birthday': user.birthdate.strftime('%d.%m.%Y')})
 
 
 @register_event('update_gender')
@@ -162,4 +163,4 @@ def update_gender(user, data):
         return
     user.gender = gender or None
     commit()
-    emit('gender_updated', {'success': True})
+    emit('gender_updated', {'success': True, 'gender': user.gender})

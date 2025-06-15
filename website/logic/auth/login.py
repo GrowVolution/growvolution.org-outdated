@@ -1,5 +1,6 @@
 from website.rendering import render
 from website.data import user as udb
+from mail_service import login_notify
 from .verification import token_response
 from flask import Response, request, flash
 from markupsafe import Markup
@@ -21,6 +22,7 @@ def _2fa_check(user: udb.User, otp: str) -> Response | str:
     if len(otp) == 8:
         flash("Du hast dich mit einem Wiederherstellungscode eingeloggt. Dieser ist nun nicht mehr verfügbar.", "info")
 
+    notify(user)
     return _login_success(user.id)
 
 
@@ -28,6 +30,11 @@ def _login_success(user_id: int) -> Response:
     return token_response({
         "id": user_id
     }, 10)
+
+
+def notify(user):
+    if user.login_notify:
+        login_notify(user.email, user.first_name)
 
 
 def handle_request() -> Response | str:
@@ -59,6 +66,7 @@ def handle_request() -> Response | str:
         elif user.twofa_enabled:
             return _render_2fa(email)
 
+        notify(user)
         return _login_success(user.id)
 
     return _render_self()

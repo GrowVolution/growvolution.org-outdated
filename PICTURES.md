@@ -15,5 +15,6 @@ Um deren Urheber dennoch zu würdigen, findest du hier einen Bildquellennachweis
 | `why.jpg`           | "[Person Standing Near Lake](https://www.pexels.com/photo/person-standing-near-lake-670720/)" von **Lukas Rychvalsky via Pexels**                                                                 |
 | `vision.jpg`        | "[Green Tree](https://www.pexels.com/photo/green-tree-268533/)" von **Pixabay via Pexels**                                                                                                        |
 | `about/mission.jpg` | "[Photo Of Men Doing Fist Bump](https://www.pexels.com/photo/photo-of-men-doing-fist-bump-3184302/)" von **fauxels via Pexels**                                                                   |     
+| `reflection.jpg`    | "[Person Sitting on Rock on Body of Water](https://www.pexels.com/photo/person-sitting-on-rock-on-body-of-water-1478685/)" von **Keegan Houser via Pexels**                                       |
 
 </div>

@@ -68,6 +68,12 @@ def reset_mail(receiver: str, name: str, reset_code: str):
     send(receiver, "Passwort zurücksetzen", html)
 
 
+def login_notify(receiver: str, name: str):
+    html = render_template('mail/login_notification.html',
+                           user=name, timestamp=datetime.now().strftime("%d.%m.%Y, %H:%M:%S Uhr"))
+    send(receiver, "Login Benachrichtigung", html)
+
+
 def start(app: Flask):
     global PASSWORD
     PASSWORD = app.config["NRS_PASSWORD"]

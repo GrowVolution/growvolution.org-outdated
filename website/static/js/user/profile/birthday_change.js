@@ -3,6 +3,9 @@ import { closeModal } from '/static/js/shared/modal_control.js';
 const birthdayUnsetCheckbox = document.getElementById('birthdayUnset');
 const birthdayInput = document.getElementById('birthdayInput');
 const saveBirthdayBtn = document.getElementById('saveBirthday');
+const profileBirthday = document.getElementById('profileBirthday');
+
+let birthdayGiven = profileBirthday.textContent.trim() !== 'Keine Angabe';
 
 if (birthdayUnsetCheckbox && birthdayInput && saveBirthdayBtn) {
   const toggleBirthdayField = () => {
@@ -12,7 +15,8 @@ if (birthdayUnsetCheckbox && birthdayInput && saveBirthdayBtn) {
 
   const validateBirthday = () => {
     const valid = birthdayInput.value;
-    saveBirthdayBtn.disabled = birthdayUnsetCheckbox.checked || !valid;
+    if (birthdayGiven) saveBirthdayBtn.disabled = !birthdayUnsetCheckbox.checked;
+    else saveBirthdayBtn.disabled = birthdayUnsetCheckbox.checked || !valid;
   };
 
   birthdayUnsetCheckbox.addEventListener('change', toggleBirthdayField);
@@ -29,6 +33,9 @@ saveBirthdayBtn.addEventListener('click', () => {
 socket.on('birthday_updated', res => {
   if (res.success) {
     closeModal('birthdayChangeModal');
+    profileBirthday.textContent = res.birthday ? res.birthday : 'Keine Angabe';
+    birthdayGiven = !birthdayGiven;
+    saveBirthdayBtn.disabled = true;
   } else {
     alert(res.error || 'Fehler beim Speichern');
   }

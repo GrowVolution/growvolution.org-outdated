@@ -42,7 +42,7 @@
             <div class="d-flex flex-column">
               <span class="fw-bold fs-5">{{ user.full_name }}</span>
               <div class="d-flex gap-2 w-100 justify-content-start align-items-center username" role="button" data-bs-toggle="modal" data-bs-target="#usernameEditModal">
-                <span class="text-muted">@{{ user.username }}</span>
+                <span id="profileUsername" class="text-muted">@{{ user.username }}</span>
                 <i class="bi bi-pencil text-muted d-none" style="font-size: 0.9rem"></i>
               </div>
             </div>
@@ -54,7 +54,7 @@
               <small class="level-status">{{ user.level_status }}</small>
             </div>
             <div class="progress w-100 mx-3 rounded-pill overflow-hidden" style="height: 1.25rem;">
-              <div class="progress-bar progress-bar-striped progress-bar-animated bg-primary" role="progressbar" aria-valuenow="{{ user.score }}" aria-valuemin="0" aria-valuemax="100"></div>
+              <div class="progress-bar progress-bar-striped progress-bar-animated bg-primary rounded-pill" role="progressbar" aria-valuenow="{{ user.score }}" aria-valuemin="0" aria-valuemax="100"></div>
             </div>
             <div class="text-muted level d-flex flex-column align-items-center">
               <span class="level-label">LEVEL {{ user.level + 1 }}</span>
@@ -108,23 +108,27 @@
           <div class="list-group list-group-flush">
             <div class="list-group-item" data-bs-toggle="modal" data-bs-target="#emailChangeModal">
               <i class="bi bi-envelope me-2"></i> E-Mail<br>
-              <small class="text-muted">{{ user.email }}</small>
+              <small id="profileEmail" class="text-muted">
+                {{ user.email }}{% if user.email_change_pending %} (ausstehend){% endif %}
+              </small>
             </div>
             <div class="list-group-item" data-bs-toggle="modal" data-bs-target="#phoneChangeModal">
               <i class="bi bi-telephone me-2"></i> Telefonnummer<br>
-              <small class="text-muted">{{ user.phone or 'Keine Angabe' }}</small>
+              <small id="profilePhone" class="text-muted">
+                {{ user.phone or 'Keine Angabe' }}
+              </small>
             </div>
             <div class="list-group-item" data-bs-toggle="modal" data-bs-target="#addressChangeModal">
               <i class="bi bi-geo-alt me-2"></i> Anschrift<br>
-              <small class="text-muted">{{ user.address_str }}</small>
+              <small id="profileAddress" class="text-muted">{{ user.address_str }}</small>
             </div>
             <div class="list-group-item" data-bs-toggle="modal" data-bs-target="#birthdayChangeModal">
               <i class="bi bi-calendar-event me-2"></i> Geburtstag<br>
-              <small class="text-muted">{{ user.birthdate.strftime('%d.%m.%Y') if user.birthdate else 'Keine Angabe' }}</small>
+              <small id="profileBirthday" class="text-muted">{{ user.birthdate.strftime('%d.%m.%Y') if user.birthdate else 'Keine Angabe' }}</small>
             </div>
             <div class="list-group-item mb-3" data-bs-toggle="modal" data-bs-target="#genderChangeModal">
               <i class="bi bi-gender-ambiguous me-2"></i> Geschlecht<br>
-              <small class="text-muted">
+              <small id="profileGender" class="text-muted"><span id="{{ user.gender if user.gender else '' }}"></span>
                 {% if user.gender == 'm' %}Männlich
                 {% elif user.gender == 'w' %}Weiblich
                 {% elif user.gender == 'd' %}Divers
@@ -177,15 +181,15 @@
 
 
 {% block modal %}
-  {% include 'user/modals/profile_picture_modal.html' %}
-  {% include 'user/modals/username_edit_modal.html' %}
-  {% include 'user/modals/password_change_modal.html' %}
-  {% include 'user/modals/2fa_modal.html' %}
-  {% include 'user/modals/email_change_modal.html' %}
-  {% include 'user/modals/phone_change_modal.html' %}
-  {% include 'user/modals/address_change_modal.html' %}
-  {% include 'user/modals/birthday_change_modal.html' %}
-  {% include 'user/modals/gender_change_modal.html' %}
+  {% include 'user/modals/profile/profile_picture_modal.html' %}
+  {% include 'user/modals/profile/username_edit_modal.html' %}
+  {% include 'user/modals/profile/password_change_modal.html' %}
+  {% include 'user/modals/profile/2fa_modal.html' %}
+  {% include 'user/modals/profile/email_change_modal.html' %}
+  {% include 'user/modals/profile/phone_change_modal.html' %}
+  {% include 'user/modals/profile/address_change_modal.html' %}
+  {% include 'user/modals/profile/birthday_change_modal.html' %}
+  {% include 'user/modals/profile/gender_change_modal.html' %}
 {% endblock %}
 
 {% block script_afterDOM %}

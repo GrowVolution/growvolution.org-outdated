@@ -7,9 +7,18 @@ const phoneNumberInput = document.getElementById('phoneNumber');
 const savePhoneBtn = document.getElementById('savePhone');
 
 if (phoneUnsetCheckbox && phonePrefixSelect && phoneNumberInput && savePhoneBtn) {
+  const originalNumber = phoneNumberInput.value;
+  const originalPrefix = phonePrefixSelect.value;
+  const wasSet = !phoneUnsetCheckbox.checked;
+
   const validatePhoneInputs = () => {
-    const valid = phonePrefixSelect.value && phoneNumberInput.value.trim();
-    savePhoneBtn.disabled = phoneUnsetCheckbox.checked || !valid;
+    if (phoneUnsetCheckbox.checked) {
+      savePhoneBtn.disabled = wasSet === false;
+    } else {
+      const valid = phonePrefixSelect.value && phoneNumberInput.value.trim();
+      const changed = phoneNumberInput.value !== originalNumber || phonePrefixSelect.value !== originalPrefix;
+      savePhoneBtn.disabled = !valid || !changed;
+    }
   };
 
   phoneUnsetCheckbox.addEventListener('change', () => {
@@ -36,6 +45,10 @@ savePhoneBtn.addEventListener('click', () => {
 socket.on('phone_updated', res => {
   if (res.success) {
     closeModal('phoneChangeModal');
+    const display = document.getElementById('profilePhone');
+    if (display) {
+      display.textContent = res.phone ? `${res.phone.prefix}${res.phone.number}` : 'Keine Angabe';
+    }
   } else {
     alert(res.error || 'Fehler beim Speichern');
   }

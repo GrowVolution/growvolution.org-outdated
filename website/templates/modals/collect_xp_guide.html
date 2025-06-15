@@ -1,0 +1,65 @@
+{% extends "modal_base.html" %}
+
+{% block id %}howToCollectXP{% endblock %}
+
+{% block title %}ℹ️ So sammelst du Erfahrung{% endblock %}
+
+{% block body %}
+<div class="guide-step" data-step="0">
+  <h5 class="fw-bold">Möglichkeit 1</h5>
+  <p>
+      Im Menü hast du unter 'Account' zahlreiche Optionen, erste Schritte zu gehen. Dazu gehören:
+  </p>
+  <ol>
+      <li>Fundament legen (<span class="text-success small">+100 XP</span>)<br>
+          (nach der Registration einmalig automatisch angezeigt)</li>
+      <li>Reise starten (<span class="text-success small">+100 XP</span>)</li>
+      <li>Wochenplan erstellen (<span class="text-success small">+50 XP</span>)</li>
+      <li>Tagebuch einrichten (<span class="text-success small">+25 XP</span>)</li>
+      <li class="text-muted">Weitere Optionen folgen...</li>
+  </ol>
+  <p>
+      Diese bringen dir jeweils einmalig eine größere Menge an Erfahrungspunkten. Sie sollen dir
+      helfen eine starke Grundlage zu schaffen, auf der du dein späteres Wachstum gründen kannst.
+  </p>
+</div>
+
+<div class="guide-step d-none" data-step="1">
+  <h5 class="fw-bold">Möglichkeit 2</h5>
+  <p>
+      Sobald du deine ersten Schritte gegangen bist, hast du die Gelegenheit unter den entsprechenden
+      Menüpunkten Eintragungen vorzunehmen. So kannst du unter:
+  </p>
+  <ol>
+      <li>Meine Reise: Täglich deinen Fortschritt festhalten. (mindestens <span class="text-success small">+10 XP</span>)</li>
+      <li>Mein Wochenplan: An speziellen Wochentagen deine festgelegte Tagesaufgabe abhaken. (<span class="text-success small">+5 XP</span>)</li>
+      <li>Mein Tagebuch: Bei Bedarf - wenn es sich für dich gerade wichtig anfühlt - einen neuen Eintrag erstellen. (<span class="text-success small">+5 XP</span>)</li>
+      <li class="text-muted">Weitere Optionen folgen...</li>
+  </ol>
+</div>
+
+<div class="guide-step d-none" data-step="2">
+  <h5 class="fw-bold">Möglichkeit 3</h5>
+  <p>
+      Zusätzlich sammelst du Erfahrung durch:
+  </p>
+  <ul>
+      <li>Teilnahme an Challenges und Community Aktionen</li>
+      <li>das Absolvieren von Kursen</li>
+      <li>das Unterstützen anderer Mitglieder</li>
+      <li>und selbstverständlich ehrenamtliches Engagement</li>
+  </ul>
+  <p>
+      Hier liegt die Höhe der zu sammelnden Erfahrung im Ermessen der Verwaltung. Für alle Optionen wirst du jeweils
+      an den entsprechenden Stellen über die Menge der vergebenen Erfahrungspunkte in Kenntnis gesetzt.
+  </p>
+</div>
+{% endblock %}
+
+{% block footer %}
+<div class="d-flex justify-content-between w-100">
+  <button type="button" class="btn btn-outline-secondary" id="guideBackBtn" disabled>Zurück</button>
+  <button type="button" class="btn btn-primary" id="guideNextBtn">Weiter</button>
+  <button type="button" class="btn btn-success d-none" data-bs-dismiss="modal" id="guideFinishBtn">Verstanden</button>
+</div>
+{% endblock %}

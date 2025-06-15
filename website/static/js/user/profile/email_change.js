@@ -1,22 +1,20 @@
 import { closeModal } from '/static/js/shared/modal_control.js';
 
-const emailInput = document.getElementById('emailInput');
+const emailInput = document.getElementById('newEmail');
 const saveEmailBtn = document.getElementById('saveEmail');
-const emailBlockedBox = document.getElementById('emailSocialBlock');
+const changePendingInfo = document.getElementById('emailChangePending');
 
 if (emailInput && saveEmailBtn) {
-  const original = emailInput.value;
-  saveEmailBtn.disabled = true;
+  const original = emailInput.value.trim();
 
-  emailInput.addEventListener('input', () => {
-    const changed = emailInput.value.trim() !== original.trim();
+  const validate = () => {
+    const input = emailInput.value.trim();
+    const changed = input !== original;
     saveEmailBtn.disabled = !changed;
-  });
-}
+  };
 
-if (emailBlockedBox) {
-  saveEmailBtn.disabled = true;
-  emailInput.disabled = true;
+  emailInput.addEventListener('input', validate);
+  validate();
 }
 
 saveEmailBtn.addEventListener('click', () => {
@@ -28,6 +26,11 @@ saveEmailBtn.addEventListener('click', () => {
 socket.on('email_change_requested', res => {
   if (res.success) {
     closeModal('emailChangeModal');
+    changePendingInfo.classList.remove('d-none');
+    const display = document.getElementById('profileEmail');
+    if (display) {
+      display.textContent = res.email ? `${res.email} (ausstehend)` : 'Fehler';
+    }
   } else {
     alert(res.error || 'Fehler beim Speichern');
   }

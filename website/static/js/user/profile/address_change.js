@@ -7,11 +7,17 @@ const addressNumber = document.getElementById('addressNumber');
 const addressZip = document.getElementById('addressZip');
 const addressCity = document.getElementById('addressCity');
 const saveAddressBtn = document.getElementById('saveAddress');
+const profileAddress = document.getElementById('profileAddress');
+
+let addressGiven = profileAddress.textContent.trim() !== 'Keine Angabe';
 
 if (addressUnsetCheckbox && addressStreet && addressZip && addressCity && saveAddressBtn) {
   const validateAddress = () => {
     const valid = addressStreet.value.trim() && addressNumber.value.trim() && addressZip.value.trim() && addressCity.value.trim();
-    saveAddressBtn.disabled = addressUnsetCheckbox.checked || !valid;
+    if (addressGiven)
+      saveAddressBtn.disabled = !addressUnsetCheckbox.checked;
+    else
+      saveAddressBtn.disabled = addressUnsetCheckbox.checked || !valid;
   };
 
   addressUnsetCheckbox.addEventListener('change', () => {
@@ -31,7 +37,7 @@ if (addressUnsetCheckbox && addressStreet && addressZip && addressCity && saveAd
     const address = addressUnsetCheckbox.checked ? null : {
       street: addressStreet.value.trim(),
       number: addressNumber.value.trim(),
-      zip: addressZip.value.trim(),
+      postal: addressZip.value.trim(),
       city: addressCity.value.trim()
     };
 
@@ -41,6 +47,9 @@ if (addressUnsetCheckbox && addressStreet && addressZip && addressCity && saveAd
   socket.on('address_updated', res => {
     if (res.success) {
       closeModal('addressChangeModal');
+      profileAddress.textContent = res.address ? res.address : 'Keine Angabe';
+      addressGiven = !addressGiven;
+      saveAddressBtn.disabled = true;
     } else {
       alert(res.error || 'Fehler beim Speichern');
     }

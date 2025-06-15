@@ -1,0 +1,104 @@
+{% extends "modal_base.html" %}
+
+{% block id %}howToTravel{% endblock %}
+
+{% block title %}ℹ️ So funktioniert deine Reise{% endblock %}
+
+{% block body %}
+<div class="guide-step" data-step="0">
+  <h5 class="fw-bold">Schritt 1</h5>
+  <p>
+      Dieser Schritt dürfte einigermaßen intuitiv sein. Denn erstmal gehst du natürlich auf 'Account' -> 'Reise starten'. 😅<br><br>
+      Anschließend wird dir in einem Fenster ausführlich erklärt, was du dort machen wirst. Trotzdem sollst du wissen,
+      dass es wichtig ist hier ruhig etwas mehr Zeit hineinfließen zu lassen. Du kannst die dort gemachten Angaben nur in
+      bestimmten Intervallen bearbeiten und nachjustieren. (Eine Übersicht dazu findest du auf der nächsten Seite.) 📝
+  </p>
+  <p>
+      Dadurch sollst du dazu ermuntert werden, dich ernsthaft mit deinen Zielen auseinanderzusetzen. Außerdem sollst
+      du im Anschluss hinreichend Erfahrung sammeln, bevor du sie anpasst. So wollen wir Impulsentscheidungen vorbeugen
+      und dir Gelegenheit geben, deine Angaben auf dich wirken zu lassen. 💭
+  </p>
+  <p class="text-muted">
+      Wenn du möchtest, kannst du deine Angaben beim Speichern automatisch korrigieren lassen – stilistisch bleibt alles
+      gleich, nur (Recht-)Schreibfehler werden bereinigt. 😉
+  </p>
+</div>
+
+<div class="guide-step d-none" data-step="1">
+  <h5 class="fw-bold mb-3">Wann du deine Angaben anpassen kannst</h5>
+  <table class="table table-bordered text-center align-middle">
+    <thead class="table-light">
+      <tr>
+        <th class="fw-bold text-center">Angabe</th>
+        <th class="fw-bold text-center">Interval (je 1 Mal)</th>
+      </tr>
+    </thead>
+    <tbody class="text-start">
+      <tr>
+        <td>Vision & Intention</td>
+        <td>pro Jahr</td>
+      </tr>
+      <tr>
+          <td>5-Jahresziel</td>
+          <td>alle halbe Jahre</td>
+      </tr>
+      <tr>
+          <td>Jahresziel</td>
+          <td>pro Quartal</td>
+      </tr>
+      <tr>
+          <td>Ziel fürs Quartal</td>
+          <td>Mitte des Quartals</td>
+      </tr>
+      <tr>
+          <td>Monatsziel</td>
+          <td>Mitte des Monats</td>
+      </tr>
+      <tr>
+          <td>Wochenziel</td>
+          <td><em>nicht vorgesehen</em></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="guide-step d-none" data-step="2">
+  <h5 class="fw-bold">Schritt 2</h5>
+  <p>
+      Sobald du deine Reise gestartet hast, findest du sie unter 'Account' -> 'Meine Reise'. Dort kannst du nun alle
+      deine Angaben, sowie deinen Fortschritt einsehen. Der Tag, an dem du deine Reise gestartet hast, ist Tag 0. Dieser
+      wird von jetzt an mit jedem weiteren Tag um 1 steigen. ⏳
+  </p>
+  <p>
+      Wenn du deine Fortschritte täglich festhältst, baust du eine Kette auf. Versuch sie so lang wie möglich werden zu
+      lassen. Dieser tägliche Schritt ist sehr einfach gehalten. Er soll dir nur dabei helfen, an deine Ziele zu denken
+      und dranzubleiben. (Und uns auf den Plan rufen, falls du deine Telefonnummer angegeben hast und 7 Tage inaktiv warst. 🙈)
+  </p>
+  <p>
+      Immer, wenn du einen Zielabschnitt durchquerst, hast du Gelegenheit diesen (abgesehen vom Wochenziel) etwas ausführlicher
+      zu reflektieren und dein Ziel für den nächsten Abschnitt zu definieren. An den Tagen, die in eines der genannten Intervalle
+      fallen, ist zusätzlich die Option zum Bearbeiten der entsprechenden Angaben verfügbar. 💯
+  </p>
+  <p class="text-success small mt-1">
+      🎆 Beim Abschließen größerer Abschnitte sammelst du zusätzliche Erfahrung.
+  </p>
+</div>
+
+<div class="guide-step d-none" data-step="3">
+  <h5 class="fw-bold">Schritt 3</h5>
+  <p>
+      Bist du bei Tag 3562 angelangt, erreichst du das Ende einer Reise. Das ist ein Meilenstein,
+      den du zurecht gebührend feiern darfst. 🥳<br><br>
+      Von hier aus hast du die Möglichkeit eine weitere Reise zu starten. Diese wird genau wie deine
+      erste Reise ablaufen. Nur mit einer extrem viel größeren Basis an Erfahrung. ⛰️
+  </p>
+</div>
+{% endblock %}
+
+{% block footer %}
+<div class="d-flex justify-content-between w-100">
+  <button type="button" class="btn btn-outline-secondary" id="guideBackBtn" disabled>Zurück</button>
+  <button type="button" class="btn btn-primary" id="guideNextBtn">Weiter</button>
+  <button type="button" class="btn btn-success d-none" data-bs-dismiss="modal" id="guideFinishBtn">Verstanden</button>
+</div>
+{% endblock %}

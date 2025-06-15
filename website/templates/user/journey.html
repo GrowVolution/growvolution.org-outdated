@@ -1,0 +1,136 @@
+{% extends 'base.html' %}
+
+{% block title %}Reise{% endblock %}
+
+{% block style %}
+<style>
+.ranking-bar {
+    height: 0.5rem;
+    background-color: rgba(180,180,180,0.3);
+}
+.ranking-bar .progress-bar {
+    background-color: rgba(13, 110, 253, 0.7) !important;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="d-flex flex-column mx-auto my-5 w-100 px-2" style="max-width: 800px">
+    <div class="window-box" style="margin-bottom: 2.25rem">
+        <div class="window-header">
+            <h3 class="fw-bold mt-2">🚀 Deine {{ user.journey_number }} Reise</h3>
+        </div>
+        <div class="window-content">
+            <section class="mb-3">
+              <div class="d-flex justify-content-between align-items-center">
+                <div class="flex-grow-1">
+                  <div class="position-relative" style="height: 1.5rem;">
+                    <div class="progress w-100 h-100 rounded-pill" style="background-color: rgba(128,128,128,0.2);">
+                      <div class="progress-bar progress-bar-striped progress-bar-animated bg-success h-100 rounded-pill" style="width: {{ user.progress }}%;"></div>
+                    </div>
+                    <div class="position-absolute top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center fw-bold"
+                    style="font-size: 0.8rem">
+                      Auf dem Weg seit {{ user.days_since_started }} von 3652 Tagen
+                    </div>
+                  </div>
+                </div>
+                {% if user.current_streak %}
+                    <div class="ms-3 text-danger fw-bold d-flex align-items-center">
+                      🔥 {{ user.current_streak }}
+                    </div>
+                {% endif %}
+              </div>
+            </section>
+
+            <section class="row g-3 mb-3">
+                <div class="col-4 text-center text-muted">
+                    <div class="progress ranking-bar">
+                        <div class="progress-bar rounded" style="width: {{ (user.discipline_rating / 10) * 100 }}%"></div>
+                    </div>
+                    <small>Ø Disziplin</small>
+                </div>
+                <div class="col-4 text-center text-muted">
+                    <div class="progress ranking-bar">
+                        <div class="progress-bar rounded" style="width: {{ (user.energy_rating / 10) * 100 }}%; background-color: rgba(13, 110, 253, 0.3)"></div>
+                    </div>
+                    <small>Ø Energielevel</small>
+                </div>
+                <div class="col-4 text-center text-muted">
+                    <div class="progress ranking-bar">
+                        <div class="progress-bar rounded" style="width: {{ (user.focus_rating / 10) * 100 }}%"></div>
+                    </div>
+                    <small>Ø Fokus</small>
+                </div>
+            </section>
+
+            <section class="mb-4">
+              {% set properties = user.tracking_properties %}
+              <button class="btn btn-{{ properties[3] }} w-100" data-bs-toggle="modal" data-bs-target="#{{ properties[1] }}"
+                      {% if user.tracked_today %}disabled{% endif %}>
+                {{ properties[0] }}
+              </button>
+            </section>
+
+            <section>
+              <div class="goal-tree">
+                <div class="mb-3">
+                  <h6 class="text-muted fw-bold">Diese Woche möchtest du...</h6>
+                  <p>{{ user.goal_week }}</p>
+                </div>
+                <div class="mb-3">
+                  <h6 class="text-muted fw-bold">Damit du diesen Monat...</h6>
+                  <p>{{ user.goal_month }}</p>
+                </div>
+                <div class="mb-3">
+                  <h6 class="text-muted fw-bold">Um dann in 3 Monaten...</h6>
+                  <p>{{ user.goal_quarter }}</p>
+                </div>
+                <div class="mb-3">
+                  <h6 class="text-muted fw-bold">Weil du dieses Jahr...</h6>
+                  <p>{{ user.goal_1y }}</p>
+                </div>
+                <div>
+                  <h6 class="text-muted fw-bold">Und in 5 Jahren...</h6>
+                  <p>{{ user.goal_5y }}</p>
+                </div>
+              </div>
+            </section>
+            {% if user.longest_streak %}
+                <section class="mt-4 text-center text-muted small">
+                  Deine längste Streak: 🔥 {{ user.longest_streak }} Tage
+                </section>
+            {% endif %}
+        </div>
+    </div>
+
+    <section class="window-box">
+        <div class="window-header">
+            <h4 class="fw-bold mt-2">🎯 Das Ziel deiner {{ user.journey_number }}n Reise</h4>
+        </div>
+        <div class="window-content">
+          <div class="mb-4">
+            <h6 class="text-muted fw-bold">Wo du in 10 Jahren stehst...</h6>
+            <p>{{ user.goal_10y }}</p>
+          </div>
+          <div>
+            <h6 class="text-muted fw-bold">Warum du dort stehen wirst...</h6>
+            <p>{{ user.intention }}</p>
+          </div>
+        </div>
+    </section>
+</div>
+{% endblock %}
+
+{% block modal %}
+    {% if not user.tracked_today %}
+        {% set modal = user.tracking_properties[2] %}
+        {% include "user/modals/journey/" ~ modal ~ ".html" %}
+    {% endif %}
+{% endblock %}
+
+{% block script_afterDOM %}
+    {% if not user.tracked_today %}
+        {% set script = user.tracking_properties[1] | replace('Modal', '') %}
+        <script type="module" src="/static/js/user/journey/{{ script }}.js"></script>
+    {% endif %}
+{% endblock %}

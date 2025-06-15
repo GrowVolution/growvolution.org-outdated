@@ -1,0 +1,114 @@
+{% extends 'modal_base.html' %}
+
+{% block id %}startJourneyModal{% endblock %}
+
+{% block title %}💯 Der Anfang deiner Reise{% endblock %}
+
+{% block body %}
+<div class="progress mb-4" style="height: 0.5rem">
+  <div class="progress-bar bg-success" role="progressbar" id="journeyProgress"></div>
+</div>
+
+<div class="journey-step" data-step="0">
+  <h5 class="fw-bold">Worum es hierbei geht</h5>
+  <p>
+      Deine Reise startet mit dem Festlegen deiner Ziele. In diesem kleinen Dialog wirst du:
+  </p>
+  <ol style="line-height: 1.8">
+    <li>Das Bild deiner Zukunft kreieren, damit du weißt in welche Richtung du gehen willst und warum.</li>
+    <li>Dir anschauen, wo du gerade steht, damit du deine kurzfristigen Ziele realistisch formulieren kannst.</li>
+    <li>Deine Vision in mittel- und kurzfristige Ziele herunterbrechen.</li>
+  </ol>
+  <p>
+      Nimm dir für diesen Prozess Zeit und erlaube dir zu träumen. Setze dir lieber zu große Ziele und justiere
+      später nach, als zu wenig zu wagen. Wir empfehlen dir nur bei deinen kurzfristigen Zielen realistischer zu
+      bleiben und dir nicht zu viel auf einmal vorzunehmen. Sonst kann es dir passieren, dass du in 2 Wochen
+      die Motivation verloren hast.
+  </p>
+  <p class="mt-3 text-success small">🎯 Bei diesem Schritt wirst du weitere 100 XP sammeln.</p>
+</div>
+
+<div class="journey-step d-none" data-step="1">
+  <h4>Schritt 1 – Deine Vision</h4>
+  <div class="mb-3">
+    <label class="form-label">Wie sieht dein Leben in 10 Jahren aus?</label>
+    <textarea class="form-control" rows="5" placeholder="Beschreibe deinen Alltag, Beruf, Beziehungen, Gesundheit, Umgebung, ..."></textarea>
+  </div>
+  <div class="mb-3">
+    <label class="form-label">Warum ist dir dieses Leben wichtig?</label>
+    <textarea class="form-control" rows="3" placeholder="Was ist deine tiefere Intention?"></textarea>
+  </div>
+  <!--
+  <div class="mb-3">
+    <label class="form-label">Optional: Visualisiere deine Zukunft</label>
+    <div class="border rounded p-3 text-muted text-center">
+      <p>Hier könntest du ein Moodboard mit Bildern, Symbolen oder Farben erstellen<br>(Feature später umsetzbar z. B. per Drag&Drop / Upload)</p>
+    </div>
+  </div>
+  -->
+</div>
+
+<div class="journey-step d-none" data-step="2">
+  <h4>Schritt 2 – Dein aktueller Zustand</h4>
+  <div class="mb-4">
+    <label for="disciplineRange" class="form-label">Wie diszipliniert bist du im Alltag?</label>
+    <input type="range" class="form-range" min="0" max="10" value="5" id="disciplineRange">
+    <div class="row text-muted small">
+        <div class="col-4 text-start">Sehr unstrukturiert</div>
+        <div class="col-4 text-center">Wechselhaft</div>
+        <div class="col-4 text-end">Sehr diszipliniert</div>
+    </div>
+  </div>
+  <div class="mb-4">
+    <label for="energyRange" class="form-label">Wie ist dein durchschnittliches Energielevel?</label>
+    <input type="range" class="form-range" min="0" max="10" value="5" id="energyRange">
+    <div class="row text-muted small">
+        <div class="col-4 text-start">Erschöpft</div>
+        <div class="col-4 text-center">Ausgeglichen</div>
+        <div class="col-4 text-end">Sprühend vor Energie</div>
+    </div>
+  </div>
+  <div class="mb-3">
+    <label for="focusRange" class="form-label">Wie gut kannst du dich auf Aufgaben konzentrieren?</label>
+    <input type="range" class="form-range" min="0" max="10" value="5" id="focusRange">
+    <div class="row text-muted small">
+        <div class="col-4 text-start">Leicht abzulenken</div>
+        <div class="col-4 text-center">Mal so, mal so</div>
+        <div class="col-4 text-end">Tief fokussiert</div>
+    </div>
+  </div>
+</div>
+
+<div class="journey-step d-none" data-step="3">
+  <h4>Schritt 3 – Dein Zielbaum</h4>
+  <p class="text-muted">Brich deine Vision Stück für Stück herunter:</p>
+  <div class="mb-3">
+    <label class="form-label">Was möchtest du in 5 Jahren erreicht haben?</label>
+    <textarea class="form-control" rows="3" placeholder="In fünf Jahren werde ich..."></textarea>
+  </div>
+  <div class="mb-3">
+    <label class="form-label">Was möchtest du in 1 Jahr erreichen?</label>
+    <textarea class="form-control" rows="3" placeholder="In einem Jahr habe ich..."></textarea>
+  </div>
+  <div class="mb-3">
+    <label class="form-label">Was ist dein Ziel für das aktuelle Quartal?</label>
+    <textarea class="form-control" rows="2" placeholder="In den nächsten 3 Monaten möchte ich..."></textarea>
+  </div>
+  <div class="mb-3">
+    <label class="form-label">Was ist dein Ziel für den Monat?</label>
+    <textarea class="form-control" rows="2" placeholder="In diesem Monat ist mein Ziel..."></textarea>
+  </div>
+  <div class="mb-3">
+    <label class="form-label">Was möchtest du diese Woche schaffen?</label>
+    <textarea class="form-control" rows="2" placeholder="In dieser Woche gebe ich mein Bestes, um..."></textarea>
+  </div>
+</div>
+{% endblock %}
+
+{% block footer %}
+<div class="d-flex justify-content-between w-100">
+  <button type="button" class="btn btn-outline-secondary" id="journeyBackBtn" disabled>Zurück</button>
+  <button type="button" class="btn btn-primary" id="journeyNextBtn">Weiter</button>
+  <button type="button" class="btn btn-success d-none" id="journeyFinishBtn">Fertig</button>
+</div>
+{% endblock %}
