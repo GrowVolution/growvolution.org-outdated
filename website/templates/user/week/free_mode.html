@@ -1,0 +1,51 @@
+{% set blocks = [
+    {'label': '00–04', 'start': '00:00', 'end': '04:00'},
+    {'label': '04–08', 'start': '04:00', 'end': '08:00'},
+    {'label': '08–12', 'start': '08:00', 'end': '12:00'},
+    {'label': '12–16', 'start': '12:00', 'end': '16:00'},
+    {'label': '16–20', 'start': '16:00', 'end': '20:00'},
+    {'label': '20–24', 'start': '20:00', 'end': '23:59'}
+] %}
+{%  set freq_map = {
+  'weekly': 'Wöchentlich',
+  'biweekly': 'Alle 2 Wochen',
+  'triweekly': 'Alle 3 Wochen',
+  'fourweekly': 'Alle 4 Wochen'
+} %}
+{% for block in blocks %}
+    <tr>
+        <th class="text-start">{{ block['label'] }}</th>
+        {% for day in ['mo','di','mi','do','fr','sa','so'] %}
+            {% set tasks = week[day] %}
+            {% if tasks == 'restday' or not tasks %}
+                {% if block == blocks[0] %}
+                    <td rowspan="6" class="align-middle text-muted">
+                        {{ 'Ruhetag' if tasks == 'restday' else 'Nicht gesetzt' }}
+                    </td>
+                {% endif %}
+            {% else %}
+                <td>
+                    {% for task in tasks if task['time_from_obj'] and block['start'] <= task['time_from_obj'].strftime('%H:%M') < block['end'] %}
+                        <div class="text-start mb-2">
+                            <div class="fw-bold">
+                                <span class="nowrap">{{ task['title'] }}</span>
+                                {% if task['start_date'] and current_day == day %}
+                                    <span class="fw-normal text-muted nowrap">(Start: {{ task['start_date'] }})</span>
+                                {% endif %}
+                            </div>
+                            <div class="small text-muted">{{ task['time_from'] }} – {{ task['time_to'] }} ({{ freq_map[task['frequency']] }})</div>
+                            {% if current_day == day and now >= task['time_to_obj'] %}
+                                <div class="form-check text-success mt-1">
+                                    <input class="form-check-input" type="checkbox"
+                                           id="done-{{ day }}-{{ loop.index0 }}"
+                                           {% if task['done'] %}checked disabled{% endif %}>
+                                    <label class="form-check-label" for="done-{{ day }}-{{ loop.index0 }}">Erledigt</label>
+                                </div>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                </td>
+            {% endif %}
+        {% endfor %}
+    </tr>
+{% endfor %}

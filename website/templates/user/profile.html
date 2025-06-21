@@ -104,7 +104,7 @@
           <div><i class="bi bi-person me-2"></i> Persönliche Daten</div>
           <i class="bi bi-chevron-down transition"></i>
         </div>
-        <div id="personalCollapse" class="collapse">
+        <div id="personalCollapse" class="collapse pb-3">
           <div class="list-group list-group-flush">
             <div class="list-group-item" data-bs-toggle="modal" data-bs-target="#emailChangeModal">
               <i class="bi bi-envelope me-2"></i> E-Mail<br>
@@ -126,7 +126,7 @@
               <i class="bi bi-calendar-event me-2"></i> Geburtstag<br>
               <small id="profileBirthday" class="text-muted">{{ user.birthdate.strftime('%d.%m.%Y') if user.birthdate else 'Keine Angabe' }}</small>
             </div>
-            <div class="list-group-item mb-3" data-bs-toggle="modal" data-bs-target="#genderChangeModal">
+            <div class="list-group-item" data-bs-toggle="modal" data-bs-target="#genderChangeModal">
               <i class="bi bi-gender-ambiguous me-2"></i> Geschlecht<br>
               <small id="profileGender" class="text-muted"><span id="{{ user.gender if user.gender else '' }}"></span>
                 {% if user.gender == 'm' %}Männlich
@@ -147,8 +147,19 @@
           <div><i class="bi bi-shield-check me-2"></i> Privatsphäre & Datenschutz</div>
           <i class="bi bi-chevron-down transition"></i>
         </div>
-        <div id="privacyCollapse" class="collapse">
-          <!-- TODO: Not implemented yet -->
+        <div id="privacyCollapse" class="collapse pb-3">
+            <div class="list-group list-group-flush">
+                <div id="hideLastNameToggle" class="list-group-item d-flex justify-content-between align-items-center" role="button">
+                    <div><i class="bi bi-eye-slash me-2"></i> Nachnamen verbergen</div>
+                    <span id="hideLastNameStatus">
+                      {% if user.hide_last_name %}
+                          <i class="bi bi-check-circle text-success"></i>
+                      {% else %}
+                          <i class="bi bi-x-circle text-danger"></i>
+                      {% endif %}
+                    </span>
+                </div>
+            </div>
         </div>
       </div>
     </div>
@@ -195,7 +206,6 @@
 {% block script_afterDOM %}
   <script type="module" src="/static/js/shared/hint_validation.js"></script>
   <script type="module" src="/static/js/shared/input_toggle.js"></script>
-  <script type="module" src="/static/js/shared/modal_control.js"></script>
 
   <script type="module" src="/static/js/user/profile/profile_picture.js"></script>
   <script type="module" src="/static/js/user/profile/username_edit.js"></script>

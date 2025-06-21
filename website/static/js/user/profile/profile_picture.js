@@ -53,7 +53,7 @@ if (input && preview && saveBtn) {
         progressWrapper.classList.add('d-none');
         saveBtn.disabled = true;
       } else {
-        alert("Fehler beim Hochladen: " + xhr.statusText);
+        showInfo("Fehler", "Fehler beim Hochladen: " + xhr.statusText);
       }
     };
 

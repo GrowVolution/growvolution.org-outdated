@@ -47,6 +47,6 @@ socket.on('gender_updated', res => {
     profileGender.textContent = genderText;
     saveGenderBtn.disabled = true;
   } else {
-    alert(res.error || 'Fehler beim Speichern');
+    showInfo('Fehler beim Speichern', res.error);
   }
 });

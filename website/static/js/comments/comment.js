@@ -38,54 +38,32 @@ function onAddComment() {
 }
 
 
-function updateLikeElement(element, leave = false) {
-    const icon = element.querySelector('i')
+function onReactionChange(option) {
+    const dropdown = option.closest('.reaction-dropdown')
+    const button = dropdown.querySelector('.reaction-btn')
+    const commentElement = dropdown.closest('.comment') || dropdown.closest('.reply')
+    const referenceID = commentElement.id.replace(/^(comment|reply)-/, '')
+    const type = commentElement.classList.contains('reply') ? 'reply' : 'comment'
 
-    if (element.dataset.liked !== 'true') {
-        const showFilled = !leave
+    const selectedReaction = option.dataset.reaction
+    button.dataset.currentReaction = selectedReaction
 
-        icon.classList.toggle('bi-heart-fill', showFilled)
-        icon.classList.toggle('bi-heart', !showFilled)
-        icon.classList.toggle('text-danger', showFilled)
+    const labelMap = {
+        helpful: '💡 Hilfreich',
+        agree: '👍 Stehe ich hinter',
+        reflective: '🧠 Stimmt mich nachdenklich',
+        moved: '🌟 Hat mich berührt',
+        disagree: '🧭 Sehe ich anders',
+        '': '➕ Reaktion'
     }
-}
 
+    button.innerHTML = labelMap[selectedReaction] || '➕ Reaktion'
 
-function onHover() {
-    updateLikeElement(this)
-}
-
-
-function onLeave() {
-    updateLikeElement(this, true)
-}
-
-
-function onLike(actionClass, trigger) {
-    const icon = trigger.querySelector('i')
-    const isLiked = trigger.dataset.liked === 'true'
-
-    trigger.dataset.liked = (!isLiked).toString()
-
-    icon.classList.toggle('bi-heart-fill', !isLiked)
-    icon.classList.toggle('bi-heart', isLiked)
-    icon.classList.toggle('text-danger', !isLiked)
-
-    const referenceID = trigger.closest(`.${actionClass}`).id.replace(`${actionClass}-`, '');
-    const data = {
+    emit('set_reaction', {
         ref: referenceID,
-        type: actionClass
-    }
-
-    const likeCounter = trigger.querySelector('.like-count')
-    const likeCount = parseInt(likeCounter.textContent)
-    if (isLiked) {
-        likeCounter.textContent = `${likeCount - 1}`
-        emit('remove_like', data)
-    } else {
-        likeCounter.textContent = `${likeCount + 1}`
-        emit('add_like', data)
-    }
+        type: type,
+        reaction: selectedReaction
+    })
 }
 
 
@@ -158,13 +136,13 @@ function onCommentSystemSave(referenceID, actionClass, trigger) {
 }
 
 
-function onDelete(actionClass, trigger) {
+async function onDelete(actionClass, trigger) {
     let typeText
     const isComment = actionClass === 'comment'
     if (isComment)
         typeText = 'deinen Kommentar'
     else typeText = 'deine Antwort'
-    const confirmed = confirm(`Möchtest du ${typeText} wirklich entfernen?`)
+    const confirmed = confirmDialoge(`Möchtest du ${typeText} wirklich entfernen?`, 'warning')
     if (! confirmed) return
 
     const element = trigger.closest(`.${actionClass}`)
@@ -207,14 +185,10 @@ function loadReplies() {
 
 
 function initAction(action, actionClass = 'comment') {
-    if (action.classList.contains('like')) {
-        action.addEventListener('mouseover', onHover)
-        action.addEventListener('mouseout', onLeave)
-        action.addEventListener('click', () => { onLike(actionClass, action) })
-    }
+    if (action.classList.contains('reaction-option')) action.addEventListener('click', () => onReactionChange(action))
     else if (action.classList.contains('reply')) action.addEventListener('click', () => { onCommentReply(action) })
     else if (action.classList.contains('edit')) action.addEventListener('click', () => { onCommentSystemEdit(actionClass, action) })
-    else if (action.classList.contains('delete')) action.addEventListener('click', () => { onDelete(actionClass, action) })
+    else if (action.classList.contains('delete')) action.addEventListener('click', async () => { await onDelete(actionClass, action) })
     else if (action.classList.contains('has-replies')) action.addEventListener('click', loadReplies)
 }
 
@@ -229,6 +203,9 @@ function initComment(comment) {
 function initComments() {
     comments.forEach(comment => {
         initComment(comment)
+        comment.querySelectorAll('.reaction-option').forEach(option => {
+            option.addEventListener('click', () => onReactionChange(option))
+        })
     })
 }
 

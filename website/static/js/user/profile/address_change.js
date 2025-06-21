@@ -51,7 +51,7 @@ if (addressUnsetCheckbox && addressStreet && addressZip && addressCity && saveAd
       addressGiven = !addressGiven;
       saveAddressBtn.disabled = true;
     } else {
-      alert(res.error || 'Fehler beim Speichern');
+      showInfo('Fehler beim Speichern', res.error);
     }
   });
 }

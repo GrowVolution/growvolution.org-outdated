@@ -40,7 +40,7 @@
               <p style="text-align: justify;">
                 Die Welt verändern? Kein Problem.
                 Aber alles beginnt bei dir. Deshalb ist diese Seite dir gewidmet –
-                deinem Weg, deinem Wachstum, deinem Mut.
+                deinem Weg, deinem Wachstum und deinem Mut.
               </p>
             </div>
           </div>
@@ -71,16 +71,19 @@
     </footer>
 
     {% block modal %}{% endblock %}
+    <script type="module" src="/static/js/shared/modal_control.js"></script>
     {% if user and not user.reflection_done %}
         <span id="reflectionShown" class="d-none">{{ 'true' if user.reflection_shown else 'false' }}</span>
         {% include "user/modals/reflection_modal.html" %}
-        <script type="module" src="/static/js/shared/modal_control.js"></script>
         <script type="module" src="/static/js/user/initial_reflection.js"></script>
     {% endif %}
     {% if user and not user.journey_started %}
         {% include "user/modals/journey_start.html" %}
-        {% if user.reflection_done %}<script type="module" src="/static/js/shared/modal_control.js"></script>{% endif %}
         <script type="module" src="/static/js/user/journey_start.js"></script>
+    {% endif %}
+    {% if user and not user.journal_created %}
+        {% include "user/modals/create_journal.html" %}
+        <script type="module" src="/static/js/user/journal/create.js"></script>
     {% endif %}
     {% include "modals/confirm_modal.html" %}
     {% include "modals/info_modal.html" %}

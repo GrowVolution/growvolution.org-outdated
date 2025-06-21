@@ -1,19 +1,41 @@
-<div class="d-flex gap-3 mb-0">
-  <a class="text-dark text-decoration-none {{ 'active' if user else '' }} like" data-liked="{{ 'true' if liked else 'false' }}">
-      <i class="bi {{ 'bi-heart-fill text-danger' if liked else 'bi-heart' }}"></i>
-      <span class="like-count">{{ comment.likes if comment else reply.likes }}</span>
-  </a>
-  {% if user %}
-      <a class="text-dark text-decoration-none text-hover-primary reply">
-          <i class="bi bi-reply"></i> <span class="d-md-inline d-none">Antworten</span>
-      </a>
-  {% endif %}
-  {% if is_author %}
-      <a class="text-dark text-decoration-none text-hover-warning rounded edit">
-          <i class="bi bi-pencil"></i> <span class="d-md-inline d-none">Bearbeiten</span>
-      </a>
-      <a class="text-dark text-decoration-none text-hover-danger rounded delete">
-          <i class="bi bi-trash"></i> <span class="d-md-inline d-none">Löschen</span>
-      </a>
-  {% endif %}
+<div class="d-flex gap-3 mb-0 align-items-center">
+    {% if user and not is_author %}
+        <div class="dropdown reaction-dropdown">
+            <a
+                    class="btn btn-sm btn-light dropdown-toggle reaction-btn"
+                    type="button"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false"
+                    data-current-reaction="{{ reaction_type or '' }}"
+            >
+                {{ {
+          'helpful': '💡 Hilfreich',
+          'agree': '👍 Stehe ich hinter',
+          'reflective': '🧠 Stimmt mich nachdenklich',
+          'moved': '🌟 Hat mich berührt',
+          'disagree': '🧭 Sehe ich anders'
+        }[reaction_type] if reaction_type else '➕ Reaktion' }}
+            </a>
+            <ul class="dropdown-menu">
+                <li><a class="dropdown-item reaction-option" data-reaction="helpful">💡 Hilfreich</a></li>
+                <li><a class="dropdown-item reaction-option" data-reaction="agree">👍 Stehe ich hinter</a></li>
+                <li><a class="dropdown-item reaction-option" data-reaction="reflective">🧠 Stimmt mich nachdenklich</a></li>
+                <li><a class="dropdown-item reaction-option" data-reaction="moved">🌟 Hat mich berührt</a></li>
+                <li><a class="dropdown-item reaction-option" data-reaction="disagree">🧭 Sehe ich anders</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item reaction-option" data-reaction="">🚫 Keine Reaktion</a></li>
+            </ul>
+        </div>
+    <a class="text-dark text-decoration-none text-hover-primary reply">
+        <i class="bi bi-reply"></i> <span class="d-md-inline d-none">Antworten</span>
+    </a>
+    {% endif %}
+    {% if is_author %}
+        <a class="text-dark text-decoration-none text-hover-warning rounded edit">
+            <i class="bi bi-pencil"></i> <span class="d-md-inline d-none">Bearbeiten</span>
+        </a>
+        <a class="text-dark text-decoration-none text-hover-danger rounded delete">
+            <i class="bi bi-trash"></i> <span class="d-md-inline d-none">Löschen</span>
+        </a>
+    {% endif %}
 </div>

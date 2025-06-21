@@ -1,0 +1,28 @@
+{% set simple_labels = {
+    'laundry': '🧺 Wäschetag',
+    'tidy': '🧹 Aufräumtag',
+    'clean': '🧼 Putztag',
+    'shopping': '🛒 Einkaufstag'
+} %}
+<tr>
+    {% for day in ['mo','di','mi','do','fr','sa','so'] %}
+        <td class="text-center align-middle nowrap">
+            {% set tasks = week[day] %}
+            {% if tasks == 'restday' %}
+                <span class="text-muted">Ruhetag</span>
+            {% elif not tasks %}
+                <span class="text-muted">Nicht gesetzt</span>
+            {% else %}
+                {% set task = tasks[0] %}
+                {% set label = simple_labels[task['label']] if task['label'] in simple_labels else task['label'] %}
+                <div>{{ label }}</div>
+                {% if current_day == day %}
+                    <button class="btn btn-sm btn-success mt-2" id="done-{{ day }}"
+                            {% if task['done'] %}disabled{% endif %}>
+                        Erledigt
+                    </button>
+                {% endif %}
+            {% endif %}
+        </td>
+    {% endfor %}
+</tr>

@@ -1,0 +1,32 @@
+{% extends 'modal_base.html' %}
+
+{% block id %}editJournalModal{% endblock %}
+
+{% block title %}✏️ Journal bearbeiten{% endblock %}
+
+{% block body %}
+    <form id="editJournalForm">
+    <div id="editJournalQuestions">
+        {% set questions = user.journal_setup_data or [] %}
+        {% for question in questions %}
+            {% set index = loop.index0 %}
+            <div class="journal-question mb-4">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <strong>Frage {{ index + 1 }}</strong>
+                    <i class="bi bi-trash text-danger cursor-pointer delete-question"></i>
+                </div>
+                <input type="text" class="form-control mb-2 question-input" name="q_{{ index }}" maxlength="50" placeholder="Welche Frage möchtest du dir stellen?" value="{{ question.question }}">
+                <select class="form-select" name="type_{{ index }}">
+                    <option value="text" {% if question.type == 'text' %}selected{% endif %}>Text</option>
+                    <option value="checkbox" {% if question.type == 'checkbox' %}selected{% endif %}>Checkbox</option>
+                </select>
+            </div>
+        {% endfor %}
+    </div>
+    <button type="button" class="btn btn-outline-secondary w-100" id="editAddQuestion">Weitere Frage hinzufügen</button>
+    </form>
+{% endblock %}
+
+{% block footer %}
+    <button type="submit" class="btn btn-primary w-100" form="editJournalForm">Änderungen speichern</button>
+{% endblock %}

@@ -22,4 +22,5 @@ def delete_model(model: DB.Model):
 
 
 def init_models():
-    from . import user, blog, comment, reply, journey
+    from . import user, blog, journey, journal
+    from .comment_system import comment, reply

@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block title %}Mein Tagebuch{% endblock %}
+
+{% block content %}
+    <div class="window-wrapper flex-column mx-auto" style="max-width: 700px">
+        <div class="window-box mb-3 w-100">
+            <div class="window-header">
+                <h3 class="fw-bold mt-2">📖 Neuer Tagebucheintrag</h3>
+            </div>
+            <div class="window-content">
+                <form method="post" action="/journal/add-entry">
+                    {% set questions = user.journal_setup_data or [] %}
+                    {% for question in questions %}
+                        {% set index = loop.index0 %}
+                        {% include 'user/journal/question.html' %}
+                    {% endfor %}
+                    <button type="submit" class="btn btn-success w-100 mt-3">Eintrag speichern</button>
+                </form>
+                <a class="btn btn-outline-primary w-100 mt-2" href="/journal/history">Meine Tagebucheinträge ansehen</a>
+                <button class="btn btn-outline-secondary w-100 mt-2" data-bs-toggle="modal" data-bs-target="#editJournalModal">Fragen bearbeiten</button>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block modal %}
+    {% include "user/modals/edit_journal.html" %}
+{% endblock %}
+
+{% block script_afterDOM %}
+	<script type="module" src="/static/js/user/journal/edit.js"></script>
+{% endblock %}

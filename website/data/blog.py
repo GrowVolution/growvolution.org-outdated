@@ -15,7 +15,7 @@ class Blog(DB.Model):
     timestamp = DB.Column(DB.DateTime, server_default=DB.func.current_timestamp())
     edited = DB.Column(DB.Boolean, default=False)
 
-    comments = DB.relationship('Comment', back_populates='blog', cascade='all, delete-orphan')
+    comments = DB.relationship('Comment', backref='blog', cascade='all, delete-orphan')
 
     @hybrid_property
     def image_url(self) -> str | None:
@@ -24,7 +24,7 @@ class Blog(DB.Model):
     @hybrid_property
     def info(self) -> str:
         user = udb.User.query.filter_by(username=self.author).first()
-        author = f"{user.first_name} {user.last_name}"
+        author = f"{user.first_name} {user.last_name if not user.hide_last_name else ''}".strip()
         timestamp = self.timestamp.strftime("%d.%m.%Y %H:%M")
         edited = ' (bearbeitet)' if self.edited else ''
         return f"{author}, {timestamp}{edited}"

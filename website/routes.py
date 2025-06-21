@@ -2,7 +2,7 @@ from .rendering import render, render_404
 from .logic.blog import (preview as blog_preview, create as blog_creator,
                          post as blog_post_handler, edit as blog_edit_handler)
 from .logic.user import (profile as profile_handler, reflection as reflection_handler, journey as journey_handler,
-                         week as week_handler)
+                         week as week_handler, journal as journal_handler)
 from .logic import index as index_handler
 from .routing import require_user, require_admin
 from flask import Blueprint, redirect
@@ -12,6 +12,7 @@ routes = Blueprint('routes', __name__)
 blog_routes = Blueprint('blog_routes', __name__)
 journey_routes = Blueprint('journey_routes', __name__)
 week_routes = Blueprint('week_routes', __name__)
+journal_routes = Blueprint('journal_routes', __name__)
 
 
 # Main Routes
@@ -84,6 +85,12 @@ def journey(user):
     return journey_handler.handle_request(user)
 
 
+@journey_routes.route('/history')
+@require_user(False)
+def journey_history(user):
+    return journey_handler.journey_history(user)
+
+
 @journey_routes.route('/start', methods=POST_METHOD)
 @require_user(True)
 def journey_start(user):
@@ -94,6 +101,12 @@ def journey_start(user):
 @require_user(True)
 def daily_track(user):
     return journey_handler.daily_track(user)
+
+
+@journey_routes.route('/weekly_track', methods=POST_METHOD)
+@require_user(True)
+def weekly_track(user):
+    return journey_handler.weekly_track(user)
 
 
 @journey_routes.route('/text-correct')
@@ -132,6 +145,30 @@ def update_week(user):
     return week_handler.update_week(user)
 
 
+@journal_routes.route('/')
+@require_user(False)
+def journal(user):
+    return journal_handler.handle_request(user)
+
+
+@journal_routes.route('/history')
+@require_user(False)
+def journal_history(user):
+    return journal_handler.journal_history(user)
+
+
+@journal_routes.route('/set', methods=POST_METHOD)
+@require_user(True)
+def set_journal(user):
+    return journal_handler.set_journal(user)
+
+
+@journal_routes.route('/add-entry', methods=POST_METHOD)
+@require_user(False)
+def add_journal_entry(user):
+    return journal_handler.add_entry(user)
+
+
 # Legal Routes
 @routes.route('/about')
 def about():
@@ -161,7 +198,8 @@ def not_found(path):
 
 # Processing debug requests for testing
 @routes.route('/debug')
-def debug():
+@require_user(False)
+def debug(user):
     """
 
         TODO: Debug Stuff
@@ -173,3 +211,4 @@ def debug():
 routes.register_blueprint(blog_routes, url_prefix='/blog')
 routes.register_blueprint(journey_routes, url_prefix='/journey')
 routes.register_blueprint(week_routes, url_prefix='/week')
+routes.register_blueprint(journal_routes, url_prefix='/journal')

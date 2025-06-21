@@ -57,7 +57,7 @@ document.getElementById('taskStartDate').addEventListener('input', e => {
     const allowedDates = JSON.parse(e.target.getAttribute('data-valid-dates') || '[]');
     if (!allowedDates.includes(e.target.value)) {
         e.target.value = allowedDates[0];
-        alert("Das gewählte Startdatum passt nicht zu den ausgewählten Wochentagen.");
+        showInfo("Ungültige Auswahl", "Das gewählte Startdatum passt nicht zu den ausgewählten Wochentagen.");
     }
 });
 

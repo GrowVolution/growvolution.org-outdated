@@ -69,7 +69,7 @@ if (modal && completeBtn && qr && secretCode && twoFAControl) {
 
   socket.on('2fa_confirmed', res => {
     if (!res.success) {
-      alert("Fehler: Code ungültig oder abgelaufen.");
+      showInfo("Fehler", "Fehler: Code ungültig oder abgelaufen.");
       return;
     }
 
@@ -98,7 +98,7 @@ if (modal && completeBtn && qr && secretCode && twoFAControl) {
     if (res.success) {
       updateStatus(false);
     } else {
-      alert(res.error || 'Fehler beim Deaktivieren');
+      showInfo('Fehler beim Deaktivieren', res.error);
     }
   });
 }

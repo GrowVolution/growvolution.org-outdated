@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block title %}Reiseverlauf{% endblock %}
+
+{% block content %}
+	<div class="window-wrapper flex-column px-2">
+        <h1 class="text-center mb-4">Der Verlauf deiner Reise</h1>
+        <p>🏁&nbsp; Tag 3562 &nbsp;🏁</p>
+        <p class="fw-bold">...</p>
+        <div class="d-flex flex-column">
+            {% set journey_steps = user.journey|sort(attribute='timestamp', reverse=True) %}
+            {% for step in journey_steps %}
+                {% set day = (step.timestamp - user.journey_started_at).days %}
+                {% if step.step_type == 'daily' %}
+                    {% set title = "✅ Tag " ~ day %}
+                {% elif step.step_type == 'weekly' %}
+                    {% set title = "🔥 Woche " ~ (day // 7) %}
+                {% else %}
+                    {% set title = None %}
+                {% endif %}
+
+                {% if title %}
+                    {% include 'user/journey/history_step.html' %}
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

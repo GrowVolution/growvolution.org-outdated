@@ -1,6 +1,7 @@
 from . import register_event, require_user
 from .. import emit_html, socket_flash
-from website.data import comment as comment_db, reply as reply_db, blog as blog_db, add_model, delete_model, commit
+from website.data import blog as blog_db, add_model, delete_model, commit
+from website.data.comment_system import comment as comment_db, reply as reply_db
 from website.logic.comments import comment as comment_logic, reply as reply_logic
 
 
@@ -52,20 +53,13 @@ def _ref_author(user, ref) -> bool:
     return True
 
 
-@register_event('add_like')
+@register_event('set_reaction')
 @require_user(True)
-def handle_like(user, data):
+def handle_reaction(user, data):
     ref = _action_ref(data)
-    if ref.like(user.id):
-        commit()
-
-
-@register_event('remove_like')
-@require_user(True)
-def handle_unlike(user, data):
-    ref = _action_ref(data)
-    if ref.unlike(user.id):
-        commit()
+    new_reaction = data.get('reaction') or None
+    ref.set_reaction(user.id, new_reaction)
+    commit()
 
 
 @register_event('comment_system_edit')

@@ -1,0 +1,45 @@
+{% set medium_labels = {
+    'sport': '💪🏼 Sport machen',
+    'jogging': '🏃‍♂️ Joggen gehen',
+    'dish': '🍽️ Abwasch erledigen',
+    'laundry': '🧺 Wäsche machen',
+    'meditate': '🧘 Meditieren',
+    'tidy': '🧹 Aufräumen',
+    'clean': '🧼 Putzen',
+    'read': '📖 Buch lesen',
+    'learn': '📚 Lernen',
+    'walk': '🚶 Spazieren gehen',
+    'shop': '🛒 Einkaufen',
+    'cook': '🍲 Essen kochen'
+} %}
+{% for i in range(3) %}
+    <tr>
+        <th class="text-start">Aufgabe {{ i + 1 }}</th>
+        {% for day in ['mo','di','mi','do','fr','sa','so'] %}
+            {% set tasks = week[day] %}
+            {% if tasks == 'restday' or not tasks %}
+                {% if i == 0 %}
+                    <td rowspan="3" class="align-middle text-muted text-center">
+                        {{ 'Ruhetag' if tasks == 'restday' else 'Nicht gesetzt' }}
+                    </td>
+                {% endif %}
+            {% else %}
+                <td class="text-center align-middle">
+                    {% if i < tasks|length %}
+                        {% set task = tasks[i] %}
+                        {% set label = medium_labels[task['label']] if task['label'] in medium_labels else task['label'] %}
+                        <div>{{ label }}</div>
+                        {% if current_day == day %}
+                            <div class="form-check text-start text-success mt-2">
+                                <input class="form-check-input" type="checkbox"
+                                       id="done-{{ day }}-{{ i }}"
+                                       {% if task['done'] %}checked disabled{% endif %}>
+                                <label class="form-check-label" for="done-{{ day }}-{{ i }}">Erledigt</label>
+                            </div>
+                        {% endif %}
+                    {% endif %}
+                </td>
+            {% endif %}
+        {% endfor %}
+    </tr>
+{% endfor %}

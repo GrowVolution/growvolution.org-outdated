@@ -1,18 +1,32 @@
-from website.rendering import render
+from website.rendering import render, render_404
 from website.data import commit, add_model, journey as journey_db, user as udb
 from website.data.helpers import normalize_timestamp
 from website.socket.messages import send_message
 from website.jobs import register_job, queue_job
 from datetime import datetime
-from flask import request, redirect
+from flask import request, redirect, render_template
+from markupsafe import Markup
+from typing import Tuple
+from LLM_API import correct_text
 
 
 def _back_to_journey():
     return redirect('/journey')
 
 
+def _tupled_value(value: str) -> Tuple[str, None]:
+    return value, None
+
+
 def handle_request(user):
-    return render('user/journey.html', user)
+    return render('user/journey/journey.html', user)
+
+
+def journey_history(user):
+    if not user.journey_started:
+        return render_404()
+
+    return render('user/journey/history.html', user)
 
 
 @register_job('journey_start')
@@ -62,24 +76,46 @@ def daily_track(user):
     return _back_to_journey()
 
 
+def weekly_track(user):
+    data = request.form
+    correct = 'correct' in data
+    user.text_correct = correct
+    
+    new_goal = data.get('goal_next_week', '')
+    new_goal, rid = correct_text(new_goal) if correct else _tupled_value(new_goal)
+    
+    good = data.get('week_good', '')
+    bad = data.get('week_bad', '')
+
+    journey_step = journey_db.Journey(user.id)
+    journey_step.weekly_track(user.goal_week, good, bad)
+    user.goal_week = new_goal
+
+    user.add_xp(10)
+    user.new_day_tracked()
+    add_model(journey_step)
+
+    return _back_to_journey()
+
+
 def update_journey(user):
     data = request.form
     allowed_fields = user.interval_border_data or []
 
+    correct = 'correct' in data
+    user.text_correct = correct
+    
+    rid = None
     for field in allowed_fields:
         if field in data:
             value = data.get(field)
             if field.endswith('_rating'):
                 setattr(user, field, int(value))
             else:
-                setattr(user, field, value.strip())
-
-    correct = 'correct' in data
-    user.text_correct = correct
-
-    if correct:
-        user.journey_text_correct()
-
+                value = value.strip()
+                value, rid = correct_text(value, rid) if correct else _tupled_value(value)
+                setattr(user, field, value)
+    
     user.last_updated = normalize_timestamp(datetime.now())
     commit()
 

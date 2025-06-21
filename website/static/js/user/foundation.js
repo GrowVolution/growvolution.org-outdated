@@ -18,7 +18,7 @@ function updateFocusLimit(e) {
 const checked = [...focusCheckboxes].filter(cb => cb.checked);
 if (checked.length > 3) {
   e.target.checked = false;
-  alert("Du kannst maximal 3 Bereiche auswählen.");
+  showInfo("Limit erreicht","Du kannst maximal 3 Bereiche auswählen.");
 }
 }
 

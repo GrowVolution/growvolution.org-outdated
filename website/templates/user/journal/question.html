@@ -1,0 +1,13 @@
+{% if question['type'] == 'text' %}
+    <div class="mb-3">
+        <label for="text_{{ index }}" class="form-label fw-medium">{{ question['question'] }}</label>
+        <textarea class="form-control" name="q_{{ index }}" id="text_{{ index }}" rows="3" maxlength="500" placeholder="Deine Antwort..." required></textarea>
+    </div>
+{% else %}
+    <div class="form-check mb-3">
+        <input class="form-check-input" type="checkbox" name="q_{{ index }}" id="check_{{ index }}">
+        <label class="form-check-label fw-medium" for="check_{{ index }}">
+            {{ question['question'] }}
+        </label>
+    </div>
+{% endif %}

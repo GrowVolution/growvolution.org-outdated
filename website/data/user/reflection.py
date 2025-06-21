@@ -1,8 +1,11 @@
 from .. import DB
 from sqlalchemy.ext.hybrid import hybrid_property
+import json
 
 
 class UserReflection:
+
+    # Initial Reflection
     reflection_shown = DB.Column(DB.Boolean, default=False)
 
     current_state = DB.Column(DB.Text)
@@ -29,3 +32,18 @@ class UserReflection:
         self.step_thoughts = step_thoughts
 
         self.reflection_done = True
+
+    # User Journal
+    journal_created = DB.Column(DB.Boolean, default=False)
+    journal_setup = DB.Column(DB.Text)
+
+    @hybrid_property
+    def journal_setup_data(self) -> dict | None:
+        try:
+            return json.loads(self.journal_setup)
+        except ValueError:
+            return None
+
+    def set_journal(self, journal_json_str: str):
+        self.journal_created = True
+        self.journal_setup = journal_json_str

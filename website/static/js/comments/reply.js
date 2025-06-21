@@ -87,5 +87,8 @@ function initReply(reply) {
 function initReplies(replyContainer) {
     replyContainer.querySelectorAll('.reply').forEach(reply => {
         initReply(reply)
+        reply.querySelectorAll('.reaction-option').forEach(option => {
+            option.addEventListener('click', () => onReactionChange(option))
+        })
     })
 }

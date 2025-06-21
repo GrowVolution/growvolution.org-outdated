@@ -46,7 +46,7 @@ class UserSettings:
 
 
     # Privacy Section
-    # TODO: Not implemented yet
+    hide_last_name = DB.Column(DB.Boolean, default=False)
 
 
     # Account Section

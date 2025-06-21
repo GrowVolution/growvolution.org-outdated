@@ -1,5 +1,6 @@
 from . import REDIS, APP
 from .cache import update_cache
+from .data.user import update_user_scores
 from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.triggers.cron import CronTrigger
 from debugger import log
@@ -11,6 +12,13 @@ SCHEDULER.add_job(
     func=update_cache,
     trigger=CronTrigger(minute=0),
     id='cache_updater',
+    replace_existing=True
+)
+
+SCHEDULER.add_job(
+    func=update_user_scores,
+    trigger=CronTrigger(hour=23, minute=59),
+    id='user_score_updater',
     replace_existing=True
 )
 

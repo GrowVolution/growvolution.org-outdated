@@ -1,0 +1,67 @@
+<div class="window-box mt-3 w-100">
+    <div class="window-header">
+        <h4 class="fw-bold mt-2">{{ title }}</h4>
+    </div>
+    <div class="window-content">
+        {% if step.step_type == 'daily' %}
+            {% set emoji_map = {
+                1: '😞',
+                2: '😐',
+                3: '🙂',
+                4: '😄',
+                5: '🚀'
+            } %}
+            <div class="mb-3">
+                <label class="form-label fw-bold">Beurteilung des Tages: {{ emoji_map[step.mood_level] }}</label>
+                <div class="progress" style="height: 0.75rem;">
+                    <div class="progress-bar bg-secondary text-light fw-bold small" style="width: {{ (step.mood_level / 5) * 100 }}%;">
+                        {{ step.mood_level }} / 5
+                    </div>
+                </div>
+            </div>
+            <div class="mb-2">
+                {% if step.worked_on_goal %}
+                    <p>✔️ Am Wochenziel gearbeitet.</p>
+                {% else %}
+                    <p>❌ Nicht am Wochenziel gearbeitet.</p>
+                {% endif %}
+            </div>
+            {% if step.short_note %}
+                <div class="mb-2">
+                    <h6 class="fw-bold text-muted">Über diesen Tag...</h6>
+                    <p>{{ step.short_note }}</p>
+                </div>
+            {% endif %}
+            {% if step.quick_motivation %}
+                {% set that_day = "an diesem Tag" %}
+                {% set label_map = {
+                    'proud': "Worauf du {} stolz warst...",
+                    'energy': "Was dir {} Energie gegeben hat...",
+                    'help': "Wem du {} etwas Gutes tun konntest...",
+                    'success': "Ein kleiner Erfolg {}...",
+                    'recognize': "Was du dir selbst {} anerkannt hast..."
+                } %}
+                {% set label = label_map[step.motivation_type].format(that_day) %}
+                <div>
+                    <h6 class="fw-bold text-muted">{{ label }}</h6>
+                    <p>{{ step.quick_motivation }}</p>
+                </div>
+            {% endif %}
+        {% elif step.step_type == 'weekly' %}
+            <div class="mb-3">
+                <h6 class="fw-bold text-muted">Was du dir in dieser Woche vorgenommen hattest...</h6>
+                <p>{{ step.week_goal or '- War noch nicht implementiert -' }}</p>
+            </div>
+            <div class="mb-3">
+                <h6 class="fw-bold text-muted">Was in dieser Woche gut lief...</h6>
+                <p>{{ step.week_good }}</p>
+            </div>
+            <div>
+                <h6 class="fw-bold text-muted">Was in dieser Woche schlecht lief...</h6>
+                <p>{{ step.week_bad }}</p>
+            </div>
+        {% elif False %}
+        <!-- TODO: implement later -->
+        {% endif %}
+    </div>
+</div>

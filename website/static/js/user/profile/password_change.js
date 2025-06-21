@@ -32,7 +32,7 @@ socket.on('password_changed', res => {
   if (res.success) {
     closeModal('passwordChangeModal');
   } else {
-    alert(res.error || 'Fehler beim Speichern');
+    showInfo('Fehler beim Speichern', res.error);
   }
 });
 

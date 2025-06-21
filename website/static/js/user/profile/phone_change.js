@@ -50,6 +50,6 @@ socket.on('phone_updated', res => {
       display.textContent = res.phone ? `${res.phone.prefix}${res.phone.number}` : 'Keine Angabe';
     }
   } else {
-    alert(res.error || 'Fehler beim Speichern');
+    showInfo('Fehler beim Speichern', res.error);
   }
 });

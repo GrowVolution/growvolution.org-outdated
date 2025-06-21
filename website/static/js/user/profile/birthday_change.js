@@ -37,6 +37,6 @@ socket.on('birthday_updated', res => {
     birthdayGiven = !birthdayGiven;
     saveBirthdayBtn.disabled = true;
   } else {
-    alert(res.error || 'Fehler beim Speichern');
+    showInfo('Fehler beim Speichern', res.error);
   }
 });

@@ -41,7 +41,7 @@
                           client_fingerprint: hash
                       })
                   }).then(res => {
-                      if (res.status === 200) console.log(res.text());
+                      if (res.status === 200) res.text().then(console.log);
                       location.reload();
                   });
                 });

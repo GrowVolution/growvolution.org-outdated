@@ -51,7 +51,7 @@ if (input && hint && saveBtn && typeof emit !== 'undefined') {
         display.textContent = `@${res.username}`;
       }
     } else {
-      alert(res.error || 'Fehler beim Speichern');
+      showInfo('Fehler beim Speichern', res.error);
     }
   });
 }

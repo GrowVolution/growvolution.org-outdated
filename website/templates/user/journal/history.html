@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block title %}Meine Tagebucheinträge{% endblock %}
+
+{% block content %}
+    <div class="window-wrapper flex-column px-2 mx-auto" style="max-width: 700px">
+        {% for entry in user.journal|sort(attribute='timestamp', reverse=True) %}
+            <div class="window-box mt-3 w-100">
+                <div class="window-header">
+                    <h4 class="fw-bold mt-2">📖 {{ entry.timestamp.strftime('%d.%m.%Y') }}</h4>
+                </div>
+                <div class="window-content">
+                    {% for item in entry.content_data %}
+                        {% if item.value is string and item.value.strip() %}
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">📝 {{ item.label }}</label>
+                                <p>{{ item.value }}</p>
+                            </div>
+                        {% elif item.value is sameas true %}
+                            <p class="mb-2">✔️ {{ item.label }}</p>
+                        {% elif item.value is sameas false %}
+                            <p class="mb-2 text-muted">❌ {{ item.label }}</p>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        {% else %}
+            <div class="window-box w-100">
+                <div class="window-header">
+                    <h4 class="fw-bold mt-2">Noch keine Einträge</h4>
+                </div>
+                <div class="window-content text-center">
+                    <p>Hier gibt es noch nichts zu sehen. 👀</p>
+                    <a class="btn btn-outline-dark w-100" href="/journal">✍🏼 Neuen Eintrag erstellen</a>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}

@@ -69,7 +69,7 @@ group.addEventListener("click", (e) => {
 
   if (active.length > 3) {
     e.target.classList.remove("active");
-    alert("Bitte wähle maximal 3 Bereiche aus.");
+    showInfo("Limit überschritten", "Bitte wähle maximal 3 Bereiche aus.");
     return;
   }
 

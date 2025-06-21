@@ -50,7 +50,6 @@ socket.on('flash', (data) => {
 
 socket.on('error', (message) => {
     console.log(message);
-    alert("Beim Ausführen der Aktion ist ein Fehler aufgetreten. " +
-        "Weitere Details in der Entwickler Konsole. Wende dich bitte " +
-        "an developer@growv-mail.org um diesen Fehler zu melden.");
+    showInfo("Socket Fehler", "Beim Ausführen der Aktion ist ein Fehler aufgetreten.\n" +
+        `Fehler Nachricht: ${message}. Wende dich bitte an developer@growv-mail.org um diesen Fehler zu melden.`);
 })

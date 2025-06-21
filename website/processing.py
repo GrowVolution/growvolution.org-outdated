@@ -98,12 +98,12 @@ def event_handler(data: dict | str | None):
 @SOCKET.on_error_default
 def error_handler(error):
     eid = random_code()
-    log('error', f"Handling socket event failed ({eid}): {repr(error)}")
+    tb_str = ''.join(traceback.format_exception(*sys.exc_info()))
+    name = type(error).__name__
+    log('error', f"Handling socket event failed ({eid}): {name}\n{tb_str}")
 
     if user_role() == 'dev':
-        import sys, traceback
-        tb_str = ''.join(traceback.format_exception(*sys.exc_info()))
-        SOCKET.emit('error', f"Interner Server Fehler ({eid}): {repr(error)}\n{tb_str}")
+        SOCKET.emit('error', f"Interner Server Fehler ({eid}): {name}\n{tb_str}")
         return
 
     SOCKET.emit('error', "Beim Ausführen der Aktion ist ein serverseitiger Fehler aufgetreten. "

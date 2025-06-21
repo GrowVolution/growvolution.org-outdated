@@ -1,14 +1,14 @@
 from website.rendering import render
 from website.logic.auth.verification import get_user
-from website.data.reply import Reply
-from website.data.comment import Comment
+from website.data.comment_system.reply import Reply
+from website.data.comment_system.comment import Comment
 from website.data.user import User
 from markupsafe import Markup
 
 
 def render_reply(reply: Reply, user: User, render_index: int = 0) -> str:
     return render('comments/reply.html', user, reply=reply, first_reply=render_index == 1,
-                  liked=reply.has_liked(user.id), is_author=reply.author == user)
+                  liked=reply.get_user_reaction(user.id), is_author=reply.author == user)
 
 
 def get_replies_html(comment: Comment) -> Markup:

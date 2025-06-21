@@ -1,0 +1,69 @@
+{% extends 'modal_base.html' %}
+
+{% block id %}createJournalModal{% endblock %}
+
+{% block title %}📘 Starte dein Journal{% endblock %}
+
+{% block body %}
+    <div class="journal-step" data-step="0">
+        <h5 class="fw-bold">🪶 Warum Journaling?</h5>
+        <p>
+            Dein Journal ist ein Ort der Ehrlichkeit, Klarheit und Entwicklung.
+            Es hilft dir, Gedanken zu sortieren, Fortschritte sichtbar zu machen und dich selbst besser kennenzulernen. 🪞
+        </p>
+        <p>
+            Du entscheidest, wann du schreiben möchtest – täglich, wöchentlich oder nur bei Bedarf.
+            Aber maximal ein Eintrag pro Tag, damit jeder Moment Gewicht bekommt. 🏋🏼
+        </p>
+        <p>
+            Nimm dir Zeit, wenn du magst. Aber zwing dich nicht. Dieses Journal ist ein Werkzeug, kein Zwang. 🧘🏼
+        </p>
+    </div>
+
+    <div class="journal-step d-none" data-step="1">
+        <div id="journalQuestions">
+            <div class="journal-question mb-4">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <strong>Frage 1</strong>
+                    <i class="bi bi-trash text-danger cursor-pointer delete-question"></i>
+                </div>
+                <input type="text" class="form-control mb-2" maxlength="50" placeholder="Welche Frage möchtest du dir stellen?" value="Wofür bin ich heute dankbar?">
+                <select class="form-select">
+                    <option value="text" selected>Text</option>
+                    <option value="checkbox">Checkbox</option>
+                </select>
+            </div>
+            <div class="journal-question mb-4">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <strong>Frage 2</strong>
+                    <i class="bi bi-trash text-danger cursor-pointer delete-question"></i>
+                </div>
+                <input type="text" class="form-control mb-2" maxlength="50" placeholder="Welche Frage möchtest du dir stellen?" value="Was habe ich heute gelernt?">
+                <select class="form-select">
+                    <option value="text" selected>Text</option>
+                    <option value="checkbox">Checkbox</option>
+                </select>
+            </div>
+            <div class="journal-question mb-4">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <strong>Frage 3</strong>
+                    <i class="bi bi-trash text-danger cursor-pointer delete-question"></i>
+                </div>
+                <input type="text" class="form-control mb-2" maxlength="50" placeholder="Welche Frage möchtest du dir stellen?" value="Was möchte ich morgen besser machen?">
+                <select class="form-select">
+                    <option value="text" selected>Text</option>
+                    <option value="checkbox">Checkbox</option>
+                </select>
+            </div>
+        </div>
+        <button type="button" class="btn btn-outline-secondary w-100" id="addJournalQuestion">Weitere Frage hinzufügen</button>
+    </div>
+{% endblock %}
+
+{% block footer %}
+    <div class="d-flex justify-content-between w-100">
+        <button type="button" class="btn btn-outline-secondary" id="journalBackBtn" disabled>Zurück</button>
+        <button type="button" class="btn btn-primary" id="journalNextBtn">Weiter</button>
+        <button type="button" class="btn btn-success d-none" id="journalFinishBtn">Speichern</button>
+    </div>
+{% endblock %}

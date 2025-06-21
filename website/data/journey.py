@@ -1,12 +1,14 @@
 from . import DB
 from .helpers import normalize_timestamp
-from datetime import datetime, time
+from datetime import datetime
 
 
 class Journey(DB.Model):
     __tablename__ = 'journey'
     uid = DB.Column(DB.Integer, DB.ForeignKey('user.id'), nullable=False, primary_key=True)
     timestamp = DB.Column(DB.DateTime, nullable=False, primary_key=True)
+
+    step_type = DB.Column(DB.String(16), nullable=False, default='daily')
 
     # Daily Tracking
     mood_level = DB.Column(DB.Integer)
@@ -16,7 +18,9 @@ class Journey(DB.Model):
     motivation_type = DB.Column(DB.String(12))
 
     # Weekly Tracking
-    # TODO: content
+    week_goal = DB.Column(DB.Text)
+    week_good = DB.Column(DB.String(300))
+    week_bad = DB.Column(DB.String(300))
 
     # Quarter Tracking
     # ...
@@ -33,8 +37,14 @@ class Journey(DB.Model):
         self.quick_motivation = quick_motivation
         self.motivation_type = motivation_type
 
-    def weekly_track(self):
-        pass
+        self.step_type = 'daily'
+
+    def weekly_track(self, goal: str, good: str, bad: str):
+        self.week_goal = goal
+        self.week_good = good
+        self.week_bad = bad
+
+        self.step_type = 'weekly'
 
     def quarter_track(self):
         pass

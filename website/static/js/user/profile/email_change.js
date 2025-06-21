@@ -32,6 +32,6 @@ socket.on('email_change_requested', res => {
       display.textContent = res.email ? `${res.email} (ausstehend)` : 'Fehler';
     }
   } else {
-    alert(res.error || 'Fehler beim Speichern');
+    showInfo('Fehler beim Speichern', res.error);
   }
 });
