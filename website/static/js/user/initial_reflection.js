@@ -12,6 +12,8 @@ const progressBar = document.getElementById("reflectionProgress");
 const nextBtn = document.getElementById("nextStep");
 const prevBtn = document.getElementById("prevStep");
 
+const onboarding = document.getElementById('onboardingModal');
+
 let currentStep = 0;
 let navigatedFurther;
 const formData = new FormData();
@@ -35,13 +37,13 @@ function validateCurrentStep() {
   switch (currentStep) {
     case 1: {
       const val = document.getElementById("current").value.trim();
-      isValid = val.length > 50;
+      isValid = val.length > 20;
       break;
     }
     case 2: {
       const val = document.getElementById("goal").value.trim();
       const selected = document.querySelectorAll(".focus-option.active");
-      isValid = val.length > 50 && selected.length >= 1;
+      isValid = val.length > 20 && selected.length >= 1;
       break;
     }
     case 3: {
@@ -149,6 +151,8 @@ function sendReflectionData() {
     reflectionToggle.dataset.bsToggle = null;
     reflectionToggle.dataset.bsTarget = null;
     reflectionToggle.textContent = "Mein Fundament";
+
+    doOnboarding();
   });
 }
 
@@ -170,11 +174,19 @@ modalCloseBtn.addEventListener('click', async (e) => {
   }
 
   flash("In Ordnung, du kannst diesen Schritt jederzeit in der Navigation unter Account -> 'Fundament legen' nachholen.", 'info')
+  doOnboarding();
 });
 
 function showModal() {
   openModal(modalId);
 }
+
+function doOnboarding() {
+  if (onboarding) setTimeout(() => {
+    openModal(onboarding.id);
+  }, 1500);
+}
+
 
 updateStepDisplay();
 if (!reflectionShown) setTimeout(showModal, 1000);

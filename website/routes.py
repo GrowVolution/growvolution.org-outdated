@@ -1,7 +1,8 @@
 from .rendering import render, render_404
 from .logic.blog import (preview as blog_preview, create as blog_creator,
                          post as blog_post_handler, edit as blog_edit_handler)
-from .logic.user import profile as profile_handler, reflection as reflection_handler, journey as journey_handler
+from .logic.user import (profile as profile_handler, reflection as reflection_handler, journey as journey_handler,
+                         week as week_handler)
 from .logic import index as index_handler
 from .routing import require_user, require_admin
 from flask import Blueprint, redirect
@@ -10,6 +11,7 @@ from LIBRARY import ALL_METHODS, POST_METHOD
 routes = Blueprint('routes', __name__)
 blog_routes = Blueprint('blog_routes', __name__)
 journey_routes = Blueprint('journey_routes', __name__)
+week_routes = Blueprint('week_routes', __name__)
 
 
 # Main Routes
@@ -94,6 +96,42 @@ def daily_track(user):
     return journey_handler.daily_track(user)
 
 
+@journey_routes.route('/text-correct')
+@require_user(False)
+def journey_text_correct(user):
+    return journey_handler.text_correct(user)
+
+
+@journey_routes.route('/update', methods=POST_METHOD)
+@require_user(True)
+def journey_update(user):
+    return journey_handler.update_journey(user)
+
+
+@week_routes.route('/')
+@require_user(False)
+def week(user):
+    return week_handler.handle_request(user)
+
+
+@week_routes.route('/setup', methods=POST_METHOD)
+@require_user(True)
+def setup_week(user):
+    return week_handler.setup_week(user)
+
+
+@week_routes.route('/edit')
+@require_user(False)
+def edit_week(user):
+    return week_handler.edit_week(user)
+
+
+@week_routes.route('/update', methods=POST_METHOD)
+@require_user(True)
+def update_week(user):
+    return week_handler.update_week(user)
+
+
 # Legal Routes
 @routes.route('/about')
 def about():
@@ -134,3 +172,4 @@ def debug():
 
 routes.register_blueprint(blog_routes, url_prefix='/blog')
 routes.register_blueprint(journey_routes, url_prefix='/journey')
+routes.register_blueprint(week_routes, url_prefix='/week')

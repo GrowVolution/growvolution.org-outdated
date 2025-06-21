@@ -99,9 +99,9 @@ def oauth_callback() -> Response:
 
         userinfo_raw = request.form.get('user')
         userinfo = json.loads(userinfo_raw)
-        first_name = userinfo.get("name", '').get("firstName")
-        last_name = userinfo.get("name", '').get("lastName")
-        username = f"{first_name} {last_name}".lower().replace(' ', '_')
+        first_name = userinfo.get("name", {}).get("firstName", '')
+        last_name = userinfo.get("name", {}).get("lastName", '')
+        username = f"{first_name}_{last_name}".lower().replace(' ', '_')
 
         if udb.User.query.filter_by(username=username).first():
             username = udb.randomize_username(username)

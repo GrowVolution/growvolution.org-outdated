@@ -16,17 +16,23 @@
           <a class="nav-link dropdown-toggle" href="#" id="menuDropdown" role="button" data-bs-toggle="dropdown"
              aria-expanded="false">Account</a>
           <div class="dropdown-menu dropdown-menu-dark" aria-labelledby="menuDropdown">
-            {% if signed_in %}
+            {% if user %}
               <a class="dropdown-item {% if request.path == '/profile' %}active{% endif %}" href="/profile">Mein Profil</a>
-              {% if initial_reflection %}
-                  <a class="dropdown-item {% if not reflection_shown %}d-none{% endif %}" role="button" data-bs-toggle="modal" data-bs-target="#reflectionModal" id="reflectionToggle">Fundament legen</a>
+              {% if not user.reflection_done %}
+                  <a class="dropdown-item {% if not user.reflection_shown %}d-none{% endif %}" role="button" data-bs-toggle="modal" data-bs-target="#reflectionModal" id="reflectionToggle">Fundament legen</a>
               {% else %}
                   <a class="dropdown-item {% if request.path == '/foundation' %}active{% endif %}" href="/foundation">Mein Fundament</a>
               {% endif %}
-              {% if not journey_started %}
+              {% if not user.journey_started %}
                   <a class="dropdown-item" role="button" data-bs-toggle="modal" data-bs-target="#startJourneyModal" id="journeyToggle">Reise starten</a>
               {% else %}
                   <a class="dropdown-item {% if request.path == '/journey' %}active{% endif %}" href="/journey">Meine Reise</a>
+              {% endif %}
+              <a class="dropdown-item {% if request.path == '/week' %}active{% endif %}" href="/week">{{ 'Mein Wochenplan' if user.week_plan else 'Woche planen' }}</a>
+              {% if not user.journal_created %}
+                  <a class="dropdown-item" role="button" data-bs-toggle="modal" data-bs-target="#createJournalModal" id="journalCreationToggle">Tagebuch einrichten</a>
+              {% else %}
+                  <a class="dropdown-item {% if request.path == '/journal' %}active{% endif %}" href="/journal">Mein Tagebuch</a>
               {% endif %}
                 <!--
                 <a class="dropdown-item {% if request.path == '/progress' %}active{% endif %}" href="/progress">Fortschritt</a>
@@ -45,7 +51,7 @@
              aria-expanded="false">Anleitungen</a>
           <div class="dropdown-menu dropdown-menu-dark dropdown-menu-end" aria-labelledby="menuDropdown">
             <a class="dropdown-item" role="button" data-bs-toggle="modal" data-bs-target="#howToCollectXP">Erfahrung sammeln</a>
-            <a class="dropdown-item" role="button" data-bs-toggle="modal" data-bs-target="#howToTravel">Wie deine Reise funktioniert</a>
+            <a class="dropdown-item" role="button" data-bs-toggle="modal" data-bs-target="#howToTravel">Wie deine Reise abläuft</a>
           </div>
         </div>
       </div>

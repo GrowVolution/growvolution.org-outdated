@@ -1,4 +1,5 @@
 from . import DB, cloudinary, commit, user as udb
+from sqlalchemy.ext.hybrid import hybrid_property
 
 
 class Blog(DB.Model):
@@ -16,22 +17,24 @@ class Blog(DB.Model):
 
     comments = DB.relationship('Comment', back_populates='blog', cascade='all, delete-orphan')
 
+    @hybrid_property
+    def image_url(self) -> str | None:
+        return cloudinary.retrieve_asset_url(self.image_id)
+
+    @hybrid_property
+    def info(self) -> str:
+        user = udb.User.query.filter_by(username=self.author).first()
+        author = f"{user.first_name} {user.last_name}"
+        timestamp = self.timestamp.strftime("%d.%m.%Y %H:%M")
+        edited = ' (bearbeitet)' if self.edited else ''
+        return f"{author}, {timestamp}{edited}"
+
     def __init__(self, headline: str, image_id: str, summary: str, content: str, author: str):
         self.headline = headline
         self.image_id = image_id
         self.summary = summary
         self.content = content
         self.author = author
-
-    def get_image_url(self) -> str | None:
-        return cloudinary.retrieve_asset_url(self.image_id)
-
-    def get_info(self) -> str:
-        user = udb.User.query.filter_by(username=self.author).first()
-        author = f"{user.first_name} {user.last_name}"
-        timestamp = self.timestamp.strftime("%d.%m.%Y %H:%M")
-        edited = ' (bearbeitet)' if self.edited else ''
-        return f"{author}, {timestamp}{edited}"
 
     def update_data(self, new_headline: str | None, new_summary: str | None, new_content: str | None) -> None:
         if new_headline:

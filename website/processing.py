@@ -8,6 +8,7 @@ from .logic.auth.captcha import handle_request as captcha
 from flask import Response, request, abort, render_template, make_response, session
 from LIBRARY import back_home, random_code
 from debugger import log
+import sys, traceback
 
 
 def _verify_token_ownership(name: str = 'token') -> Response | None:
@@ -74,14 +75,13 @@ def before_auth_route():
 @APP.errorhandler(Exception)
 def handle_exception(error):
     eid = random_code()
-    log('error', f"Handling app request failed ({eid}): {repr(error)}")
+    tb_str = ''.join(traceback.format_exception(*sys.exc_info()))
+    name = type(error).__name__
+    log('error', f"Handling app request failed ({eid}): {name}\n{tb_str}")
 
     if user_role() == 'dev':
-        import sys, traceback
-        tb_str = ''.join(traceback.format_exception(*sys.exc_info()))
         return render('error_dev.html', error_id=eid,
-                      name=type(error).__name__, error=error,
-                      traceback=tb_str)
+                      name=name, error=error, traceback=tb_str)
 
     return render_error(eid)
 

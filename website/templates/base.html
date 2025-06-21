@@ -71,20 +71,24 @@
     </footer>
 
     {% block modal %}{% endblock %}
-    {% if initial_reflection %}
-        <span id="reflectionShown" class="d-none">{{ 'true' if reflection_shown else 'false' }}</span>
+    {% if user and not user.reflection_done %}
+        <span id="reflectionShown" class="d-none">{{ 'true' if user.reflection_shown else 'false' }}</span>
         {% include "user/modals/reflection_modal.html" %}
         <script type="module" src="/static/js/shared/modal_control.js"></script>
         <script type="module" src="/static/js/user/initial_reflection.js"></script>
     {% endif %}
-    {% if signed_in and not journey_started %}
+    {% if user and not user.journey_started %}
         {% include "user/modals/journey_start.html" %}
-        <script type="module" src="/static/js/shared/modal_control.js"></script>
+        {% if user.reflection_done %}<script type="module" src="/static/js/shared/modal_control.js"></script>{% endif %}
         <script type="module" src="/static/js/user/journey_start.js"></script>
     {% endif %}
     {% include "modals/confirm_modal.html" %}
+    {% include "modals/info_modal.html" %}
     {% include "modals/collect_xp_guide.html" %}
     {% include "modals/journey_guide.html" %}
+    {% if user and not user.onboarding_shown %}
+        {% include "modals/onboarding_guide.html" %}
+    {% endif %}
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://code.iconify.design/iconify-icon/3.0.0/iconify-icon.min.js"></script>

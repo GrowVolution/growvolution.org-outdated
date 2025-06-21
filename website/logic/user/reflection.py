@@ -37,7 +37,7 @@ def handle_initial_reflection(user):
 
 
 def foundation(user):
-    return render('user/foundation.html', user=user)
+    return render('user/foundation.html', user)
 
 
 def update_foundation(user):

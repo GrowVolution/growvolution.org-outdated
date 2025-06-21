@@ -1,4 +1,5 @@
 from . import DB
+from .helpers import normalize_timestamp
 from datetime import datetime, time
 
 
@@ -22,7 +23,7 @@ class Journey(DB.Model):
 
     def __init__(self, user_id: int):
         self.uid = user_id
-        self.timestamp = datetime.combine(datetime.now().date(), time.min)
+        self.timestamp = normalize_timestamp(datetime.now())
 
     def daily_track(self, mood_level: int , worked_on_goal: bool, short_note: str | None,
                     quick_motivation: str | None, motivation_type: str | None):

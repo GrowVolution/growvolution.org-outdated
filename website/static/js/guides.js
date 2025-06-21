@@ -1,3 +1,8 @@
+const onboarding = document.getElementById("onboardingModal")
+
+let understood
+if (onboarding) understood = onboarding.querySelector("#understood")
+
 document.querySelectorAll(".modal").forEach(modal => {
   const steps = modal.querySelectorAll(".guide-step")
   if (!steps.length) return
@@ -32,9 +37,23 @@ document.querySelectorAll(".modal").forEach(modal => {
       }
     })
 
+    finishBtn.addEventListener("click", () => {
+      if (onboarding && understood.checked) emit('onboarding_done')
+    })
+
     modal.addEventListener("shown.bs.modal", () => {
       currentStep = 0
       updateStep()
     })
   }
 })
+
+if (onboarding) {
+  const reflectionShownEl = document.getElementById('reflectionShown')
+  const reflectionShown = !reflectionShownEl || reflectionShownEl && reflectionShownEl.textContent === 'true'
+
+  if (reflectionShown) {
+    const modal = new bootstrap.Modal(onboarding)
+    modal.show()
+  }
+}

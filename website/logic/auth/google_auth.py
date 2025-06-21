@@ -80,9 +80,9 @@ def oauth_callback() -> Response:
 
             return back_to_login()
 
-        first_name = userinfo.get('given_name')
-        last_name = userinfo.get('family_name')
-        username = f"{first_name} {last_name}".lower().replace(' ', '_')
+        first_name = userinfo.get('given_name', '')
+        last_name = userinfo.get('family_name', '')
+        username = f"{first_name}_{last_name}".lower().replace(' ', '_')
         picture = userinfo.get('picture')
 
         if udb.User.query.filter_by(username=username).first():

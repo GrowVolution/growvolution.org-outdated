@@ -13,17 +13,34 @@ mode = env['EXEC_MODE']
 logs_dir = Path(__file__).parent / 'logs'
 logs_dir.mkdir(parents=True, exist_ok=True)
 main_proc = None
+worker_proc = None
 watcher = None
+
+
+def _timestamp():
+    return datetime.now().strftime("%d%m%Y%H%M%S")
 
 
 def start_main():
     global main_proc
-    timestamp = datetime.now().strftime("%d%m%Y%H%M%S")
+    timestamp = _timestamp()
     logfile = logs_dir / f"{timestamp}.log"
     main_proc = subprocess.Popen(
         ['gunicorn', 'app:APP', '-b', '127.0.0.1:5000', '-k', 'eventlet'],
         env=env,
         stdout=open(logfile, 'w'),
+        stderr=subprocess.STDOUT
+    )
+
+
+def start_worker():
+    global worker_proc
+    timestamp = _timestamp()
+    log_file = logs_dir / "worker" / f"{timestamp}.log"
+    worker_proc = subprocess.Popen(
+        ['python', 'worker.py'],
+        env=env,
+        stdout=open(log_file, 'w'),
         stderr=subprocess.STDOUT
     )
 
@@ -74,9 +91,12 @@ def shutdown():
     stop_watch()
     if main_proc:
         main_proc.terminate()
+    if worker_proc:
+        worker_proc.terminate()
 
 
 start_main()
+start_worker()
 signal.signal(signal.SIGINT, _shutdown)
 signal.signal(signal.SIGTERM, _shutdown)
 
@@ -91,8 +111,9 @@ def start_message():
     print('4 - reload .env')
     print('5 - update database')
     print('6 - restart main')
-    print('7 - clear console')
-    print('8 - exit')
+    print('7 - restart worker')
+    print('8 - clear console')
+    print('9 - exit')
 
 
 if mode == 'DEBUG':
@@ -127,10 +148,16 @@ if mode == 'DEBUG':
             restart_main()
 
         elif cmd == '7':
+            if worker_proc:
+                worker_proc.terminate()
+                worker_proc.wait()
+            start_worker()
+
+        elif cmd == '8':
             os.system('cls' if os.name == 'nt' else 'clear')
             start_message()
 
-        elif cmd == '8':
+        elif cmd == '9':
             shutdown()
             break
 

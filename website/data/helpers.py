@@ -1,4 +1,5 @@
 from cryptography.fernet import Fernet
+from datetime import datetime, time
 import os, string, random, re
 
 
@@ -25,6 +26,19 @@ def normalize_phone(phone: str) -> str:
         phone = "+49" + phone
 
     return phone
+
+
+def normalize_timestamp(timestamp: datetime) -> datetime:
+    return datetime.combine(timestamp.date(), time.min)
+
+
+def parse_time_str(s: str | None) -> time | None:
+    if not s:
+        return None
+    try:
+        return datetime.strptime(s, '%H:%M').time()
+    except ValueError:
+        return None
 
 
 def get_fernet():

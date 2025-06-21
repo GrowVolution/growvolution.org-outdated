@@ -1,8 +1,14 @@
 const flashContainer = document.getElementById('flashContainer');
+
 const confirmModal = new bootstrap.Modal(document.getElementById('confirmModal'));
 const confirmText = document.getElementById('dialogeConfirmText');
 const confirmBtn = document.getElementById('dialogeConfirmBtn');
 const dismissBtn = document.getElementById('dialogeDismissBtn');
+
+const infoModal = new bootstrap.Modal(document.getElementById('infoModal'));
+const infoTitle = document.getElementById('infoModalTitle');
+const infoText = document.getElementById('infoModalText');
+const infoBody = document.getElementById('infoModalBody');
 
 
 function flash(message, category) {
@@ -41,6 +47,21 @@ async function confirmDialoge(message, category) {
 
         confirmModal.show();
     });
+}
+
+
+function showInfo(title, message, html) {
+    infoTitle.textContent = title;
+    if (message) {
+        infoBody.classList.add('d-none');
+        infoText.classList.remove('d-none')
+        infoText.textContent = message;
+    } else {
+        infoText.classList.add('d-none');
+        infoBody.classList.remove('d-none');
+        infoBody.innerHTML = html;
+    }
+    infoModal.show();
 }
 
 

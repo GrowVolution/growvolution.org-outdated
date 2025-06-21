@@ -1,0 +1,110 @@
+{% extends "modal_base.html" %}
+
+{% block id %}editModal{% endblock %}
+
+{% block title %}🛠️ Angaben bearbeiten{% endblock %}
+
+{% block body %}
+<form method="post" action="/journey/update" id="editForm">
+  {% set editable = user.interval_border_data or [] %}
+
+  {% if "goal_10y" in editable %}
+  <div class="mb-3">
+    <label for="goal_10y" class="form-label">Wie sieht dein Leben in 10 Jahren aus?</label>
+    <textarea class="form-control" id="goal_10y" name="goal_10y" rows="3">{{ user.goal_10y }}</textarea>
+  </div>
+  {% endif %}
+
+  {% if "intention" in editable %}
+  <div class="mb-3">
+    <label for="intention" class="form-label">Warum ist dir dieses Leben wichtig?</label>
+    <textarea class="form-control" id="intention" name="intention" rows="3">{{ user.intention }}</textarea>
+  </div>
+  {% endif %}
+
+  {% if "discipline_rating" in editable %}
+  <div class="mb-4">
+    <label for="disciplineRange" class="form-label">Wie diszipliniert bist du im Alltag?</label>
+    <input type="range" class="form-range" min="0" max="10" value="{{ user.discipline_rating }}" id="disciplineRange" name="discipline_rating">
+    <div class="row text-muted small">
+      <div class="col-4 text-start">Sehr unstrukturiert</div>
+      <div class="col-4 text-center">Wechselhaft</div>
+      <div class="col-4 text-end">Sehr diszipliniert</div>
+    </div>
+  </div>
+  {% endif %}
+
+  {% if "energy_rating" in editable %}
+  <div class="mb-4">
+    <label for="energyRange" class="form-label">Wie ist dein durchschnittliches Energielevel?</label>
+    <input type="range" class="form-range" min="0" max="10" value="{{ user.energy_rating }}" id="energyRange" name="energy_rating">
+    <div class="row text-muted small">
+      <div class="col-4 text-start">Erschöpft</div>
+      <div class="col-4 text-center">Ausgeglichen</div>
+      <div class="col-4 text-end">Sprühend vor Energie</div>
+    </div>
+  </div>
+  {% endif %}
+
+  {% if "focus_rating" in editable %}
+  <div class="mb-3">
+    <label for="focusRange" class="form-label">Wie gut kannst du dich auf Aufgaben konzentrieren?</label>
+    <input type="range" class="form-range" min="0" max="10" value="{{ user.focus_rating }}" id="focusRange" name="focus_rating">
+    <div class="row text-muted small">
+      <div class="col-4 text-start">Leicht abzulenken</div>
+      <div class="col-4 text-center">Mal so, mal so</div>
+      <div class="col-4 text-end">Tief fokussiert</div>
+    </div>
+  </div>
+  {% endif %}
+
+  {% if "goal_5y" in editable %}
+  <div class="mb-3">
+    <label for="goal_5y" class="form-label">Was möchtest du in 5 Jahren erreicht haben?</label>
+    <textarea class="form-control" id="goal_5y" name="goal_5y" rows="3">{{ user.goal_5y }}</textarea>
+  </div>
+  {% endif %}
+
+  {% if "goal_1y" in editable %}
+  <div class="mb-3">
+    <label for="goal_1y" class="form-label">Was möchtest du in 1 Jahr erreichen?</label>
+    <textarea class="form-control" id="goal_1y" name="goal_1y" rows="3">{{ user.goal_1y }}</textarea>
+  </div>
+  {% endif %}
+
+  {% if "goal_quarter" in editable %}
+  <div class="mb-3">
+    <label for="goal_quarter" class="form-label">Was ist dein Ziel für das aktuelle Quartal?</label>
+    <textarea class="form-control" id="goal_quarter" name="goal_quarter" rows="2">{{ user.goal_quarter }}</textarea>
+  </div>
+  {% endif %}
+
+  {% if "goal_month" in editable %}
+  <div class="mb-3">
+    <label for="goal_month" class="form-label">Was ist dein Ziel für den Monat?</label>
+    <textarea class="form-control" id="goal_month" name="goal_month" rows="2">{{ user.goal_month }}</textarea>
+  </div>
+  {% endif %}
+
+  {% if "goal_week" in editable %}
+  <div class="mb-3">
+    <label for="goal_week" class="form-label">Was möchtest du diese Woche schaffen?</label>
+    <textarea class="form-control" id="goal_week" name="goal_week" rows="2">{{ user.goal_week }}</textarea>
+  </div>
+  {% endif %}
+
+  <div class="form-check mb-3">
+    <input class="form-check-input" type="checkbox" id="autoCorrect" name="correct" {% if user.text_correct %}checked{% endif %}>
+    <label class="form-check-label" for="autoCorrect">
+      Meine Angaben sollen auf (Recht-)Schreibfehler geprüft & korrigiert werden.
+    </label>
+  </div>
+</form>
+{% endblock %}
+
+{% block footer %}
+<div class="d-flex justify-content-between w-100">
+  <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Abbrechen</button>
+  <button type="submit" form="editForm" class="btn btn-success">Speichern</button>
+</div>
+{% endblock %}

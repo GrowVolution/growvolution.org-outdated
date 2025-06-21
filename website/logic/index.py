@@ -11,8 +11,8 @@ def get_posts_html():
 
     counter = 1
     for post in blog_db.Blog.query.order_by(blog_db.Blog.id.desc()).all():
-        html += render_template('site/index_blog_preview.html', delay=counter*100,
-                                title=post.headline, preview_text=post.summary, id=post.id)
+        html += render_template('site/index_blog_preview.html',
+                                delay=counter*100, post=post)
         counter += 1
 
         if counter > 3:
@@ -20,9 +20,12 @@ def get_posts_html():
 
     # Just for the beginning
     while counter <= 3:
+        class Post:
+            id = counter
+            headline=f"Beitrag {counter}"
+            summary="Dieser Beitrag existiert noch nicht..."
         html += render_template('site/index_blog_preview.html', delay=counter*100,
-                                title=f"Blogtitel {counter}", preview_text="Dieser Beitrag existiert noch nicht...",
-                                id=counter)
+                                post=Post())
         counter += 1
 
     return Markup(html)

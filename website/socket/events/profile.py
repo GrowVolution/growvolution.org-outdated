@@ -2,11 +2,19 @@ from . import register_event, require_user
 from .. import emit , socket_flash
 from ..messages import send_message
 from website.data import user as udb, commit
-from website.data.user.helpers import normalize_phone
+from website.data.helpers import normalize_phone
 from website.cache import add_entry, request_entry_data, pop_entry
 from mail_service import email_change_mail
 from datetime import datetime
+from debugger import log
 import pyotp
+
+
+@register_event('onboarding_done')
+@require_user(False)
+def finish_onboarding(user):
+    user.onboarding_shown = True
+    commit()
 
 
 @register_event('check_username')

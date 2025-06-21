@@ -1,13 +1,13 @@
 <div class="row align-items-center bg-white rounded shadow-sm p-3 mb-4 mx-auto" data-aos="fade-{{ fade_direction }}">
 <div class="col-md-4 text-center">
-  <img src="{{ image }}" alt="Vorschau Bild" class="img-fluid rounded">
+  <img src="{{ post.image_url }}" alt="Vorschau Bild" class="img-fluid rounded">
 </div>
 <div class="col-md-8 mt-3 mt-md-0">
-  <h4>{{ title }}</h4>
-  <small class="text-muted">{{ post_info }}</small>
+  <h4>{{ post.headline }}</h4>
+  <small class="text-muted">{{ post.info }}</small>
   <p class="mt-2">
-    {{ preview_text }}
+    {{ post.summary }}
   </p>
-  <a href="/blog/{{ id }}" class="btn btn-outline-dark">Zum Beitrag</a>
+  <a href="/blog/{{ post.id }}" class="btn btn-outline-dark">Zum Beitrag</a>
 </div>
 </div>

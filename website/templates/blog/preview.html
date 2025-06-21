@@ -10,7 +10,7 @@
       <button class="btn btn-outline-secondary">
         <i class="bi bi-sliders"></i> Filter
       </button>
-      {% if is_admin %}
+      {% if user and (user.role == 'admin' or user.role == 'dev') %}
       <a href="/blog/new" class="btn btn-outline-primary">
         <i class="bi bi-plus-circle"></i> Neuer Beitrag
       </a>

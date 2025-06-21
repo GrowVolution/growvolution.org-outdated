@@ -1,9 +1,9 @@
 <div class="d-flex gap-3 mb-0">
-  <a class="text-dark text-decoration-none {{ 'active' if signed_in else '' }} like" data-liked="{{ 'true' if liked else 'false' }}">
+  <a class="text-dark text-decoration-none {{ 'active' if user else '' }} like" data-liked="{{ 'true' if liked else 'false' }}">
       <i class="bi {{ 'bi-heart-fill text-danger' if liked else 'bi-heart' }}"></i>
       <span class="like-count">{{ comment.likes if comment else reply.likes }}</span>
   </a>
-  {% if signed_in %}
+  {% if user %}
       <a class="text-dark text-decoration-none text-hover-primary reply">
           <i class="bi bi-reply"></i> <span class="d-md-inline d-none">Antworten</span>
       </a>

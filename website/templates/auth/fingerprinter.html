@@ -1,20 +1,23 @@
 <script>
     async function getClientFingerprintHash() {
-      const fpData = {
-        userAgent: navigator.userAgent,
-        language: navigator.language,
-        languages: navigator.languages,
-        hardwareConcurrency: navigator.hardwareConcurrency,
-        deviceMemory: navigator.deviceMemory,
-        timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
-        screen: `${screen.width}x${screen.height}@${window.devicePixelRatio}`
-      };
+      const key = 'client_fingerprint'
+      const stored = localStorage.getItem(key)
 
-      const json = JSON.stringify(fpData);
-      const encoder = new TextEncoder();
-      const data = encoder.encode(json);
-      const hashBuffer = await crypto.subtle.digest("SHA-256", data);
-      const hashArray = Array.from(new Uint8Array(hashBuffer));
-      return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+      const now = Date.now()
+      const TEN_DAYS = 10 * 24 * 60 * 60 * 1000
+
+      if (stored) {
+        const { value, ts } = JSON.parse(stored)
+        if (now - ts < TEN_DAYS) return value
+      }
+
+      const value = await generateRandomHashLike()
+      localStorage.setItem(key, JSON.stringify({ value, ts: now }))
+      return value
+    }
+
+    async function generateRandomHashLike() {
+      const bytes = crypto.getRandomValues(new Uint8Array(32))
+      return Array.from(bytes).map(b => b.toString(16).padStart(2, '0')).join('')
     }
 </script>

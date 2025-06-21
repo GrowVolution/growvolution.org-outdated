@@ -110,6 +110,7 @@ function collectInputs(step) {
     formData.set("goal_quarter", fields[2].value.trim())
     formData.set("goal_month", fields[3].value.trim())
     formData.set("goal_week", fields[4].value.trim())
+    formData.set("auto_correct", steps[3].querySelector('#autoCorrect').checked ? '1' : '0')
   }
 }
 

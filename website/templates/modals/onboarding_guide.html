@@ -1,0 +1,68 @@
+{% extends "modal_base.html" %}
+
+{% block id %}onboardingModal{% endblock %}
+
+{% block title %}ℹ️ Wie du unsere Seite nutzt{% endblock %}
+
+{% block body %}
+<div class="guide-step" data-step="0">
+  <h5 class="fw-bold">Schritt 1</h5>
+  <p>
+      Hey, willkommen auf unserer Platform! Wir erklären dir kurz, wie du dich hier zurechtfindest. ✌🏼<br><br>
+      Wenn du auf dem Handy unterwegs bist, findest du die Navigation oben rechts bei den 3 Balken:
+  </p>
+  <img src="/static/img/guide/phone.png" alt="Phone Example" class="img-fluid w-100 h-auto mb-3">
+  <p>
+      Auf Desktops oder größeren Displays befindet sie sich ebenfalls oben rechts, ist jedoch bereits
+      ausgeklappt und du kannst direkt auswählen, wo du als Nächstes hin möchtest:
+  </p>
+  <img src="/static/img/guide/desktop.png" alt="Desktop Example" class="img-fluid w-100 h-auto mb-3">
+  <p>
+      Um zu erfahren, wie du unsere Seite nutzt und welche Features wir bereits für dich eingebaut haben,
+      hast du zwei Möglichkeiten:
+  </p>
+  <ol>
+      <li><a class="text-decoration-none text-dark" href="/blog"><i>Unseren Blog</i></a>:
+          Dort wirst du nicht nur auf dem aktuellsten Stand, sondern kannst dich auch aktiv mit eigenen Ideen einbringen.</li>
+      <li>Unter 'Anleitungen': Dort findest du ausführliche Erklärungen, wie diese Platform aufgebaut ist.</li>
+  </ol>
+</div>
+
+<div class="guide-step d-none" data-step="1">
+  <h5 class="fw-bold">Schritt 2</h5>
+  <p>
+      Indem du auf das Branding der Seite drückst, gelangst du auf die Startseite:
+  </p>
+  <img src="/static/img/guide/branding.png" alt="Branding Example" class="img-fluid w-100 h-auto mb-3">
+  <p>
+      Dort siehst du entweder unsere Startseite (wenn du ausgeloggt bist) oder dein Dashboard. Auf
+      deinem Dashboard bekommst du eine kurze und schnelle Übersicht darüber, wo du in deiner
+      Entwicklung gerade stehst:
+  </p>
+  <img src="/static/img/guide/dashboard.png" alt="Dashboard Example" class="img-fluid w-100 h-auto mb-2">
+</div>
+
+<div class="guide-step d-none" data-step="2">
+  <h5 class="fw-bold">Schritt 3</h5>
+  <p>
+      Jetzt für den Anfang - wo unsere Seite noch nicht vollständig ausgebaut ist - empfehlen wir dir,
+      die Navigation und Anleitungen regelmäßig auf Updates zu überprüfen. Wenn irgendetwas unklar ist
+      oder du noch Fragen haben solltest, helfen wir dir selbstverständlich gerne weiter. Melde dich
+      einfach bei <a class="text-decoration-none text-dark" href="mailto:info@growv-mail.org"><i>unserem Support</i></a>.
+  </p>
+  <div class="form-check mb-3">
+    <input class="form-check-input" type="checkbox" id="understood" name="understood">
+    <label class="form-check-label" for="understood">
+      Diese Meldung beim nächsten Mal nicht mehr anzeigen.
+    </label>
+  </div>
+</div>
+{% endblock %}
+
+{% block footer %}
+<div class="d-flex justify-content-between w-100">
+  <button type="button" class="btn btn-outline-secondary" id="guideBackBtn" disabled>Zurück</button>
+  <button type="button" class="btn btn-primary" id="guideNextBtn">Weiter</button>
+  <button type="button" class="btn btn-success d-none" data-bs-dismiss="modal" id="guideFinishBtn">Verstanden</button>
+</div>
+{% endblock %}

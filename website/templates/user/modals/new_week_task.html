@@ -1,0 +1,95 @@
+{% extends "modal_base.html" %}
+
+{% block id %}newTaskModal{% endblock %}
+
+{% block title %}📝 Neue Aufgabe planen{% endblock %}
+
+{% block body %}
+    <form id="newTaskForm">
+        <div class="mb-3">
+            <label for="taskStartDate" class="form-label">Startdatum</label>
+            <input type="date" class="form-control" id="taskStartDate" name="start_date" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="taskFrequency" class="form-label">Frequenz</label>
+            <select class="form-select" id="taskFrequency" name="frequency">
+                <option value="weekly" selected>Wöchentlich</option>
+                <option value="biweekly">Alle 2 Wochen</option>
+                <option value="triweekly">Alle 3 Wochen</option>
+                <option value="fourweekly">Alle 4 Wochen</option>
+            </select>
+        </div>
+
+        <div class="form-check form-switch mb-2">
+            <input class="form-check-input" type="checkbox" id="multiWeekSwitch">
+            <label class="form-check-label" for="multiWeekSwitch">Mehrmals in der Woche</label>
+        </div>
+
+        <div class="mb-3 d-none" id="taskWeekdaysWrapper">
+            <label class="form-label mb-2">Wochentage</label>
+            <div class="row">
+                <div class="col-6">
+                    <div class="form-check mb-1">
+                        <input class="form-check-input" type="checkbox" name="weekdays" value="mo" id="weekday-mo">
+                        <label class="form-check-label" for="weekday-mo">Montag</label>
+                    </div>
+                    <div class="form-check mb-1">
+                        <input class="form-check-input" type="checkbox" name="weekdays" value="di" id="weekday-di">
+                        <label class="form-check-label" for="weekday-di">Dienstag</label>
+                    </div>
+                    <div class="form-check mb-1">
+                        <input class="form-check-input" type="checkbox" name="weekdays" value="mi" id="weekday-mi">
+                        <label class="form-check-label" for="weekday-mi">Mittwoch</label>
+                    </div>
+                    <div class="form-check mb-1">
+                        <input class="form-check-input" type="checkbox" name="weekdays" value="do" id="weekday-do">
+                        <label class="form-check-label" for="weekday-do">Donnerstag</label>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="form-check mb-1">
+                        <input class="form-check-input" type="checkbox" name="weekdays" value="fr" id="weekday-fr">
+                        <label class="form-check-label" for="weekday-fr">Freitag</label>
+                    </div>
+                    <div class="form-check mb-1">
+                        <input class="form-check-input" type="checkbox" name="weekdays" value="sa" id="weekday-sa">
+                        <label class="form-check-label" for="weekday-sa">Samstag</label>
+                    </div>
+                    <div class="form-check mb-1">
+                        <input class="form-check-input" type="checkbox" name="weekdays" value="so" id="weekday-so">
+                        <label class="form-check-label" for="weekday-so">Sonntag</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row g-3 align-items-end mb-3">
+            <div class="col-md-6">
+                <label for="taskTimeFrom" class="form-label">Von</label>
+                <input type="time" class="form-control" id="taskTimeFrom" name="time_from" step="900">
+            </div>
+            <div class="col-md-6">
+                <label for="taskTimeTo" class="form-label">Bis</label>
+                <input type="time" class="form-control" id="taskTimeTo" name="time_to" step="900">
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <label for="taskTitle" class="form-label">Aufgabenbezeichnung</label>
+            <input type="text" class="form-control" id="taskTitle" name="title" maxlength="60" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="taskNotes" class="form-label">Beschreibung &amp; Notizen</label>
+            <textarea class="form-control" id="taskNotes" name="notes" maxlength="100" rows="2"></textarea>
+        </div>
+    </form>
+{% endblock %}
+
+{% block footer %}
+    <div class="d-flex justify-content-between w-100">
+        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Abbrechen</button>
+        <button type="button" class="btn btn-primary" id="addNewTaskBtn">Hinzufügen</button>
+    </div>
+{% endblock %}

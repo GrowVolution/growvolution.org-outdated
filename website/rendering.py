@@ -1,24 +1,24 @@
-from .logic.auth.verification import get_user, is_admin
+from .logic.auth.verification import get_user
 from .data import commit
 from flask import render_template
 
 
-def render(template: str, **kwargs) -> str:
-    user = get_user()
-    signed_in = user is not None
+def render(template: str, user = None, **kwargs) -> str:
     current_template = template.removesuffix('.html')
 
     def inner_render(**optional):
         return render_template(template, template=current_template, **optional, **kwargs)
 
-    if signed_in:
+    if not user:
+        user = get_user()
+
+    if user:
         reflection_shown = user.reflection_shown
         if not reflection_shown:
             user.reflection_shown = True
             commit()
 
-        return inner_render(signed_in=signed_in, is_admin=is_admin(), initial_reflection=not user.reflection_done,
-                            reflection_shown=reflection_shown, journey_started=user.journey_started)
+        return inner_render(user=user)
 
     return inner_render()
 

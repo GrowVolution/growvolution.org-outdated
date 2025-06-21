@@ -3,9 +3,11 @@ from .base import UserBase
 from .info import UserInfo
 from .settings import UserSettings
 from .reflection import UserReflection
+from .journey import UserJourney
+from .week import UserWeek
 
 
-class User(DB.Model, UserBase, UserInfo, UserSettings, UserReflection):
+class User(DB.Model, UserBase, UserInfo, UserSettings, UserReflection, UserJourney, UserWeek):
     __tablename__ = 'user'
     id = DB.Column(DB.Integer, primary_key=True)
 

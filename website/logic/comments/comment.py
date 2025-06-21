@@ -7,7 +7,7 @@ from markupsafe import Markup
 
 
 def render_comment(comment: Comment, user: User, render_index: int = 1) -> str:
-    return render('comments/comment.html', comment=comment, render_index=render_index,
+    return render('comments/comment.html', user, comment=comment, render_index=render_index,
                   is_author=comment.author == user, liked=comment.has_liked(user.id))
 
 

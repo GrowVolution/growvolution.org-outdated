@@ -55,4 +55,4 @@ def set_nav_context(user: 'User', template_name: str):
 
 
 def init_events():
-    from . import forgot, profile, comment_system
+    from . import forgot, profile, comment_system, week

@@ -20,6 +20,7 @@ class UserBase:
     role = DB.Column(DB.String(8), nullable=False, default='user')
 
     username_changed_at = DB.Column(DB.DateTime)
+    onboarding_shown = DB.Column(DB.Boolean, default=False)
 
     def __init__(self,
                  first_name: str, last_name: str,

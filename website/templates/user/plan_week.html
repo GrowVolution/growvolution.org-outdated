@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+
+{% block title %}Wochenplan erstellen{% endblock %}
+
+{% block content %}
+<div class="window-wrapper">
+    <div class="window-box w-100 px-2" id="planWeekPage" style="max-width: 700px">
+      <div class="window-header">
+          <h3 class="fw-bold mt-2">📅 Woche planen</h3>
+      </div>
+      <div class="window-content">
+          <div class="mb-4">
+              <label for="weekMode" class="form-label fw-medium">Wie ausgeprägt möchtest du deine Woche planen?</label>
+              <select id="weekMode" class="form-select">
+                  <option value="simple" selected>Ganz grob</option>
+                  <option value="medium">Etwas erweitert</option>
+                  <option value="free">Völlig frei</option>
+              </select>
+          </div>
+
+          <form id="planWeekForm" data-edit="{{ 'true' if user.week_plan else '' }}">
+              {% set days = ['Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag', 'Samstag', 'Sonntag'] %}
+              {% for day in days %}
+                  <div class="mb-4 day-group" data-day-index="{{ loop.index0 }}">
+                      <div class="d-flex justify-content-between align-items-center">
+                          <h5 class="fw-bold">{{ day }}</h5>
+                          <div class="form-check form-switch">
+                              <input class="form-check-input rest-day-toggle" type="checkbox" id="rest-{{ loop.index0 }}">
+                              <label class="form-check-label ms-2" for="rest-{{ loop.index0 }}">Als Ruhetag festlegen</label>
+                          </div>
+                      </div>
+
+                      <div class="mode-simple task-block">
+                          <select class="form-select task-select" name="{{ day[:2] | lower }}">
+                              <option value="">Keine Auswahl</option>
+                              <option value="laundry">🧺 Wäschetag</option>
+                              <option value="tidy">🧹 Aufräumtag</option>
+                              <option value="clean">🧼 Putztag</option>
+                              <option value="shopping">🛒 Einkaufstag</option>
+                              <option value="custom">✏️ Benutzerdefiniert</option>
+                          </select>
+                          <input type="text" class="form-control mt-2 d-none custom-input" maxlength="40" placeholder="Mein spezieller Wochentag...">
+                      </div>
+
+                      <div class="mode-medium task-block d-none">
+                          {% for i in range(1, 4) %}
+                              <div class="mb-2">
+                                  <label class="form-label">{{ i }}. Aufgabe</label>
+                                  <select class="form-select multi-task-select" name="{{ day[:2] | lower }}-{{ i }}">
+                                      <option value="">Nicht festgelegt</option>
+                                      <option value="sport">💪🏼 Sport machen</option>
+                                      <option value="jogging">🏃‍♂️ Joggen gehen</option>
+                                      <option value="dish">🍽️ Abwasch erledigen</option>
+                                      <option value="laundry">🧺 Wäsche machen</option>
+                                      <option value="meditate">🧘 Meditieren</option>
+                                      <option value="tidy">🧹 Aufräumen</option>
+                                      <option value="clean">🧼 Putzen</option>
+                                      <option value="read">📖 Buch lesen</option>
+                                      <option value="learn">📚 Lernen</option>
+                                      <option value="walk">🚶 Spazieren gehen</option>
+                                      <option value="shop">🛒 Einkaufen</option>
+                                      <option value="cook">🍲 Essen kochen</option>
+                                      <option value="custom">✏️ Benutzerdefiniert</option>
+                                  </select>
+                                  <input type="text" class="form-control mt-1 d-none custom-input" maxlength="40" placeholder="Meine spezielle Tagesaufgabe...">
+                              </div>
+                          {% endfor %}
+                      </div>
+
+                      <div class="mode-free task-block d-none">
+                          <div id="tasks-{{ day[:2] | lower }}">
+                              <!-- placed via js -->
+                          </div>
+                          <button type="button" class="btn btn-outline-secondary btn-sm add-task-btn"
+                                  data-bs-toggle="modal" data-bs-target="#newTaskModal">➕ Neue Aufgabe hinzufügen</button>
+                      </div>
+                  </div>
+              {% endfor %}
+
+              <div class="mt-4 w-100">
+                  <button type="submit" class="btn btn-success w-100" disabled id="submitWeekBtn">Woche speichern</button>
+              </div>
+          </form>
+      </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block modal %}
+	{% include "user/modals/new_week_task.html" %}
+{% endblock %}
+
+{% block script_afterDOM %}
+<script type="module" src="/static/js/user/week/plan_week.js"></script>
+<script type="module" src="/static/js/user/week/add_task.js"></script>
+{% if user.week_plan %}
+    <script type="module" src="/static/js/user/week/plan_edit.js"></script>
+{% endif %}
+{% endblock %}
