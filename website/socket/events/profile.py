@@ -2,11 +2,10 @@ from . import register_event, require_user
 from .. import emit , socket_flash
 from ..messages import send_message
 from website.data import user as udb, commit
-from website.data.helpers import normalize_phone
-from website.cache import add_entry, request_entry_data, pop_entry
-from mail_service import email_change_mail
+from website.utils import normalize_phone
+from website.utils.cache import add_entry, request_entry_data, pop_entry
+from website.utils.mail_service import email_change_mail
 from datetime import datetime
-from debugger import log
 import pyotp
 
 

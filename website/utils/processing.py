@@ -1,27 +1,16 @@
-from . import APP, DEBUG
-from .socket import SOCKET
-from .socket.events import HANDLERS, no_handler
+from . import random_code
+from .. import APP, DEBUG
+from ..socket import SOCKET
+from ..socket.events import HANDLERS, no_handler
 from .rendering import render_error, render
-from .auth_routes import auth_routes
-from .logic.auth.verification import captcha_status, token_owner_hash, empty_token, user_role, authenticated_user_request
-from .logic.auth.captcha import handle_request as captcha
-from flask import Response, request, abort, render_template, make_response, session
-from LIBRARY import back_home, random_code
+from ..logic.auth import (captcha_status, verify_token_ownership, user_role,
+                          authenticated_user_request, twofa_status)
+from ..logic.auth.captcha import handle_request as captcha
+from ..logic.auth.twofa import handle_2fa
+from ..routing import back_home
+from flask import request, abort, render_template, session
 from debugger import log
 import sys, traceback
-
-
-def _verify_token_ownership(name: str = 'token') -> Response | None:
-    if request.is_json and request.get_json().get(f'verify_{name}'):
-        fingerprint = request.headers.get('X-Client-Fingerprint')
-        owner = token_owner_hash(name) == fingerprint
-        if not owner:
-            return empty_token(name)
-
-        session[f'{name}_owner'] = True
-        return make_response('', 204)
-
-    return None
 
 
 @APP.context_processor
@@ -41,35 +30,18 @@ def before_request():
 
     log('request', f"{method} '{path:48}' from {ip:15} via ({agent}).")
 
-    response = _verify_token_ownership()
+    response = verify_token_ownership()
+    if response:
+        return response
+
+    safe_path = path.startswith('/static') or path.startswith('/socket.io')
+    response = handle_2fa() if not safe_path else None
     if response:
         return response
 
     if authenticated_user_request() and not session.get("token_owner"):
         return render_template('auth/verify_token_ownership.html',
                                flag='verify_token')
-
-
-@auth_routes.before_request
-def before_auth_route():
-    if authenticated_user_request() and not request.path == '/logout':
-        return back_home()
-
-    response = _verify_token_ownership('captcha_token')
-    if response:
-        return response
-
-    status = captcha_status()
-
-    if status == "invalid":
-        abort(401)
-
-    if status in {"unverified", "pending"}:
-        return captcha()
-
-    if not session.get('captcha_token_owner'):
-        return render_template('auth/verify_token_ownership.html',
-                               flag='verify_captcha_token')
 
 
 @APP.errorhandler(Exception)
@@ -109,3 +81,24 @@ def error_handler(error):
     SOCKET.emit('error', "Beim Ausführen der Aktion ist ein serverseitiger Fehler aufgetreten. "
                          f"(Fehler ID: {eid}) Wende dich für weitere Unterstützung bitte an "
                          "developer@growv-mail.org !")
+
+
+def protect_route():
+    if authenticated_user_request():
+        return back_home()
+
+    response = verify_token_ownership('captcha_token')
+    if response:
+        return response
+
+    status = captcha_status()
+
+    if status == "invalid":
+        abort(401)
+
+    if status in {"unverified", "pending"}:
+        return captcha()
+
+    if not session.get('captcha_token_owner'):
+        return render_template('auth/verify_token_ownership.html',
+                               flag='verify_captcha_token')

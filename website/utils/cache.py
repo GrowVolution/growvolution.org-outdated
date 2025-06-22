@@ -1,5 +1,5 @@
+from . import random_code
 from datetime import datetime, timedelta
-from LIBRARY import random_code
 from typing import Any
 
 APP_CACHE = {}
@@ -30,12 +30,6 @@ def update_cache():
 
 
 def add_entry(data: Any, valid_for: int, duration_type: str = 'minutes') -> str:
-    """
-    :param data: Any data which can be stored into a dict.
-    :param valid_for: Duration for which the entry will be valid.
-    :param duration_type: Can be 'seconds', 'minutes', 'hours' or 'days'; defaults to 'minutes'.
-    :return: ID of the cache entry.
-    """
     entry_id = random_code()
     APP_CACHE[entry_id] = {
         "timestamp": datetime.now(),

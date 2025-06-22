@@ -1,29 +1,10 @@
 from website import APP
-from website.data import user as udb
-from flask import request, session, flash, Response, make_response, redirect
+from website.data.user import User
+from website.routing import back_home
+from flask import request, Response, make_response, redirect, session
 from datetime import datetime, timedelta
 from typing import Any
-from LIBRARY import back_home
 import jwt
-
-
-def start_callback() -> tuple[str | None, str | None]:
-    if request.method == "POST":
-        code = request.form.get("code")
-        state = request.form.get("state")
-    else:
-        code = request.args.get("code")
-        state = request.args.get("state")
-
-    if state != session.get('state'):
-        flash("OAuth Status ungültig!", 'danger')
-        return None, None
-
-    if not code:
-        flash("OAuth Code fehlt!", 'danger')
-        return None, None
-
-    return code, state
 
 
 def empty_token(name: str = 'token', path: str = '/') -> Response:
@@ -49,6 +30,19 @@ def token_response(data: dict, expiration_days: int, name='token',
     return res
 
 
+def verify_token_ownership(name: str = 'token') -> Response | None:
+    if request.is_json and request.get_json().get(f'verify_{name}'):
+        fingerprint = request.headers.get('X-Client-Fingerprint')
+        owner = token_owner_hash(name) == fingerprint
+        if not owner:
+            return empty_token(name)
+
+        session[f'{name}_owner'] = True
+        return make_response('', 204)
+
+    return None
+
+
 def _decoded_token(token) -> Any | None:
     try:
         return jwt.decode(token, key=APP.config['SECRET_KEY'], algorithms=['HS256'])
@@ -65,14 +59,19 @@ def captcha_status() -> str:
     return decoded_token.get('status') if decoded_token else 'unverified'
 
 
+def twofa_status() -> bool:
+    decoded_token = _decoded_token(request.cookies.get('token'))
+    return decoded_token.get('twofa_confirmed') if decoded_token else None
+
+
 def token_owner_hash(name: str = 'token') -> str | None:
     decoded_token = _decoded_token(request.cookies.get(name))
     return decoded_token.get('fingerprint') if decoded_token else None
 
 
-def get_user() -> udb.User | None:
+def get_user() -> User | None:
     decoded_token = _decoded_token(request.cookies.get('token'))
-    return udb.User.query.get(decoded_token['id']) if decoded_token else None
+    return User.query.get(decoded_token['id']) if decoded_token else None
 
 
 def user_role() -> str | None:

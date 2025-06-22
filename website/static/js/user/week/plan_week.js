@@ -167,7 +167,7 @@ planForm.addEventListener('submit', async e => {
     }
   });
 
-  const setupMode = location.href.endsWith('/week');
+  const setupMode = location.href.endsWith('week/');
   let route = '/week/setup';
   if(!setupMode) route = '/week/update';
 

@@ -1,4 +1,4 @@
-from website.rendering import render
+from website.utils.rendering import render
 from website.data import commit
 from flask import request
 from datetime import datetime
@@ -62,6 +62,8 @@ def update_week(user):
     if xp_update_data:
         fn_map[xp_update_data[0]](xp_update_data[1])
     commit()
+
+    return '', 200
 
 
 def edit_week(user):

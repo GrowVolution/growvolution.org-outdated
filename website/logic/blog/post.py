@@ -1,6 +1,6 @@
-from website.rendering import render, render_404
+from website.utils.rendering import render, render_404
 from website.data import blog as blog_db
-from ..auth.verification import get_user
+from ..auth import get_user
 from ..comments.comment import get_comments_html
 
 

@@ -1,4 +1,4 @@
-from  website.jobs import process_queue
+from website.jobs import process_queue
 from apscheduler.schedulers.blocking import BlockingScheduler
 from debugger import log
 

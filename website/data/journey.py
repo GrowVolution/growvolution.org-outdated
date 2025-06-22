@@ -1,5 +1,5 @@
 from . import DB
-from .helpers import normalize_timestamp
+from website.utils import normalize_timestamp
 from datetime import datetime
 
 

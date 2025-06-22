@@ -1,5 +1,5 @@
 from .. import DB
-from ..helpers import parse_time_str
+from website.utils import parse_time_str
 from sqlalchemy.ext.hybrid import hybrid_property
 from datetime import datetime, timedelta
 import json
@@ -202,7 +202,7 @@ class UserWeek:
         week = self.active_week_tasks
 
         if mode == 'simple':
-            return sum(1 for day in days if week.get(day) not in {None, 'restday'})
+            return sum(1 for day in days if week.get(day) not in [None, 'restday'])
 
         elif mode in {'medium', 'free'}:
             return sum(len(week[day]) for day in days if isinstance(week.get(day), list))

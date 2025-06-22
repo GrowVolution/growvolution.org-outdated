@@ -1,5 +1,5 @@
 from . import REDIS, APP
-from .cache import update_cache
+from .utils.cache import update_cache
 from .data.user import update_user_scores
 from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.triggers.cron import CronTrigger

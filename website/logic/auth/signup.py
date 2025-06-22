@@ -1,6 +1,6 @@
-from website.rendering import render
-from website.cache import add_entry
-from mail_service import confirmation_mail
+from website.utils.rendering import render
+from website.utils.cache import add_entry
+from website.utils.mail_service import confirmation_mail
 from flask import Response, request, redirect
 
 

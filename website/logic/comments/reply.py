@@ -1,5 +1,5 @@
-from website.rendering import render
-from website.logic.auth.verification import get_user
+from website.utils.rendering import render
+from website.logic.auth import get_user
 from website.data.comment_system.reply import Reply
 from website.data.comment_system.comment import Comment
 from website.data.user import User

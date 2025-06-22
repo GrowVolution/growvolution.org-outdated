@@ -1,6 +1,6 @@
 from website.data import commit
 from website.socket.messages import send_message
-from website.rendering import render
+from website.utils.rendering import render
 from flask import request, flash, redirect
 import json
 

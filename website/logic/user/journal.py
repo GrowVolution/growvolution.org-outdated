@@ -1,4 +1,4 @@
-from website.rendering import render
+from website.utils.rendering import render
 from website.data import commit, journal as journal_db, add_model
 from website.socket.messages import send_message
 from flask import request, redirect

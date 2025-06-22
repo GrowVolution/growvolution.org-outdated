@@ -1,6 +1,6 @@
+from . import captcha_status, token_response
+from website.utils.rendering import render
 from google.cloud.recaptchaenterprise_v1 import RecaptchaEnterpriseServiceClient, Event, Assessment, CreateAssessmentRequest
-from website.rendering import render
-from .verification import captcha_status, token_response
 from flask import request, Response
 from debugger import log
 import os

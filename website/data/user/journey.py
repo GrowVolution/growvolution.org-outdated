@@ -1,10 +1,10 @@
 from .. import DB
-from ..helpers import normalize_timestamp
+from website.utils import normalize_timestamp
+from website.utils.llm_api import correct_text
 from sqlalchemy.ext.hybrid import hybrid_property
 from datetime import datetime, timedelta
 from calendar import isleap
 from num2words import num2words
-from LLM_API import correct_text
 
 
 class UserJourney:

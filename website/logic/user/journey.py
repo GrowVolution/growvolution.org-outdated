@@ -1,13 +1,12 @@
-from website.rendering import render, render_404
+from website.utils.rendering import render, render_404
+from website.utils.llm_api import correct_text
 from website.data import commit, add_model, journey as journey_db, user as udb
 from website.data.helpers import normalize_timestamp
 from website.socket.messages import send_message
 from website.jobs import register_job, queue_job
 from datetime import datetime
-from flask import request, redirect, render_template
-from markupsafe import Markup
+from flask import request, redirect
 from typing import Tuple
-from LLM_API import correct_text
 
 
 def _back_to_journey():

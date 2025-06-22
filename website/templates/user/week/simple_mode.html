@@ -7,13 +7,12 @@
 <tr>
     {% for day in ['mo','di','mi','do','fr','sa','so'] %}
         <td class="text-center align-middle nowrap">
-            {% set tasks = week[day] %}
-            {% if tasks == 'restday' %}
+            {% set task = week[day] %}
+            {% if task == 'restday' %}
                 <span class="text-muted">Ruhetag</span>
-            {% elif not tasks %}
+            {% elif not task %}
                 <span class="text-muted">Nicht gesetzt</span>
             {% else %}
-                {% set task = tasks[0] %}
                 {% set label = simple_labels[task['label']] if task['label'] in simple_labels else task['label'] %}
                 <div>{{ label }}</div>
                 {% if current_day == day %}

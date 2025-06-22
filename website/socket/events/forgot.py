@@ -1,8 +1,8 @@
 from . import register_event
 from .. import emit, emit_html, socket_flash
 from website.data import user as udb
-from mail_service import reset_mail
-from website.cache import add_entry
+from website.utils.mail_service import reset_mail
+from website.utils.cache import add_entry
 from flask import render_template
 from markupsafe import Markup
 

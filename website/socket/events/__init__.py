@@ -1,6 +1,6 @@
 from .. import SOCKET, socket_flash, emit
 from website import REDIS
-from website.logic.auth.verification import get_user
+from website.logic.auth import get_user
 from typing import Callable, TYPE_CHECKING
 from flask import request
 from debugger import log

@@ -1,5 +1,5 @@
 from . import DB
-from .helpers import normalize_timestamp
+from website.utils import normalize_timestamp
 from sqlalchemy.ext.hybrid import hybrid_property
 from datetime import datetime
 import json

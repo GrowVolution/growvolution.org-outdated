@@ -1,5 +1,5 @@
 from website import REDIS
-from website.logic.auth.verification import get_user
+from website.logic.auth import get_user
 from typing import Callable
 from debugger import log
 

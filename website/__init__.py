@@ -48,13 +48,9 @@ def init_app(db_manage: bool = False):
 
     LIMITER.init_app(APP)
 
-    import website.processing
-    from .routes import routes
-    from .auth_routes import auth_routes
-    from .api_routes import api_routes
-    APP.register_blueprint(routes)
-    APP.register_blueprint(auth_routes)
-    APP.register_blueprint(api_routes, url_prefix='/api')
+    import website.utils.processing
+    from .routing import register_blueprints
+    register_blueprints(APP)
 
     from .socket import SOCKET, init_socket
     SOCKET.init_app(APP)
@@ -63,5 +59,5 @@ def init_app(db_manage: bool = False):
     from debugger import start_session
     start_session()
 
-    from mail_service import start
+    from .utils.mail_service import start
     start(APP)

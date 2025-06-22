@@ -1,6 +1,6 @@
-from website.rendering import render
+from website.utils.rendering import render
 from website.data import blog as blog_db, add_model, cloudinary
-from website.logic.auth.verification import get_user
+from website.logic.auth import get_user
 from flask import request
 from werkzeug.datastructures import FileStorage
 from binascii import Error as BinasciiError

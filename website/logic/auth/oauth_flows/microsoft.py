@@ -1,8 +1,9 @@
+from . import start_callback
+from .. import token_response
+from ..login import notify
 from website import DEBUG
 from website.data import user as udb, add_model
-from .verification import token_response, start_callback
-from .login import notify
-from LIBRARY import back_to_login
+from website.routing import back_to_login
 from flask import Response, session, redirect, flash
 from urllib.parse import urlencode
 import os, secrets, jwt, requests

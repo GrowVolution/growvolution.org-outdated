@@ -1,6 +1,6 @@
-from website.rendering import render
+from website.utils.rendering import render
 from website.data import blog as blog_db
-from .auth.verification import get_user
+from .auth import get_user
 from .user.profile import user_dashboard
 from markupsafe import Markup
 from flask import render_template

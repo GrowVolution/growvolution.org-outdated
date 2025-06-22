@@ -1,5 +1,5 @@
-from .logic.auth.verification import get_user
-from .data import commit
+from ..logic.auth import get_user
+from ..data import commit
 from flask import render_template
 
 

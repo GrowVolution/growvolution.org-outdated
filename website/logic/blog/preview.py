@@ -1,4 +1,4 @@
-from website.rendering import render
+from website.utils.rendering import render
 from website.data import blog as blog_db
 from markupsafe import Markup
 
