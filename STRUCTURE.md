@@ -28,5 +28,5 @@ growvolution.org/
 ├── ...                             
 ```
 
-Schau dich gern ein wenig um, ich bin sehr bemüht es übersichtlich zu halten und tragfähig für den weiteren Ausbau zu halten.
+Schau dich gern ein wenig um, ich bin sehr bemüht es übersichtlich und tragfähig für den weiteren Ausbau zu halten.
 Wenn du Fragen oder Feedback hast, bin ich immer offen dafür! ✌🏼
