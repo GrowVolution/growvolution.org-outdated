@@ -1,25 +1,16 @@
-# 🌱 GrowVolution
+# 🌐 Das Web-Projekt
+Hier entsteht der Code, der unsere Vision lebendig macht.
+Dieses System ist das Fundament, auf dem alle weiteren Ideen und Gedanken unseres Projekts langfristig aufbauen werden.
 
-**GrowVolution** wird eine werbefreie Plattform für persönliches Wachstum, echte Motivation und gemeinsames Weiterkommen.  
-Keine Dopaminfallen, keine Likes, keine Ablenkung – sondern ein digitaler Ort, der dich unterstützt, dein Leben bewusster zu gestalten.
-
-> ➤ Worum es geht? Das erfährst du ausführlich unter:  
-> [https://growvolution.org/about](https://growvolution.org/about)
-
----
-
-## ✨ Was macht GrowVolution besonders?
-
-- Eine durchdachte Plattform, die *nicht* deine Zeit klauen – sondern dich dabei unterstützen soll, sie sinnvoll zu nutzen.
-- Ein Ort für Reflexion, Fortschrittsverfolgung, echte Community und langfristige Veränderung.
-- Vollständig open source und bereit für gemeinsames Weiterdenken & Entwickeln.
+> 🔥 Mehr über dieses Projekt und unsere Vision erfährst du:  
+> 👉 [Im Profil unserer Organisation](https://github.com/GrowVolution/)
 
 ---
 
 ## 💻 Über den Code
 
-Dieses Projekt ist in meiner Freizeit entstanden.  
-Ich (Pierre) bin kein Profi-Entwickler, sondern ein Hobby-Tüftler mit einer großen Vision – und sehr dankbar für die Hilfe von [ChatGPT](https://chat.openai.com), ohne den ich niemals in so kurzer Zeit so weit gekommen wäre. 😅
+Dieses Projekt entwickle ich in meiner Freizeit.  
+Ich (Pierre) bin leider kein Profi, sondern bloß ein Hobbydev mit einer großen Vision – und sehr dankbar für die Hilfe von [ChatGPT](https://chat.openai.com), ohne den ich niemals in so kurzer Zeit so weit gekommen wäre. 😅
 
 ---
 
