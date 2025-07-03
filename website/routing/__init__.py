@@ -1,4 +1,4 @@
-from flask import abort, flash, Response, redirect
+from flask import abort, flash, Response, redirect, Blueprint
 from functools import wraps
 from typing import Callable
 
@@ -10,19 +10,24 @@ class Methods:
 
 METHODS = Methods()
 
+routes = Blueprint('routes', __name__)
+
 
 def register_blueprints(app):
     from .site import site
     from .auth import auth
-    from .user import user
     from .api import api
     from .blog import blog
+    from .user import user, init_routes
+    init_routes()
 
-    app.register_blueprint(site)
-    app.register_blueprint(auth)
-    app.register_blueprint(user)
-    app.register_blueprint(api, url_prefix='/api')
-    app.register_blueprint(blog, url_prefix='/blog')
+    routes.register_blueprint(site)
+    routes.register_blueprint(auth)
+    routes.register_blueprint(user)
+    routes.register_blueprint(api, url_prefix='/api')
+    routes.register_blueprint(blog, url_prefix='/blog')
+
+    app.register_blueprint(routes)
 
 
 def back_home() -> Response:

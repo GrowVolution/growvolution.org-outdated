@@ -1,10 +1,8 @@
-from ..data import commit
-from flask import render_template
+from website.utils.rendering import render as main_render
 
 
 def render(template: str, **kwargs) -> str:
-    current_template = template.removesuffix('.html')
-    return render_template(template, template=current_template, **kwargs)
+    return main_render(f"subsites/people/{template}", **kwargs)
 
 
 def render_404():

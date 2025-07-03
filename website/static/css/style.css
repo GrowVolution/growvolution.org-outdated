@@ -47,6 +47,10 @@ footer a:hover {
   100% { background-color: transparent; }
 }
 
+.text-justify {
+  text-align: justify;
+}
+
 .text-hover-primary:hover {
   color: var(--bs-primary) !important;
 }

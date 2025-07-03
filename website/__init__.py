@@ -8,6 +8,7 @@ import warnings, os, redis
 warnings.filterwarnings("ignore", message="Using the in-memory storage for tracking rate limits")
 
 APP = Flask(__name__)
+APP.subdomain_matching = True
 APP.wsgi_app = ProxyFix(APP.wsgi_app, x_for=3, x_proto=1, x_host=1)
 LIMITER = Limiter(get_remote_address, default_limits=["500 per day", "100 per hour"])
 
@@ -61,3 +62,6 @@ def init_app(db_manage: bool = False):
 
     from .utils.mail_service import start
     start(APP)
+
+    from .subsites import init_subsites
+    init_subsites(APP)

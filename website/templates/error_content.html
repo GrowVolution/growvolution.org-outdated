@@ -1,0 +1,12 @@
+{% extends "error_window.html" %}
+{% block error_content %}
+    <p class="mb-2">
+        Auf dem Server ist ein Fehler aufgetreten.<br>
+        Bitte wende dich mit der folgenden Fehler-ID:
+    </p>
+    <div class="display-1 fw-bold my-3">{{ error_id }}</div>
+    <p>
+        an <a href="mailto:developer@growv-mail.org">developer@growv-mail.org</a>.
+    </p>
+    <a href="/" class="btn btn-dark mt-3">Zurück zur Startseite</a>
+{% endblock %}

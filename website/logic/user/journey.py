@@ -1,7 +1,7 @@
 from website.utils.rendering import render, render_404
 from website.utils.llm_api import correct_text
+from website.utils import normalize_timestamp
 from website.data import commit, add_model, journey as journey_db, user as udb
-from website.data.helpers import normalize_timestamp
 from website.socket.messages import send_message
 from website.jobs import register_job, queue_job
 from datetime import datetime

@@ -1,4 +1,4 @@
-from watcher import start_watcher, stop_watcher, reload_dotenv
+from watcher import start_watcher, stop_watcher, reload_dotenv, set_debug_routing
 from dotenv import load_dotenv
 from pathlib import Path
 from datetime import datetime
@@ -116,12 +116,36 @@ def start_message():
     print('9 - exit')
 
 
+def start_debug_menu():
+    print("Simulate routing for:\n")
+    print('\t1 - growvolution.org')
+    print('\t2 - people.growvolution.org')
+    print('\t3 - learning.growvolution.org')
+
+
 if mode == 'DEBUG':
     start_message()
 
     while True:
         cmd = input('> ')
         if cmd == '1':
+            start_debug_menu()
+            cmd = input('\t> ')
+
+            def default_routing():
+                set_debug_routing('')
+
+            if cmd == '1':
+                default_routing()
+            elif cmd == '2':
+                set_debug_routing('people')
+            elif cmd == '3':
+                set_debug_routing('learning')
+            else:
+                print('\tInvalid option! - Continuing with default routing.')
+                default_routing()
+
+            print('')
             start_watch()
 
         elif cmd == '2':

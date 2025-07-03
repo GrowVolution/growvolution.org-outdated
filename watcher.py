@@ -10,6 +10,8 @@ load_dotenv()
 env = os.environ.copy()
 env['INSTANCE'] = 'debug'
 env['SERVER_NAME'] = f"debug.{env['SERVER_NAME']}"
+DEBUG_SUBROUTING = ''
+env['DEBUG_SUBROUTING'] = DEBUG_SUBROUTING
 
 watch_dir = Path(__file__).parent / 'website'
 logs_dir = Path(__file__).parent / 'logs' / 'debug'
@@ -22,6 +24,7 @@ def reload_dotenv():
     env = os.environ.copy()
     env['INSTANCE'] = 'debug'
     env['SERVER_NAME'] = f"debug.{env['SERVER_NAME']}"
+    env['DEBUG_SUBROUTING'] = DEBUG_SUBROUTING
 
 
 def clean_old_logs(log_dir: Path, max_files: int = 10, delete_count: int = 10):
@@ -104,3 +107,9 @@ def stop_watcher(observer: Observer) -> None:
     process.terminate()
     observer.join()
     return None
+
+
+def set_debug_routing(subsite: str):
+    global DEBUG_SUBROUTING
+    DEBUG_SUBROUTING = subsite
+    env['DEBUG_SUBROUTING'] = subsite

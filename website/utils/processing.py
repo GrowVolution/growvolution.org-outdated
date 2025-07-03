@@ -4,19 +4,30 @@ from ..socket import SOCKET
 from ..socket.events import HANDLERS, no_handler
 from .rendering import render_error, render
 from ..logic.auth import (captcha_status, verify_token_ownership, user_role,
-                          authenticated_user_request, twofa_status)
+                          authenticated_user_request, get_user)
 from ..logic.auth.captcha import handle_request as captcha
 from ..logic.auth.twofa import handle_2fa
-from ..routing import back_home
-from flask import request, abort, render_template, session
+from ..data import commit
+from ..routing import back_home, routes
+from flask import request, abort, render_template, session, send_from_directory
 from debugger import log
-import sys, traceback
+import sys, traceback, os
 
 
 @APP.context_processor
 def context_processor():
+    subdomain = request.host.split('.', 1)[0]
+    subdomain = '' if subdomain == 'growvolution' or subdomain == 'www' else f"{subdomain}."
+
     return dict(
-        debug=DEBUG,
+        subdomain=subdomain
+    )
+
+
+@routes.context_processor
+def routes_context_processor():
+    return dict(
+        user=get_user()
     )
 
 
@@ -30,11 +41,15 @@ def before_request():
 
     log('request', f"{method} '{path:48}' from {ip:15} via ({agent}).")
 
+    if path.startswith('/static'):
+        filename = path.removeprefix('/static/')
+        return send_from_directory(APP.static_folder, filename)
+
     response = verify_token_ownership()
     if response:
         return response
 
-    safe_path = path.startswith('/static') or path.startswith('/socket.io')
+    safe_path = path.startswith('/socket.io')
     response = handle_2fa() if not safe_path else None
     if response:
         return response
@@ -42,6 +57,32 @@ def before_request():
     if authenticated_user_request() and not session.get("token_owner"):
         return render_template('auth/verify_token_ownership.html',
                                flag='verify_token')
+
+    def process_debug():
+        subsite = os.getenv('DEBUG_SUBROUTING')
+        if not subsite:
+            return
+
+        if subsite == 'people':
+            from ..subsites.people.utils.processing import process_debug_request
+            return process_debug_request(APP, path)
+
+        elif subsite == 'learning':
+            from ..subsites.learning.utils.processing import process_debug_request
+            return process_debug_request(APP, path)
+
+    if DEBUG:
+        return process_debug()
+
+
+@routes.after_request
+def after_request(response):
+    user = get_user()
+    if user and not user.reflection_shown:
+        user.reflection_shown = True
+        commit()
+
+    return response
 
 
 @APP.errorhandler(Exception)

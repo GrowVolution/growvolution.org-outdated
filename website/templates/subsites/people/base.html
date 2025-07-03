@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block nav %}
+	{% include "subsites/people/nav.html" %}
+{% endblock %}
+
+{% block footer_about %}
+    <h5>Das Zuhause unseres Teams</h5>
+    <p class="text-justify">
+        Wahre Magie entsteht, wenn Menschen gemeinsam wirken.
+        Hier werden die Organe unserer Vision durch dich lebendig.
+        Ein Ort, an dem unsere Mitwirkenden zusammenkommen, um
+        die Welt im Kleinen zu wandeln – und im Großen zu bewegen.
+    </p>
+{% endblock %}
+
+{% block source_binding %}
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+    <script>
+        AOS.init({ once: true, duration: 1000 });
+    </script>
+{% endblock %}
