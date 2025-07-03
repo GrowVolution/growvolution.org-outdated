@@ -92,6 +92,7 @@ def restart():
 
     clean_old_logs(logs_dir)
     clean_old_logs(logs_dir.parent)
+    clean_old_logs(logs_dir.parent / 'worker')
 
 
 def start_watcher() -> Observer:

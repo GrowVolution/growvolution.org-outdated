@@ -29,6 +29,18 @@ Sehr gerne!
 Wenn du Lust hast, dich an der Weiterentwicklung zu beteiligen – sei es im Backend, UI, API, Accessibility oder UX – **mach einfach mit!**  
 Forke das Projekt, erstelle einen Branch, sende Pull Requests oder melde dich mit Ideen.
 
+Die Setup-Scripts sollen dir den Einstieg in das Projekt so einfach wie möglich machen:
+
+```bash
+./setup.sh
+```
+oder für Windows:
+
+```powershell
+.\setup.bat
+```
+Mehr zum Aufbau dieses Repos [erfährst du hier](STRUCTURE.md).
+
 **Schon ein kleiner Beitrag kann Großes bewirken.**
 
 ---
