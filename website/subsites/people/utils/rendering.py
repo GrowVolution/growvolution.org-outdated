@@ -1,8 +1,9 @@
-from website.utils.rendering import render as main_render
+from flask import render_template
 
 
 def render(template: str, **kwargs) -> str:
-    return main_render(f"subsites/people/{template}", **kwargs)
+    current_template = template.removesuffix('.html')
+    return render_template(f"people/{template}", template=current_template, **kwargs)
 
 
 def render_404():

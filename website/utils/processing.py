@@ -71,6 +71,10 @@ def before_request():
             from ..subsites.learning.utils.processing import process_debug_request
             return process_debug_request(APP, path)
 
+        elif subsite == 'banking':
+            from ..subsites.banking.utils.processing import process_debug_request
+            return process_debug_request(APP, path)
+
     if DEBUG:
         return process_debug()
 

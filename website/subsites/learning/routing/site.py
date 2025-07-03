@@ -1,4 +1,4 @@
-from website.subsites.learning.utils.rendering import render, render_404
+from ..utils.rendering import render, render_404
 from flask import Blueprint
 
 site = Blueprint('learning_site', __name__)

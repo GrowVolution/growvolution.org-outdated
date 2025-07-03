@@ -3,6 +3,7 @@ from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
 from werkzeug.middleware.proxy_fix import ProxyFix
 from urllib.parse import urlparse
+from jinja2 import ChoiceLoader, PrefixLoader, FileSystemLoader
 import warnings, os, redis
 
 warnings.filterwarnings("ignore", message="Using the in-memory storage for tracking rate limits")
@@ -11,6 +12,16 @@ APP = Flask(__name__)
 APP.subdomain_matching = True
 APP.wsgi_app = ProxyFix(APP.wsgi_app, x_for=3, x_proto=1, x_host=1)
 LIMITER = Limiter(get_remote_address, default_limits=["500 per day", "100 per hour"])
+
+APP.jinja_loader = ChoiceLoader([
+    PrefixLoader({
+        'main': FileSystemLoader('website/templates'),
+        'banking': FileSystemLoader('website/subsites/banking/templates'),
+        'learning': FileSystemLoader('website/subsites/learning/templates'),
+        'people': FileSystemLoader('website/subsites/people/templates')
+    }),
+    FileSystemLoader('website/templates')
+])
 
 REDIS_URL = urlparse(os.getenv("REDIS_URI"))
 REDIS = redis.Redis(

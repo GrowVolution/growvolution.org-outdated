@@ -121,6 +121,7 @@ def start_debug_menu():
     print('\t1 - growvolution.org')
     print('\t2 - people.growvolution.org')
     print('\t3 - learning.growvolution.org')
+    print('\t4 - banking.growvolution.org')
 
 
 if mode == 'DEBUG':
@@ -141,6 +142,8 @@ if mode == 'DEBUG':
                 set_debug_routing('people')
             elif cmd == '3':
                 set_debug_routing('learning')
+            elif cmd == '4':
+                set_debug_routing('banking')
             else:
                 print('\tInvalid option! - Continuing with default routing.')
                 default_routing()

@@ -3,7 +3,7 @@ from flask import render_template
 
 def render(template: str, **kwargs) -> str:
     current_template = template.removesuffix('.html')
-    return render_template(f"main/{template}", template=current_template, **kwargs)
+    return render_template(f"banking/{template}", template=current_template, **kwargs)
 
 
 def render_404():
