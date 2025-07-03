@@ -2,8 +2,8 @@
 Hier entsteht der Code, der unsere Vision lebendig macht.
 Dieses System ist das Fundament, auf dem alle weiteren Ideen und Gedanken unseres Projekts langfristig aufbauen werden.
 
-> 🔥 Mehr über dieses Projekt und unsere Vision erfährst du über unsere:  
-> 👉 [Projektübersicht auf GrowVolution/GrowVolution](https://github.com/GrowVolution/GrowVolution/)
+> 🔥 Mehr über dieses Projekt und unsere Vision erfährst du:  
+> 👉 [Im Profil unserer Organisation](https://github.com/GrowVolution/)
 
 ---
 
