@@ -4,7 +4,7 @@
 <p>
     Hey {{ user }}!<br><br>
     Wir haben deine Anfrage zum Zurücksetzen des Passworts erhalten.<br>
-    Du kannst es ganz entspannt <a href="{{ url_for('auth_routes.reset', _external=True, code=reset_code) }}">
+    Du kannst es ganz entspannt <a href="{{ url_for('routes.auth.reset', _external=True, code=reset_code) }}">
     hier zurücksetzen</a>.<br><br>
     Alles Liebe wünscht dir,<br>
     Das GrowVolution Team!

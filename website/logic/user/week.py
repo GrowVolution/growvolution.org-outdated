@@ -6,7 +6,7 @@ from datetime import datetime
 
 def handle_request(user):
     if not user.week_plan:
-        return render('user/week/plan_week.html', user)
+        return render('user/week/plan_week.html')
 
     today = datetime.now()
     current_day = ['mo', 'di', 'mi', 'do', 'fr', 'sa', 'so'][today.weekday()]
@@ -14,7 +14,6 @@ def handle_request(user):
 
     return render(
         'user/week/week.html',
-        user=user,
         mode=user.week_plan_mode,
         week=user.active_week_tasks,
         current_day=current_day,
@@ -66,5 +65,5 @@ def update_week(user):
     return '', 200
 
 
-def edit_week(user):
-    return render('user/week/plan_week.html', user)
+def edit_week():
+    return render('user/week/plan_week.html')

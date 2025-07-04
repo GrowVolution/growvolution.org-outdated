@@ -21,27 +21,32 @@ def login():
     return login_handler.handle_request()
 
 
+@protected.route('/login/dev', methods=METHODS.ALL)
+def login_dev():
+    return login_handler.handle_dev_login()
+
+
 @protected.route('/signup', methods=METHODS.ALL)
 def signup():
     return signup_handler.handle_request()
 
 
-@protected.route('/notice/confirm/<code>')
+@auth.route('/notice/confirm/<code>')
 def confirm_notice(code):
     return confirm_handler.confirm_notice(code)
 
 
-@protected.route('/confirm/<code>')
+@auth.route('/confirm/<code>')
 def confirm(code):
     return confirm_handler.handle_confirm(code)
 
 
-@protected.route('/reset/<code>', methods=METHODS.ALL)
+@auth.route('/reset/<code>', methods=METHODS.ALL)
 def reset(code):
     return reset_handler.handle_request(code)
 
 
-@protected.route('/oauth/<api>/start')
+@auth.route('/oauth/<api>/start')
 def start_oauth(api):
     return google.start_oauth() if api == 'google' else (
         apple.start_oauth() if api == 'apple' else (

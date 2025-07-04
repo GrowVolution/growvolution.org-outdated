@@ -14,7 +14,7 @@ def main(user):
 @journal.route('/history')
 @require_user(False)
 def journal_history(user):
-    return journal_handler.journal_history(user)
+    return journal_handler.journal_history()
 
 
 @journal.route('/set', methods=METHODS.POST)

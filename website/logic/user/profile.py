@@ -14,8 +14,8 @@ def _confirm_pending_change(user):
             commit()
 
 
-def user_dashboard(user):
-    return render('user/dashboard.html', user)
+def user_dashboard():
+    return render('user/dashboard.html')
 
 
 def handle_mail_change(code: str):
@@ -55,4 +55,4 @@ def twofa_setup(user):
 
 def handle_request(user):
     _confirm_pending_change(user)
-    return render('user/profile.html', user)
+    return render('user/profile.html')

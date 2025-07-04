@@ -6,12 +6,12 @@
 <div class="window-wrapper">
     <div class="window-box">
         <div class="window-header">
-          <img src="{{ url_for('static', filename='img/logo1.png') }}" alt="GrowV Colorful Logo">
+          <img src="/static/img/logo1.png" alt="GrowV Colorful Logo">
           <h2>Identität Bestätigen</h2>
         </div>
         <div class="window-content text-center" style="max-width:500px">
           <p>
-              Hey {{ user }}, deine Registrierung ist bei uns eingegangen und
+              Hey {{ name }}, deine Registrierung ist bei uns eingegangen und
               wir möchten uns für dein Vertrauen bedanken! Um dir
               und anderen einen sicheren Rahmen zu bieten, haben wir
               eine Bestätigungsmail an <b>{{ mail }}</b> gesendet. Sobald du

@@ -1,26 +1,29 @@
 from . import random_code
 from .. import APP, DEBUG
 from ..socket import SOCKET
-from ..socket.events import HANDLERS, no_handler
+from ..socket.events import no_handler
 from .rendering import render_error, render
-from ..logic.auth import (captcha_status, verify_token_ownership, user_role,
+from ..logic.auth import (captcha_status, verify_token_ownership, is_dev,
                           authenticated_user_request, get_user)
 from ..logic.auth.captcha import handle_request as captcha
 from ..logic.auth.twofa import handle_2fa
 from ..data import commit
 from ..routing import back_home, routes
-from flask import request, abort, render_template, session, send_from_directory
+from flask import request, abort, render_template, session, send_from_directory, redirect, make_response
 from debugger import log
 import sys, traceback, os
 
 
+def _get_subsite():
+    host = request.host
+    subsite = host.split('.', 1)[0]
+    return subsite if subsite not in {'growvolution', 'www'} else ''
+
+
 @APP.context_processor
 def context_processor():
-    subdomain = request.host.split('.', 1)[0]
-    subdomain = '' if subdomain == 'growvolution' or subdomain == 'www' else f"{subdomain}."
-
     return dict(
-        subdomain=subdomain
+        subdomain=_get_subsite()
     )
 
 
@@ -49,6 +52,10 @@ def before_request():
     if response:
         return response
 
+    response = verify_token_ownership('dev_token')
+    if response:
+        return response
+
     safe_path = path.startswith('/socket.io')
     response = handle_2fa() if not safe_path else None
     if response:
@@ -58,22 +65,32 @@ def before_request():
         return render_template('auth/verify_token_ownership.html',
                                flag='verify_token')
 
+    if is_dev() and not request.cookies.get('dev_token_owner'):
+        host = request.host
+        origin = f"https://{host}{path}" if not host.startswith('growvolution') else ''
+        if origin:
+            response = make_response(redirect("https://growvolution.org/verify"))
+            response.set_cookie('origin', origin, httponly=True, secure=True,
+                                samesite=None, domain=".growvolution.org")
+            return response
+
+        return render_template('auth/verify_token_ownership.html',
+                               flag='verify_dev_token')
+
     def process_debug():
         subsite = os.getenv('DEBUG_SUBROUTING')
-        if not subsite:
-            return
+        
+        match subsite:
+            case 'people':
+                from ..subsites.people.utils.processing import process_debug_request
+            case 'learning':
+                from ..subsites.learning.utils.processing import process_debug_request
+            case 'banking':
+                from ..subsites.banking.utils.processing import process_debug_request
+            case _:
+                return
 
-        if subsite == 'people':
-            from ..subsites.people.utils.processing import process_debug_request
-            return process_debug_request(APP, path)
-
-        elif subsite == 'learning':
-            from ..subsites.learning.utils.processing import process_debug_request
-            return process_debug_request(APP, path)
-
-        elif subsite == 'banking':
-            from ..subsites.banking.utils.processing import process_debug_request
-            return process_debug_request(APP, path)
+        return process_debug_request(APP, path)
 
     if DEBUG:
         return process_debug()
@@ -96,7 +113,7 @@ def handle_exception(error):
     name = type(error).__name__
     log('error', f"Handling app request failed ({eid}): {name}\n{tb_str}")
 
-    if user_role() == 'dev':
+    if is_dev():
         return render('error_dev.html', error_id=eid,
                       name=name, error=error, traceback=tb_str)
 
@@ -108,8 +125,21 @@ def event_handler(data: dict | str | None):
     event = data['event']
     payload = data.get('payload')
     log('request', f"Socket event: {event} - With data: {payload}")
-    handler = HANDLERS.get(event, no_handler)
-    handler(payload)
+
+    def resolve_handler(event: str, subsite: str) -> callable:
+        match subsite:
+            case 'people':
+                from ..subsites.people.socket.events import HANDLERS
+            case 'learning':
+                from ..subsites.learning.socket.events import HANDLERS
+            case 'banking':
+                from ..subsites.banking.socket.events import HANDLERS
+            case _:
+                from ..socket.events import HANDLERS
+        return HANDLERS.get(event, no_handler)
+
+    subsite = os.getenv('DEBUG_SUBROUTING') if DEBUG else _get_subsite()
+    resolve_handler(event, subsite)(payload)
 
 
 @SOCKET.on_error_default
@@ -119,7 +149,7 @@ def error_handler(error):
     name = type(error).__name__
     log('error', f"Handling socket event failed ({eid}): {name}\n{tb_str}")
 
-    if user_role() == 'dev':
+    if is_dev():
         SOCKET.emit('error', f"Interner Server Fehler ({eid}): {name}\n{tb_str}")
         return
 
@@ -139,7 +169,7 @@ def protect_route():
     status = captcha_status()
 
     if status == "invalid":
-        abort(401)
+        return abort(401)
 
     if status in {"unverified", "pending"}:
         return captcha()

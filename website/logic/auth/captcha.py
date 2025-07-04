@@ -33,22 +33,25 @@ def captcha_valid(token: str, fallback: bool) -> bool:
     response = client.create_assessment(assessment_request)
 
     if not response.token_properties.valid:
-        log('warn',
-            f"Captcha check failed because of invalid token: "
-            f"{str(response.token_properties.invalid_reason)}")
+        log('warn', f"Captcha check failed: Invalid token – reason: {response.token_properties.invalid_reason}")
         return False
 
-    action = 'verify'
-    if response.token_properties.action != action:
-        log('warn',
-            f"Captcha check failed because of invalid action: {action}")
+    expected_action = 'verify'
+    if response.token_properties.action != expected_action:
+        log('warn', f"Captcha check failed: Expected action '{expected_action}', got '{response.token_properties.action}'")
         return False
-    else:
-        log('info', f"Captcha risk analysis score: {str(response.risk_analysis.score)}")
-        for reason in response.risk_analysis.reasons:
-            log('info', f"Captcha risk analysis reason: {reason}")
 
-    return True if response.risk_analysis.score > 0.5 else False
+    score = response.risk_analysis.score
+    reasons = response.risk_analysis.reasons
+
+    log('info', f"Captcha score: {score}")
+    for reason in reasons:
+        log('info', f"Captcha reason: {reason}")
+
+    if fallback:
+        return True
+
+    return score > 0.5
 
 
 def _render_self(fallback: bool) -> str:
@@ -68,7 +71,7 @@ def handle_request() -> Response | str:
         fingerprint = request_data.get('client_fingerprint')
 
         data = {
-            'status': 'valid' if valid else 'invalid' if fallback else 'pending',
+            'status': ('valid' if valid else 'invalid') if fallback else 'pending',
             'fingerprint': fingerprint
         }
         debug_response = f"Captcha {'v2' if fallback else 'v3'} {'passed' if valid else 'failed'}!"

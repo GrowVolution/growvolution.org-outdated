@@ -4,7 +4,7 @@
 <p>
     Hey {{ user }}!<br><br>
     Wir haben deine Anfrage zum Ändern deiner E-Mail-Adresse erhalten und würden dich bitten, diese kurz
-    <a href="{{ url_for('routes.confirm_mail_change', _external=True, code=confirm_code) }}">zu bestätigen</a>.<br><br>
+    <a href="{{ url_for('routes.user.confirm_mail_change', _external=True, code=confirm_code) }}">zu bestätigen</a>.<br><br>
     Wir freuen uns, dass du unsere Plattform nutzt und Teil dieser Community bist! Melde dich gerne
     jederzeit bei uns, wenn du Fragen hast oder Hilfe bei irgendetwas brauchst.<br><br>
     Alles Liebe wünscht dir,<br>

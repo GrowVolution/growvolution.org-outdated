@@ -21,11 +21,11 @@ def handle_request(user):
     if not can_add_entry:
         return _to_journal_history()
 
-    return render('user/journal/journal.html', user)
+    return render('user/journal/journal.html')
 
 
-def journal_history(user):
-    return render('user/journal/history.html', user)
+def journal_history():
+    return render('user/journal/history.html')
 
 
 def set_journal(user):

@@ -113,7 +113,7 @@ def start_message():
     print('6 - restart main')
     print('7 - restart worker')
     print('8 - clear console')
-    print('9 - exit')
+    print('9 - exit\n')
 
 
 def start_debug_menu():

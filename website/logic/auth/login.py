@@ -1,13 +1,19 @@
 from . import token_response
+from website import DEBUG
 from website.utils.rendering import render
 from website.utils.mail_service import login_notify
 from website.data.user import User
-from flask import Response, request, flash
+from website.data.dev import DevToken
+from flask import Response, request, flash, redirect, session
 from markupsafe import Markup
 
 
 def _render_self(**kwargs) -> str:
     return render('auth/login.html', **kwargs)
+
+
+def _render_dev() -> str:
+    return render('auth/dev_login.html')
 
 
 def login_success(user_id: int, twofa_confirmed: bool = False) -> Response:
@@ -20,6 +26,36 @@ def login_success(user_id: int, twofa_confirmed: bool = False) -> Response:
 def notify(user):
     if user.login_notify:
         login_notify(user.email, user.first_name)
+
+
+def handle_dev_login() -> Response | str:
+    if DEBUG:
+        return redirect("https://growvolution.org/login/dev")
+
+    if not session.get('dev_login_info'):
+        session['dev_login_info'] = 'notified'
+        flash("Dev-Cookies werden zur globalen Verifizierung über die Hauptseite geladen.", 'info')
+
+    if request.method == "POST":
+        token_name = request.form.get("name")
+        token = DevToken.query.filter_by(name=token_name).first()
+        if not token:
+            flash("Es existiert kein Token mit dieser Bezeichnung", 'warning')
+            return _render_dev()
+
+        elif not token.valid:
+            flash("Dieses Token ist abgelaufen!", 'danger')
+            return _render_dev()
+
+        elif token.token != request.form.get("token"):
+            flash("Falsches Token!", 'danger')
+            return _render_dev()
+
+        return token_response({
+            "id": token.id
+        }, 5, 'dev_token', dev=True)
+
+    return _render_dev()
 
 
 def handle_request() -> Response | str:

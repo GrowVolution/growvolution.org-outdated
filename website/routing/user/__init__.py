@@ -35,7 +35,7 @@ def initial_reflection(usr):
 @user.route('/foundation')
 @require_user(False)
 def foundation(usr):
-    return reflection_handler.foundation(usr)
+    return reflection_handler.foundation()
 
 
 @user.route('/foundation/update', methods=METHODS.POST)

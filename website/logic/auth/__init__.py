@@ -1,5 +1,6 @@
 from website import APP
 from website.data.user import User
+from website.data.dev import DevToken
 from website.routing import back_home
 from flask import request, Response, make_response, redirect, session
 from datetime import datetime, timedelta
@@ -14,7 +15,7 @@ def empty_token(name: str = 'token', path: str = '/') -> Response:
 
 
 def token_response(data: dict, expiration_days: int, name='token',
-                   response: Response | str | None = None, status=302) -> Response:
+                   response: Response | str | None = None, status=302, dev=False) -> Response:
     expiration = timedelta(days=expiration_days)
     max_age = expiration_days * 24 * 60 * 60
     data['exp'] = datetime.now() + expiration
@@ -25,7 +26,11 @@ def token_response(data: dict, expiration_days: int, name='token',
     token = jwt.encode(data, APP.config['SECRET_KEY'], algorithm='HS256')
 
     res = make_response(response if response else back_home(), status)
-    res.set_cookie(name, token, httponly=True, secure=True, max_age=max_age)
+    if dev:
+        res.set_cookie(name, token, httponly=True, secure=True, max_age=max_age,
+                       samesite=None, domain=".growvolution.org")
+    else:
+        res.set_cookie(name, token, httponly=True, secure=True, max_age=max_age)
 
     return res
 
@@ -37,8 +42,20 @@ def verify_token_ownership(name: str = 'token') -> Response | None:
         if not owner:
             return empty_token(name)
 
-        session[f'{name}_owner'] = True
-        return make_response('', 204)
+        origin = request.cookies.get('origin')
+        if origin:
+            response = make_response(redirect(origin))
+            response.set_cookie('origin', '', expires=0)
+        else:
+            response = make_response('', 204)
+
+        if name == 'dev_token':
+            response.set_cookie('dev_token_owner', 'true', httponly=True, secure=True,
+                                samesite=None, domain=".growvolution.org")
+        else:
+            session[f'{name}_owner'] = True
+
+        return response
 
     return None
 
@@ -74,14 +91,10 @@ def get_user() -> User | None:
     return User.query.get(decoded_token['id']) if decoded_token else None
 
 
-def user_role() -> str | None:
-    user = get_user()
-    return user.role if user else None
-
-
-def is_admin() -> bool:
-    role = user_role()
-    return role == 'admin' or role == 'dev'
+def is_dev() -> bool:
+    decoded = _decoded_token(request.cookies.get('dev_token'))
+    token = DevToken.query.get(decoded.get('id')) if decoded else None
+    return token and token.valid
 
 
 def authenticated_user_request() -> bool:

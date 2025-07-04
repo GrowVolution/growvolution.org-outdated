@@ -64,12 +64,12 @@ def require_admin(strict: bool) -> Callable:
     def decorator(fn):
         @wraps(fn)
         def wrapper(*args, **kwargs):
-            from website.logic.auth import get_user, is_admin
+            from website.logic.auth import get_user
             user = get_user()
             if not user:
                 return _not_logged_in()
 
-            admin = is_admin()
+            admin = user.role == 'admin'
             if not admin and strict:
                 return abort(401)
             elif not admin:
@@ -86,12 +86,12 @@ def require_role(role: str, strict: bool) -> Callable:
     def decorator(fn):
         @wraps(fn)
         def wrapper(*args, **kwargs):
-            from website.logic.auth import get_user, user_role
+            from website.logic.auth import get_user
             user = get_user()
             if not user:
                 return _not_logged_in()
 
-            active_role = user_role()
+            active_role = user.role
             denied = not active_role or active_role != role
             if denied and strict:
                 return abort(401)

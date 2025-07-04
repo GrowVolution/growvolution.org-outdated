@@ -1,6 +1,7 @@
 from website.utils.rendering import render, render_404
 from website.utils.cache import request_entry_data, pop_entry
-from website.data import user as udb, add_model
+from website.data import add_model
+from website.data.user import User
 
 
 def confirm_notice(code: str) -> str:
@@ -9,10 +10,14 @@ def confirm_notice(code: str) -> str:
         return render_404()
 
     userdata = request_entry_data(entry_code)
+    if not userdata:
+        pop_entry(code)
+        return render_404()
+
     name = userdata.get('first_name')
     email = userdata.get('email')
 
-    return render('auth/confirm_notice.html', user=name, mail=email)
+    return render('auth/confirm_notice.html', name=name, mail=email)
 
 
 def handle_confirm(code: str) -> str:
@@ -26,7 +31,8 @@ def handle_confirm(code: str) -> str:
     email = userdata.get('email')
     password = userdata.get('password')
 
-    user = udb.User(first_name, last_name, username, email, password=password)
+    user = User(first_name, last_name, username, email)
+    user.set_password(password)
     add_model(user)
     pop_entry(code)
 

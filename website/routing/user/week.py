@@ -20,7 +20,7 @@ def setup_week(user):
 @week.route('/edit')
 @require_user(False)
 def edit_week(user):
-    return week_handler.edit_week(user)
+    return week_handler.edit_week()
 
 
 @week.route('/update', methods=METHODS.POST)

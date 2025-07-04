@@ -8,7 +8,7 @@ journey = Blueprint('journey', __name__)
 @journey.route('/')
 @require_user(False)
 def main(user):
-    return journey_handler.handle_request(user)
+    return journey_handler.handle_request()
 
 
 @journey.route('/history')

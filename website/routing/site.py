@@ -1,3 +1,4 @@
+from . import back_home
 from website.utils.rendering import render, render_404
 from website.logic import index as index_handler
 from flask import Blueprint, redirect
@@ -51,4 +52,4 @@ def debug():
         TODO: Debug Stuff
 
     """
-    return redirect('/')
+    return back_home()

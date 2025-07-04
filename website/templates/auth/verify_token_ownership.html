@@ -9,13 +9,14 @@
             fetch(window.location.href, {
                 method: "POST",
                 credentials: "include",
+                redirect: "follow",
                 headers: {
                   "Content-Type": "application/json",
                   "X-Client-Fingerprint": fingerprint
                 },
                 body: JSON.stringify({ {{ flag }}: true })
-            }).then(() => {
-                location.reload();
+            }).then((res) => {
+                if (res.status === 204) location.reload();
             });
         }
         verify_token();

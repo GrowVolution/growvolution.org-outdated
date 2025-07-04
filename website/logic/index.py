@@ -34,6 +34,6 @@ def get_posts_html():
 def handle_request():
     user = get_user()
     if user:
-        return user_dashboard(user)
+        return user_dashboard()
 
     return render('site/index.html', posts=get_posts_html())

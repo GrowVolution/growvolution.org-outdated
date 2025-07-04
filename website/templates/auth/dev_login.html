@@ -1,0 +1,18 @@
+{% extends "auth/base.html" %}
+
+{% block title %}Entwickler Zugang{% endblock %}
+
+{% block form %}
+    <p class="text-center">Entwicklerzugang, für Debug-Features.</p>
+    <div class="mb-3 input-group">
+        <span class="input-group-text"><i class="bi bi-card-heading"></i></span>
+        <input class="form-control" placeholder="Tokenname" name="name" required>
+    </div>
+    <div class="mb-3 input-group">
+        <span class="input-group-text"><i class="bi bi-shield-lock"></i></span>
+        <input class="form-control" placeholder="Dein Dev-Token" name="token" required>
+    </div>
+    <div class="d-grid">
+        <button type="submit" class="btn btn-secondary">Freischalten</button>
+    </div>
+{% endblock %}

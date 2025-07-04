@@ -17,15 +17,15 @@ def _tupled_value(value: str) -> Tuple[str, None]:
     return value, None
 
 
-def handle_request(user):
-    return render('user/journey/journey.html', user)
+def handle_request():
+    return render('user/journey/journey.html')
 
 
 def journey_history(user):
     if not user.journey_started:
         return render_404()
 
-    return render('user/journey/history.html', user)
+    return render('user/journey/history.html')
 
 
 @register_job('journey_start')
