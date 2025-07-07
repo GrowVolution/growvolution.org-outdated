@@ -23,7 +23,7 @@ growvolution.org/
     ├── templates/          # HTML Templates (Jinja2)
     ├── utils/              # Tools der App
     ├── ...
-├──setup.*                  # Nur zur Einrichtung des Projekts
+├── setup.*                 # Nur zur Einrichtung des Projekts
 ├── requirements.txt        # Abhängigkeiten
 ├── PICTURES.md             # Auf der Seite verwendete Bilder (CC0)
 ├── main.py                 # 'python main.py' -> Startet die App
