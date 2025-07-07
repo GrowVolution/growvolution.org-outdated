@@ -10,5 +10,10 @@ def register_event(name: str) -> Callable:
     return decorator
 
 
+@register_event("set_nav_context")
+def set_nav_context(template: str):
+    pass
+
+
 def init_events():
     pass

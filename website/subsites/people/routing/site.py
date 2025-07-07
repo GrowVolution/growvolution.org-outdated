@@ -9,6 +9,16 @@ def index():
     return render('site/index.html')
 
 
+# Statutes
+@site.route('/statutes/<struct>')
+def statutes(struct):
+    match struct:
+        case 'association':
+            return render('site/association_statute.html')
+        case _:
+            return render_404()
+
+
 @site.route('/<path:path>')
 def not_found(path):
     return render_404()

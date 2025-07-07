@@ -5,3 +5,4 @@ logs
 website/auth
 __pycache__/
 migrations/
+**/easteregg/

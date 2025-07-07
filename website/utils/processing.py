@@ -22,8 +22,10 @@ def _get_subsite():
 
 @APP.context_processor
 def context_processor():
+    subsite = _get_subsite()
+    subdomain = f"{subsite}." if subsite else ''
     return dict(
-        subdomain=_get_subsite()
+        subdomain=subdomain
     )
 
 
@@ -46,7 +48,19 @@ def before_request():
 
     if path.startswith('/static'):
         filename = path.removeprefix('/static/')
-        return send_from_directory(APP.static_folder, filename)
+        parts = filename.split('/', 1)
+
+        root = APP.root_path
+        static_folder_map = {
+            'people': f'{root}/subsites/people/static',
+            'learning': f'{root}/subsites/learning/static',
+            'banking': f'{root}/subsites/banking/static',
+        }
+
+        subsite, file = parts if parts[0] in static_folder_map else ('', filename)
+
+        static_folder = static_folder_map.get(subsite, APP.static_folder)
+        return send_from_directory(static_folder, file)
 
     response = verify_token_ownership()
     if response:
@@ -79,7 +93,7 @@ def before_request():
 
     def process_debug():
         subsite = os.getenv('DEBUG_SUBROUTING')
-        
+
         match subsite:
             case 'people':
                 from ..subsites.people.utils.processing import process_debug_request

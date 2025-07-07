@@ -25,7 +25,6 @@ if ! command -v python3 >/dev/null 2>&1; then
         fi
         brew install python
     elif [[ -f /etc/debian_version ]]; then
-        # Debian/Ubuntu
         sudo apt update
         sudo apt install -y wget build-essential libssl-dev zlib1g-dev \
         libncurses5-dev libncursesw5-dev libreadline-dev libsqlite3-dev \

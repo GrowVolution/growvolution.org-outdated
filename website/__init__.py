@@ -76,3 +76,6 @@ def init_app(db_manage: bool = False):
 
     from .subsites import init_subsites
     init_subsites(APP)
+
+    from .easteregg import init_easteregg
+    init_easteregg(APP)
