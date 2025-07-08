@@ -5,7 +5,7 @@ from sqlalchemy.ext.hybrid import hybrid_property
 class Address(DB.Model):
     __tablename__ = 'people_addresses'
 
-    id = DB.Column(DB.Integer, primary_key=True)
+    id = DB.Column(DB.Integer, autoincrement=True, primary_key=True)
     user_id = DB.Column(DB.Integer, DB.ForeignKey('people_accounts.id'), unique=True, nullable=False)
     street = DB.Column(DB.String(255), nullable=False)
     street_nr = DB.Column(DB.String(8), nullable=False)
@@ -14,7 +14,7 @@ class Address(DB.Model):
     zip_code = DB.Column(DB.String(20), nullable=False)
     country = DB.Column(DB.String(100), default='Germany')
 
-    user = DB.relationship('User', backref='address', uselist=False, cascade='all, delete-orphan')
+    user = DB.relationship('PeopleUser', backref='address', uselist=False, cascade='all')
 
     def __init__(self, user_id: int, street: str, street_nr: str, city: str, zip_code: str,
                  state: str =None, country: str ='Germany'):

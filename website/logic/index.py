@@ -18,16 +18,6 @@ def get_posts_html():
         if counter > 3:
             break
 
-    # Just for the beginning
-    while counter <= 3:
-        class Post:
-            id = counter
-            headline=f"Beitrag {counter}"
-            summary="Dieser Beitrag existiert noch nicht..."
-        html += render_template('site/index_blog_preview.html', delay=counter*100,
-                                post=Post())
-        counter += 1
-
     return Markup(html)
 
 

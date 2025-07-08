@@ -192,31 +192,33 @@
 
 
 {% block modal %}
-  {% include 'user/modals/profile/profile_picture_modal.html' %}
-  {% include 'user/modals/profile/username_edit_modal.html' %}
-  {% include 'user/modals/profile/password_change_modal.html' %}
-  {% include 'user/modals/profile/2fa_modal.html' %}
-  {% include 'user/modals/profile/email_change_modal.html' %}
-  {% include 'user/modals/profile/phone_change_modal.html' %}
-  {% include 'user/modals/profile/address_change_modal.html' %}
-  {% include 'user/modals/profile/birthday_change_modal.html' %}
-  {% include 'user/modals/profile/gender_change_modal.html' %}
+    {% include 'user/modals/profile/profile_picture_modal.html' %}
+    {% include 'user/modals/profile/username_edit_modal.html' %}
+    {% include 'user/modals/profile/password_change_modal.html' %}
+    {% include 'user/modals/profile/2fa_modal.html' %}
+    {% include 'user/modals/profile/email_change_modal.html' %}
+    {% include 'user/modals/profile/phone_change_modal.html' %}
+    {% include 'user/modals/profile/address_change_modal.html' %}
+    {% include 'user/modals/profile/birthday_change_modal.html' %}
+    {% include 'user/modals/profile/gender_change_modal.html' %}
 {% endblock %}
 
 {% block script_afterDOM %}
-  <script type="module" src="/static/js/shared/hint_validation.js"></script>
-  <script type="module" src="/static/js/shared/input_toggle.js"></script>
+    <script type="module" src="/static/js/shared/hint_validation.js"></script>
+    <script type="module" src="/static/js/shared/input_toggle.js"></script>
 
-  <script type="module" src="/static/js/user/profile/profile_picture.js"></script>
-  <script type="module" src="/static/js/user/profile/username_edit.js"></script>
-  <script type="module" src="/static/js/user/profile/password_change.js"></script>
-  <script type="module" src="/static/js/user/profile/two_factor.js"></script>
-  <script type="module" src="/static/js/user/profile/login_notify.js"></script>
-  <script type="module" src="/static/js/user/profile/email_change.js"></script>
-  <script type="module" src="/static/js/user/profile/phone_change.js"></script>
-  <script type="module" src="/static/js/user/profile/address_change.js"></script>
-  <script type="module" src="/static/js/user/profile/birthday_change.js"></script>
-  <script type="module" src="/static/js/user/profile/gender_change.js"></script>
-  <script type="module" src="/static/js/user/profile/level_progress.js"></script>
-  <script type="module" src="/static/js/user/profile/accordion_toggle.js"></script>
+    <script type="module" src="/static/js/user/profile/profile_picture.js"></script>
+    <script type="module" src="/static/js/user/profile/username_edit.js"></script>
+    <script type="module" src="/static/js/user/profile/password_change.js"></script>
+    <script type="module" src="/static/js/user/profile/two_factor.js"></script>
+    <script type="module" src="/static/js/user/profile/login_notify.js"></script>
+    <script type="module" src="/static/js/user/profile/email_change.js"></script>
+    <script type="module" src="/static/js/user/profile/phone_change.js"></script>
+    <script type="module" src="/static/js/user/profile/address_change.js"></script>
+    <script type="module" src="/static/js/user/profile/birthday_change.js"></script>
+    <script type="module" src="/static/js/user/profile/gender_change.js"></script>
+    <script type="module" src="/static/js/user/profile/level_progress.js"></script>
+    <script type="module" src="/static/js/user/profile/accordion_toggle.js"></script>
+
+    <script type="module" src="/static/js/user/profile/privacy/hide_last_name.js"></script>
 {% endblock %}

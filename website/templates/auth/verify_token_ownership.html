@@ -15,8 +15,8 @@
                   "X-Client-Fingerprint": fingerprint
                 },
                 body: JSON.stringify({ {{ flag }}: true })
-            }).then((res) => {
-                if (res.status === 204) location.reload();
+            }).then(() => {
+                location.reload();
             });
         }
         verify_token();

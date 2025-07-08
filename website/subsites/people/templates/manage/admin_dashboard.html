@@ -1,0 +1,66 @@
+{% extends "people/base.html" %}
+
+{% block title %}Verwaltung{% endblock %}
+
+{% set role_access = user.has_permissions(['view_roles', 'manage_roles']) %}
+{% set manage_roles = user.has_permissions(['manage_roles']) %}
+
+{% set perm_access = user.has_permissions(['view_permissions', 'manage_permissions']) %}
+{% set manage_perms = user.has_permissions(['manage_permissions']) %}
+
+{% set user_access = user.has_permissions(['view_users', 'manage_users']) %}
+{% set manage_users = user.has_permissions(['manage_users']) %}
+
+{% set application_access = user.has_permissions(['view_applications', 'manage_applications']) %}
+{% set manage_applications = user.has_permissions(['manage_applications']) %}
+
+{% set user_access = user.has_permissions(['view_users', 'manage_users']) %}
+{% set manage_users = user.has_permissions(['manage_users']) %}
+
+{% set report_access = user.has_permissions(['view_reports', 'manage_reports', 'moderate_content']) %}
+{% set manage_reports = user.has_permissions(['manage_reports']) %}
+{% set moderate_content = user.has_permissions(['moderate_content']) %}
+
+{% set request_access = user.has_permissions(['view_requests', 'manage_requests']) %}
+{% set manage_requests = user.has_permissions(['manage_requests']) %}
+
+{% set book_access = user.has_permissions(['view_transactions', 'manage_transactions']) %}
+{% set manage_book = user.has_permissions(['manage_transactions']) %}
+
+{% block content %}
+    <div class="window-wrapper flex-column gap-4">
+        {% if role_access %}
+            {% include roles %}
+        {% endif %}
+
+        {% if perm_access %}
+            {% include "people/manage/sections/permissions.html" %}
+        {% endif %}
+
+        {% if application_access %}
+            {% include "people/manage/sections/applications.html" %}
+        {% endif %}
+
+        {% if user_access %}
+            {% include "people/manage/sections/users.html" %}
+        {% endif %}
+
+        {% if report_access %}
+            {% include "people/manage/sections/users.html" %}
+        {% endif %}
+
+        {% if request_access %}
+            {% include "people/manage/sections/users.html" %}
+        {% endif %}
+
+        {% if book_access %}
+            {% include "people/manage/sections/users.html" %}
+        {% endif %}
+    </div>
+{% endblock %}
+
+{% block modal %}
+    {% if manage_roles %}
+        {% include "people/manage/modals/create_role.html" %}
+    {% endif %}
+{% endblock %}

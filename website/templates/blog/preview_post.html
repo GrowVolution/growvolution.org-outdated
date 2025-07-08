@@ -6,7 +6,7 @@
   <h4>{{ post.headline }}</h4>
   <small class="text-muted">{{ post.info }}</small>
   <p class="mt-2">
-    {{ post.summary }}
+    {{ post.summary | safe }}
   </p>
   <a href="/blog/{{ post.id }}" class="btn btn-outline-dark">Zum Beitrag</a>
 </div>

@@ -2,7 +2,7 @@
   <div class="card h-100 d-flex flex-column">
     <div class="card-body d-flex flex-column text-center">
       <h5 class="card-title"><b>{{ post.headline }}</b></h5>
-      <p class="card-text text-start flex-grow-1">{{ post.summary[:500] }}{{ '...' if post.summary|length > 500 else '' }}</p>
+      <p class="card-text text-start flex-grow-1">{{ post.summary[:500] | safe }}{{ '...' if post.summary|length > 500 else '' }}</p>
       <div class="mt-auto">
         <a href="/blog/{{ post.id }}" class="btn btn-outline-secondary">Zum Beitrag</a>
       </div>

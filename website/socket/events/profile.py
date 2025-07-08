@@ -171,3 +171,21 @@ def update_gender(user, data):
     user.gender = gender or None
     commit()
     emit('gender_updated', {'success': True, 'gender': user.gender})
+
+
+@register_event('set_setting')
+@require_user(True)
+def set_setting(user, data):
+    if not isinstance(data, dict) or len(data) != 1:
+        emit('setting_updated', {'success': False})
+        return
+
+    key, value = next(iter(data.items()), (None, None))
+
+    if not hasattr(user, key):
+        emit('setting_updated', {'success': False})
+        return
+
+    setattr(user, key, value)
+    commit()
+    emit('setting_updated', {'success': True})

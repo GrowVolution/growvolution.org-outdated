@@ -53,7 +53,7 @@ def init_app(db_manage: bool = False):
     DB.init_app(APP)
     BCRYPT.init_app(APP)
     MIGRATE.init_app(APP, DB)
-    init_models()
+    init_models(APP)
 
     if db_manage:
         return

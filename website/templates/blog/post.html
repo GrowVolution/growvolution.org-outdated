@@ -23,7 +23,7 @@
   <div class="window-box mx-auto mb-5 max-vw-md-75">
   <span id="id" class="d-none">{{ post.id }}</span>
       <div class="window-header">
-        <h2 id="title">{{ post.headline }}</h2>
+        <h2 id="title" class="title">{{ post.headline }}</h2>
           {% if user and user.username == post.author %}
             <input id="titleEdit" type="text" class="form-control w-100 d-none" value="{{ post.headline }}">
           {% endif %}
@@ -55,7 +55,7 @@
                     </div>
                     <div class="col-md-8 d-flex flex-column">
                       <label for="summary" class="form-label">Kurzbeschreibung</label>
-                      <textarea class="form-control h-100" id="summary" name="summary" placeholder="Worum geht es in diesem Beitrag?">{{ post.summary  }}</textarea>
+                      <textarea class="form-control h-100" id="summary" name="summary" placeholder="Worum geht es in diesem Beitrag?">{{ post.summary | safe }}</textarea>
                     </div>
                   </div>
 

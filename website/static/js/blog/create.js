@@ -38,8 +38,10 @@ function saveEntryLocal() {
 }
 
 
-document.getElementById('save').addEventListener('click', saveEntryLocal);
-
+document.getElementById('save').addEventListener('click', () => {
+    saveEntryLocal();
+    flash("Beitrag lokal gespeichert!", 'info');
+});
 
 document.getElementById('image_file').addEventListener('change', function () {
     const file = this.files[0];
@@ -96,7 +98,7 @@ document.getElementById('submit').addEventListener('click', function () {
 
     const formData = new FormData();
     formData.append('title', title);
-    formData.append('summary', summary);
+    formData.append('summary', summary.replace(/\n/g, '<br>'));
     formData.append('content', contentHtml);
 
     if (fileInput.files.length > 0) {
@@ -147,4 +149,7 @@ document.getElementById('submit').addEventListener('click', function () {
     xhr.send(formData);
 });
 
-setInterval(saveEntryLocal, 5000);
+setInterval(() => {
+    saveEntryLocal();
+    flash("Beitrag automatisch lokal zwischengespeichert!", 'info');
+}, 600000);

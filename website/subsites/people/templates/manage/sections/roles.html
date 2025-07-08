@@ -1,0 +1,26 @@
+{% extends "people/manage/sections/base.html" %}
+
+{% block title %}🎭 Rollenverwaltung{% endblock %}
+
+{% block content %}
+    <h5 class="fw-bold">Primärrollen</h5>
+    {% if manage_roles %}
+        <button id="primary-create" type="button" class="btn btn-outline-success mb-2 w-100 text-center">➕ Rolle erstellen</button>
+    {% endif %}
+    <div class="mb-4">
+        <div class="mb-2 input-group">
+            <span class="input-group-text"><i class="bi bi-search"></i></span>
+            <input class="form-control" placeholder="Rolle suchen..." id="primary-search">
+        </div>
+    </div>
+    <h5 class="fw-bold">Sekundärrollen</h5>
+    {% if manage_roles %}
+        <button id="secondary-create" type="button" class="btn btn-outline-success mb-2 w-100 text-center">➕ Rolle erstellen</button>
+    {% endif %}
+    <div class="mb-4">
+        <div class="mb-2 input-group">
+            <span class="input-group-text"><i class="bi bi-search"></i></span>
+            <input class="form-control" placeholder="Rolle suchen..." id="secondary-search">
+        </div>
+    </div>
+{% endblock %}
