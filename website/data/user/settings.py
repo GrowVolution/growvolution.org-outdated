@@ -1,4 +1,4 @@
-from .. import DB, commit
+from shared.data import DB, commit
 from website.utils import fernet_encrypted, fernet_decrypted
 from cryptography.fernet import InvalidToken
 import string, random, pyotp

@@ -1,9 +1,16 @@
+from website import DEBUG
 from flask import render_template
 
 
 def render(template: str, **kwargs) -> str:
     current_template = template.removesuffix('.html')
-    return render_template(f"people/{template}", template=current_template, **kwargs)
+
+    context = {}
+    if DEBUG:
+        from .processing import context_processor
+        context = context_processor()
+
+    return render_template(f"people/{template}", template=current_template, **context, **kwargs)
 
 
 def render_404():

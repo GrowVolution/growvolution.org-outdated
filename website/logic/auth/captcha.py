@@ -2,7 +2,7 @@ from . import captcha_status, token_response
 from website.utils.rendering import render
 from google.cloud.recaptchaenterprise_v1 import RecaptchaEnterpriseServiceClient, Event, Assessment, CreateAssessmentRequest
 from flask import request, Response
-from debugger import log
+from shared.debugger import log
 import os
 
 PROJECT_ID = os.getenv('GOOGLE_PROJECT_ID')

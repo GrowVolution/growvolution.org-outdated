@@ -1,4 +1,6 @@
-from . import DB, cloudinary, commit, user as udb
+from . import cloudinary
+from .user import User
+from shared.data import DB, commit
 from sqlalchemy.ext.hybrid import hybrid_property
 
 
@@ -23,7 +25,7 @@ class Blog(DB.Model):
 
     @hybrid_property
     def info(self) -> str:
-        user = udb.User.query.filter_by(username=self.author).first()
+        user = User.query.filter_by(username=self.author).first()
         author = f"{user.first_name} {user.last_name if not user.hide_last_name else ''}".strip()
         timestamp = self.timestamp.strftime("%d.%m.%Y %H:%M")
         edited = ' (bearbeitet)' if self.edited else ''

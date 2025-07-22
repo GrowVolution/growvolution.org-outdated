@@ -1,48 +1,20 @@
-from dotenv import load_dotenv
-load_dotenv()
-
-from db_manage import app
-from website.data import add_model, delete_model
+from db_main import app
+from shared.data import add_model, delete_model
 from website.data.dev import DevToken
+import sys
 
 
-def print_main_menu():
-    print("1 - create a new token")
-    print("2 - delete a token")
-    print("3 - list all tokens")
-    print("4 - exit\n")
-
-
-def print_time_valid_menu():
-    print("How long should the token be valid?\n")
-
-    print("\t1 - 5 days")
-    print("\t2 - 15 days")
-    print("\t3 - 30 days (default)")
-    print("\t4 - 60 days")
-    print("\t5 - 90 days")
-    print("\t6 - 180 days")
-    print("\t7 - 365 days")
-
-
-def create_token():
-    name = input("Enter a unique name: ")
-
+def create_token(name: str, valid_opt: str):
     token = DevToken.query.filter_by(name=name).first()
     if token:
         print(f"Token with name '{name}' already exists.")
         return
 
-    print_time_valid_menu()
-    choice = input("\t> ")
-
     choices = {
         "1": 5, "2": 15, "3": 30, "4": 60,
         "5": 90, "6": 180, "7": 365
     }
-    days = choices.get(choice, 30)
-
-    print('Creating token...')
+    days = choices.get(valid_opt, 30)
 
     token = DevToken(name, days)
     add_model(token)
@@ -51,9 +23,7 @@ def create_token():
     print(f"Token: {token.token}")
 
 
-def delete_token():
-    name = input("Enter the name of the token to delete: ")
-
+def delete_token(name: str):
     token = DevToken.query.filter_by(name=name).first()
     if not token:
         print(f"Token with name '{name}' not found.")
@@ -63,7 +33,7 @@ def delete_token():
     print(f"Token '{name}' deleted successfully.")
 
 
-def print_all_tokens():
+def get_all_tokens():
     tokens = DevToken.query.all()
 
     if not tokens:
@@ -71,37 +41,40 @@ def print_all_tokens():
         return
 
     for token in tokens:
-        print(f"Name: {token.name}, Token: {token.token}, "
-              f"Created: {token.timestamp.strftime('%d.%m.%Y %H:%M')}, "
+        print(f"Name: {token.name}, Created: {token.timestamp.strftime('%d.%m.%Y %H:%M')}, "
               f"Valid for: {token.days_valid} days")
 
 
+def _exec(args):
+    match args[0]:
+        case "create_token":
+            if len(args) < 3:
+                print("Invalid args")
+                return
+            create_token(args[1], args[2])
+
+        case "delete_token":
+            if len(args) < 2:
+                print("Invalid args")
+                return
+            delete_token(args[1])
+
+        case "list_tokens":
+            get_all_tokens()
+
+        case _:
+            print("Invalid command")
+
+
 def main():
-    print("\n\nGrowVolution 2025 - GNU General Public License")
-    print("Dev Token Management: Enter the number of the action you want to perform.\n")
-    print_main_menu()
+    args = sys.argv[1:]
+    if len(args) < 1:
+        print("Invalid args")
+        return
 
-    while True:
-        cmd = input("> ")
-
-        if cmd == "1":
-            create_token()
-
-        elif cmd == "2":
-            delete_token()
-
-        elif cmd == "3":
-            print_all_tokens()
-
-        elif cmd == "4":
-            print("\nThank you for playing the game of life, bye!")
-            break
-
-        else:
-            print("Invalid option! You can just:\n")
-            print_main_menu()
+    with app.app_context():
+        _exec(args)
 
 
 if __name__ == "__main__":
-    with app.app_context():
-        main()
+    main()

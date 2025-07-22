@@ -1,4 +1,5 @@
-from .. import DB, BCRYPT, cloudinary
+from .. import cloudinary
+from shared.data import DB, BCRYPT
 from sqlalchemy.ext.hybrid import hybrid_property
 from datetime import datetime
 

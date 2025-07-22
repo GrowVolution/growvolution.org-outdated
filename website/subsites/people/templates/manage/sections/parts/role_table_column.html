@@ -1,0 +1,7 @@
+<tr id="{{ role.id }}">
+    <td>{{ role.name }}</td>
+    <td>{{ spheres }}</td>
+    <td>{{ role.permission.name }}</td>
+    <td><button class="text-hover-primary edit-role" {% if not can_manage %}disabled{% endif %}><i class="bi bi-pencil-square"></i></button></td>
+    <td><button class="text-hover-danger delete-role" {% if not can_manage or block_delete %}disabled{% endif %}><i class="bi bi-trash3"></i></button></td>
+</tr>

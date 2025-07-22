@@ -1,4 +1,12 @@
 from ..routing import routes
+from ..logic.auth import get_user
+
+
+@routes.context_processor
+def context_processor():
+    return dict(
+        user=get_user()
+    )
 
 
 @routes.before_request

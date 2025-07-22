@@ -8,7 +8,7 @@ from markupsafe import Markup
 
 def render_comment(comment: Comment, user: User, render_index: int = 1) -> str:
     return render('comments/comment.html', comment=comment, render_index=render_index,
-                  is_author=comment.author == user, reaction_type=comment.get_user_reaction(user.id))
+                  is_author=comment.author == user, reaction_type=comment.get_user_reaction(user.id) if user else None)
 
 
 def get_comments_html(post: Blog) -> Markup:

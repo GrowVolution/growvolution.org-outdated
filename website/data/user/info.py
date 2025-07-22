@@ -1,4 +1,4 @@
-from .. import DB
+from shared.data import DB
 from website.utils import normalize_phone
 from typing import Optional
 from sqlalchemy.ext.hybrid import hybrid_property

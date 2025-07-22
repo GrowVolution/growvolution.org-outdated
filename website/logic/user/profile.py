@@ -1,6 +1,6 @@
 from website.utils.rendering import render, render_404
 from website.utils.cache import request_entry_data, pop_entry, add_entry
-from website.data import commit
+from shared.data import commit
 from flask import jsonify
 import pyotp, base64, qrcode, io
 

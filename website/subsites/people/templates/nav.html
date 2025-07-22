@@ -12,6 +12,9 @@
     <div class="collapse navbar-collapse" id="navbarMain">
       <div class="navbar-nav ms-auto">
         <a class="nav-link {% if request.path == '/news' %}active{% endif %}" href="/news">News</a>
+        {% if user and user.has_manage_permissions %}
+            <a class="nav-link {% if request.path == '/manage' %}active{% endif %}" href="/manage">Verwaltung</a>
+        {% endif %}
         <div class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" id="menuDropdown" role="button" data-bs-toggle="dropdown"
              aria-expanded="false">Account</a>

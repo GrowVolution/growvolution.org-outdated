@@ -1,9 +1,10 @@
 from website.utils.rendering import render, render_404
 from website.utils.llm_api import correct_text
 from website.utils import normalize_timestamp
-from website.data import commit, add_model, journey as journey_db, user as udb
+from website.data import journey as journey_db, user as udb
 from website.socket.messages import send_message
 from website.jobs import register_job, queue_job
+from shared.data import commit, add_model
 from datetime import datetime
 from flask import request, redirect
 from typing import Tuple

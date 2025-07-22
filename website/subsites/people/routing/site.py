@@ -1,7 +1,7 @@
 from ..utils.rendering import render, render_404
 from flask import Blueprint
 
-site = Blueprint('people_site', __name__)
+site = Blueprint('site', __name__)
 
 
 @site.route('/')

@@ -1,9 +1,9 @@
 from .. import SOCKET, socket_flash, emit
 from website import REDIS
 from website.logic.auth import get_user
-from typing import Callable, TYPE_CHECKING
+from typing import TYPE_CHECKING
 from flask import request
-from debugger import log
+from shared.debugger import log
 
 if TYPE_CHECKING:
     from website.data.user import User
@@ -11,7 +11,7 @@ if TYPE_CHECKING:
 HANDLERS = {}
 
 
-def register_event(name: str) -> Callable:
+def register_event(name: str) -> callable:
     def decorator(handler):
         HANDLERS[name] = handler
         return handler

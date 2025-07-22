@@ -1,4 +1,4 @@
-from .. import DB, commit
+from shared.data import DB, commit
 from .base import UserBase
 from .info import UserInfo
 from .settings import UserSettings

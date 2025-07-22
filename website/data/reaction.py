@@ -1,4 +1,4 @@
-from . import DB
+from shared.data import DB
 
 
 class Reaction(DB.Model):

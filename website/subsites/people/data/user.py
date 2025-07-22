@@ -1,6 +1,7 @@
-from website.data import DB, BCRYPT, add_model, commit
+from shared.data import DB, BCRYPT, add_model, commit
 from website.utils import fernet_encrypted, fernet_decrypted
 from cryptography.fernet import InvalidToken
+from sqlalchemy.ext.hybrid import hybrid_property
 import random, string, pyotp
 
 USER_TYPES = DB.Table(
@@ -8,6 +9,13 @@ USER_TYPES = DB.Table(
     DB.Column('uid', DB.Integer, DB.ForeignKey('people_accounts.id'), primary_key=True),
     DB.Column('tid', DB.Integer, DB.ForeignKey('people_account_type.id'), primary_key=True)
 )
+
+TYPE_MAP = {
+    'association': 'Verein',
+    'company': 'Firma',
+    'bank': 'Bank',
+    'external': 'Extern'
+}
 
 
 class PeopleUser(DB.Model):
@@ -35,6 +43,10 @@ class PeopleUser(DB.Model):
         self.email = email
         self.phone = phone if phone and phone.strip() else None
         self.psw_hash = BCRYPT.generate_password_hash(password).decode('utf-8')
+
+    @hybrid_property
+    def has_manage_permissions(self) -> bool:
+        return any(role.permission.can_manage for role in self.primary_roles + self.secondary_roles)
 
     def check_password(self, password: str) -> bool:
         return BCRYPT.check_password_hash(self.psw_hash, password)
@@ -112,8 +124,12 @@ class UserType(DB.Model):
     def __init__(self, name: str):
         self.name = name
 
+    @hybrid_property
+    def type_name(self) -> str:
+        return TYPE_MAP.get(self.name, self.name)
 
-def init_types():
+
+def init_defaults():
     default_types = [
         'association',
         'company',

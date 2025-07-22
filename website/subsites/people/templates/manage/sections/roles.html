@@ -12,7 +12,22 @@
             <span class="input-group-text"><i class="bi bi-search"></i></span>
             <input class="form-control" placeholder="Rolle suchen..." id="primary-search">
         </div>
+        <table class="window-table">
+            <thead>
+                <tr>
+                    <th>Rolle</th>
+                    <th>Sphären</th>
+                    <th>Berechtigung</th>
+                    <th>Bearbeiten</th>
+                    <th>Löschen</th>
+                </tr>
+            </thead>
+            <tbody id="primary-role-table">
+                {{ primary_roles }}
+            </tbody>
+        </table>
     </div>
+
     <h5 class="fw-bold">Sekundärrollen</h5>
     {% if manage_roles %}
         <button id="secondary-create" type="button" class="btn btn-outline-success mb-2 w-100 text-center">➕ Rolle erstellen</button>
@@ -22,5 +37,19 @@
             <span class="input-group-text"><i class="bi bi-search"></i></span>
             <input class="form-control" placeholder="Rolle suchen..." id="secondary-search">
         </div>
+        <table class="window-table">
+            <thead>
+            <tr>
+                <th>Rolle</th>
+                <th>Sphäre</th>
+                <th>Berechtigung</th>
+                <th>Bearbeiten</th>
+                <th>Löschen</th>
+            </tr>
+            </thead>
+            <tbody id="secondary-role-table">
+                {{ secondary_roles }}
+            </tbody>
+        </table>
     </div>
 {% endblock %}

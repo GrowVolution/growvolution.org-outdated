@@ -1,9 +1,8 @@
-from typing import Callable
 
 HANDLERS = {}
 
 
-def register_event(name: str) -> Callable:
+def register_event(name: str) -> callable:
     def decorator(handler):
         HANDLERS[name] = handler
         return handler

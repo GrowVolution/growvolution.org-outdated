@@ -1,0 +1,15 @@
+{% extends "people/base.html" %}
+
+{% block content %}
+    <div class="window-wrapper">
+        <div class="window-box" style="padding: 0 !important; width: 100%; max-width: 400px;">
+            <div class="window-header">
+                <img src="/static/img/logo1.png" alt="GrowV Colorful Logo">
+                <h2 class="title">{% block form_title %}{% endblock %}</h2>
+            </div>
+            <form id="authForm" method="POST" class="window-content">
+                {% block form %}{% endblock %}
+            </form>
+        </div>
+    </div>
+{% endblock %}

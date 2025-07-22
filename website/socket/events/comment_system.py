@@ -1,8 +1,9 @@
 from . import register_event, require_user
 from .. import emit_html, socket_flash
-from website.data import blog as blog_db, add_model, delete_model, commit
+from website.data import blog as blog_db
 from website.data.comment_system import comment as comment_db, reply as reply_db
 from website.logic.comments import comment as comment_logic, reply as reply_logic
+from shared.data import add_model, delete_model, commit
 
 
 @register_event('add_comment')

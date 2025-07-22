@@ -1,4 +1,4 @@
-from .. import DB
+from shared.data import DB
 from ..reaction import Reaction
 from sqlalchemy.ext.hybrid import hybrid_property
 

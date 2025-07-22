@@ -8,7 +8,7 @@ from markupsafe import Markup
 
 def render_reply(reply: Reply, user: User, render_index: int = 0) -> str:
     return render('comments/reply.html', reply=reply, first_reply=render_index == 1,
-                  liked=reply.get_user_reaction(user.id), is_author=reply.author == user)
+                  is_author=reply.author == user, reaction_type=reply.get_user_reaction(user.id) if user else None)
 
 
 def get_replies_html(comment: Comment) -> Markup:

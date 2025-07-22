@@ -16,7 +16,7 @@ body, html {
 }
 
 main {
-  min-height: 60dvh;
+  min-height: 80dvh;
   max-width: 100dvw !important;
 }
 
@@ -131,7 +131,7 @@ footer a:hover {
 /* Base Window */
 .window-wrapper {
   display: flex;
-  min-height: 60vh;
+  min-height: 80vh;
   align-items: center;
   justify-content: center;
   padding: 2rem 1.5rem;
@@ -173,6 +173,36 @@ footer a:hover {
 
 .window-content {
   padding: 1rem 2rem;
+}
+
+/* Window Table */
+.window-table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: #ffffff;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.window-table thead {
+  background-color: #f2f2f2;
+}
+
+.window-table th,
+.window-table td {
+  padding: 0.75rem 1rem;
+  text-align: center;
+  font-weight: normal;
+  color: #212529;
+}
+
+.window-table th {
+  font-weight: 600;
+}
+
+.window-table th:first-child,
+.window-table td:first-child {
+  text-align: left;
 }
 
 /* Blog Styles */

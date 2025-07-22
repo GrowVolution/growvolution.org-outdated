@@ -1,5 +1,5 @@
 from . import BaseModel
-from .. import DB
+from shared.data import DB
 from sqlalchemy.ext.hybrid import hybrid_property
 from typing import TYPE_CHECKING, Optional
 

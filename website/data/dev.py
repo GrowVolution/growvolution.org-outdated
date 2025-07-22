@@ -1,5 +1,5 @@
-from . import DB, delete_model
 from website import APP
+from shared.data import DB, delete_model
 from sqlalchemy.ext.hybrid import hybrid_property
 from datetime import datetime, timedelta
 import secrets

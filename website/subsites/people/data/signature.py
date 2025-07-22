@@ -1,4 +1,4 @@
-from website.data import DB
+from shared.data import DB
 
 
 class Signature(DB.Model):

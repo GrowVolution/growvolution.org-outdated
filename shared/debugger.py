@@ -12,7 +12,7 @@ def get_time() -> str:
 
 
 def log(category: str, message: str):
-    log_str = f"[{get_time()}] [FLASK]   [{category.upper()}] {message}"
+    log_str = f"[{get_time()}] [FLASK]  [{category.upper()}] {message}"
     print(log_str)
 
 

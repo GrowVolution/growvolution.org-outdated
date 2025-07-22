@@ -1,5 +1,5 @@
 from website.utils.rendering import render
-from website.data import commit
+from shared.data import commit
 from flask import request
 from datetime import datetime
 

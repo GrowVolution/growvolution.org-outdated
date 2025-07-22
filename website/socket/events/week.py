@@ -1,6 +1,6 @@
 from . import register_event, require_user
 from .. import emit
-from website.data import commit
+from shared.data import commit
 import json
 
 @register_event('request_weekplan')

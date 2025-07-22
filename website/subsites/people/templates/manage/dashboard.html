@@ -30,7 +30,7 @@
 {% block content %}
     <div class="window-wrapper flex-column gap-4">
         {% if role_access %}
-            {% include roles %}
+            {% include "people/manage/sections/roles.html" %}
         {% endif %}
 
         {% if perm_access %}
@@ -46,15 +46,15 @@
         {% endif %}
 
         {% if report_access %}
-            {% include "people/manage/sections/users.html" %}
+            {% include "people/manage/sections/reports.html" %}
         {% endif %}
 
         {% if request_access %}
-            {% include "people/manage/sections/users.html" %}
+            {% include "people/manage/sections/requests.html" %}
         {% endif %}
 
         {% if book_access %}
-            {% include "people/manage/sections/users.html" %}
+            {% include "people/manage/sections/bookkeeping.html" %}
         {% endif %}
     </div>
 {% endblock %}
@@ -62,5 +62,11 @@
 {% block modal %}
     {% if manage_roles %}
         {% include "people/manage/modals/create_role.html" %}
+    {% endif %}
+{% endblock %}
+
+{% block script_afterDOM %}
+	{% if role_access %}
+        <script type="module" src="/static/people/js/manage/roles.js"></script>
     {% endif %}
 {% endblock %}

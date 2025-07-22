@@ -1,4 +1,4 @@
-from website.data import commit
+from shared.data import commit
 from website.socket.messages import send_message
 from website.utils.rendering import render
 from flask import request, flash, redirect

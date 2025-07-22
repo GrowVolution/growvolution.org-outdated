@@ -1,12 +1,11 @@
 from website import REDIS
 from website.logic.auth import get_user
-from typing import Callable
-from debugger import log
+from shared.debugger import log
 
 MESSAGES = {}
 
 
-def register_message(name: str, templates: str | list[str] | None = None) -> Callable:
+def register_message(name: str, templates: str | list[str] | None = None) -> callable:
     def decorator(handler):
         def wrapper(data):
             user = get_user()

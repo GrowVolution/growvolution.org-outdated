@@ -73,7 +73,7 @@ Path(".env").write_text(env_content, encoding="utf-8")
 
 load_dotenv()
 db_env = os.environ.copy()
-db_env['FLASK_APP'] = 'db_manage.py'
+db_env['FLASK_APP'] = 'db_main.py'
 subprocess.run(["flask", "db", "init"], env=db_env)
 subprocess.run(["flask", "db", "migrate", "-m", "Initial Migration"], env=db_env)
 subprocess.run(["flask", "db", "upgrade"], env=db_env)

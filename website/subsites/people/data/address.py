@@ -1,4 +1,4 @@
-from website.data import DB
+from shared.data import DB
 from sqlalchemy.ext.hybrid import hybrid_property
 
 

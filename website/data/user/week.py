@@ -1,4 +1,4 @@
-from .. import DB
+from shared.data import DB
 from website.utils import parse_time_str
 from sqlalchemy.ext.hybrid import hybrid_property
 from datetime import datetime, timedelta

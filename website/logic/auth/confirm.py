@@ -1,7 +1,7 @@
 from website.utils.rendering import render, render_404
 from website.utils.cache import request_entry_data, pop_entry
-from website.data import add_model
 from website.data.user import User
+from shared.data import add_model
 
 
 def confirm_notice(code: str) -> str:

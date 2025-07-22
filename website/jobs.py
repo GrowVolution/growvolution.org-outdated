@@ -4,7 +4,7 @@ from .data.user import update_user_scores
 from .data.dev import update_database
 from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.triggers.cron import CronTrigger
-from debugger import log
+from shared.debugger import log
 import json, importlib
 
 SCHEDULER = BackgroundScheduler()

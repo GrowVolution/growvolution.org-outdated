@@ -1,10 +1,13 @@
+from shared.debugger import log, start_session
 from flask import Flask
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
 from werkzeug.middleware.proxy_fix import ProxyFix
 from urllib.parse import urlparse
 from jinja2 import ChoiceLoader, PrefixLoader, FileSystemLoader
-import warnings, os, redis
+from root_dir import ROOT_PATH
+from types import FrameType
+import warnings, os, redis, signal
 
 warnings.filterwarnings("ignore", message="Using the in-memory storage for tracking rate limits")
 
@@ -35,10 +38,17 @@ REDIS = redis.Redis(
 DEBUG = False
 
 
+def _on_shutdown(signum: int, frame: FrameType | None):
+    log('info', f"""Handling signal {
+        'SIGTERM' if signum == signal.SIGTERM else 'SIGINT'
+    }, shutting down...""")
+
+    from .socket import SOCKET
+    SOCKET.stop()
+
+
 def init_app(db_manage: bool = False):
     global DEBUG
-
-    APP.config['EXEC_MODE'] = os.getenv("EXEC_MODE")
     DEBUG = os.getenv("INSTANCE") == 'debug'
 
     APP.config['NRS_PASSWORD'] = os.getenv("NRS_PASSWORD")
@@ -48,7 +58,8 @@ def init_app(db_manage: bool = False):
     APP.config['SQLALCHEMY_DATABASE_URI'] = os.getenv("DB_URI")
     APP.config['RATELIMIT_STORAGE_URL'] = os.getenv("REDIS_URI")
 
-    from .data import DB, BCRYPT, MIGRATE, init_models
+    from shared.data import DB, BCRYPT, MIGRATE
+    from .data import init_models
 
     DB.init_app(APP)
     BCRYPT.init_app(APP)
@@ -59,6 +70,9 @@ def init_app(db_manage: bool = False):
         return
 
     LIMITER.init_app(APP)
+    os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = str(
+        ROOT_PATH / 'website' / 'auth' / 'google-service-key.json'
+    )
 
     import website.utils.processing
     from .routing import register_blueprints
@@ -68,10 +82,9 @@ def init_app(db_manage: bool = False):
     SOCKET.init_app(APP)
     init_socket()
 
-    from debugger import start_session
     start_session()
 
-    from .utils.mail_service import start
+    from shared.mail_service import start
     start(APP)
 
     from .subsites import init_subsites
@@ -79,3 +92,6 @@ def init_app(db_manage: bool = False):
 
     from .easteregg import init_easteregg
     init_easteregg(APP)
+
+    signal.signal(signal.SIGINT, _on_shutdown)
+    signal.signal(signal.SIGTERM, _on_shutdown)

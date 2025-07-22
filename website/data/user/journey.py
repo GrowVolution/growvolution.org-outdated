@@ -1,4 +1,4 @@
-from .. import DB
+from shared.data import DB
 from website.utils import normalize_timestamp
 from website.utils.llm_api import correct_text
 from sqlalchemy.ext.hybrid import hybrid_property

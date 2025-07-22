@@ -1,6 +1,5 @@
 from flask import abort, flash, Response, redirect, Blueprint
 from functools import wraps
-from typing import Callable
 
 
 class Methods:
@@ -38,12 +37,17 @@ def back_to_login() -> Response:
     return redirect('/login')
 
 
-def _not_logged_in():
+def not_logged_in():
     flash("Du bist nicht eingeloggt.", 'warning')
     return back_to_login()
 
 
-def require_user(strict: bool) -> Callable:
+def not_allowed():
+    flash("Hierzu bist du nicht berechtigt!", 'danger')
+    return back_home()
+
+
+def require_user(strict: bool, inject_user: bool = True) -> callable:
     def decorator(fn):
         @wraps(fn)
         def wrapper(*args, **kwargs):
@@ -52,54 +56,52 @@ def require_user(strict: bool) -> Callable:
             if not user and strict:
                 return abort(401)
             elif not user:
-                return _not_logged_in()
+                return not_logged_in()
 
-            return fn(user, *args, **kwargs)
+            return fn(user, *args, **kwargs) if inject_user else fn(*args, **kwargs)
 
         return wrapper
     return decorator
 
 
-def require_admin(strict: bool) -> Callable:
+def require_admin(strict: bool, inject_user: bool = False) -> callable:
     def decorator(fn):
         @wraps(fn)
         def wrapper(*args, **kwargs):
             from website.logic.auth import get_user
             user = get_user()
             if not user:
-                return _not_logged_in()
+                return not_logged_in()
 
             admin = user.role == 'admin'
             if not admin and strict:
                 return abort(401)
             elif not admin:
-                flash("Hierzu bist du nicht berechtigt!", 'danger')
-                return back_home()
+                return not_allowed()
 
-            return fn(*args, **kwargs)
+            return fn(user, *args, **kwargs) if inject_user else fn(*args, **kwargs)
 
         return wrapper
     return decorator
 
 
-def require_role(role: str, strict: bool) -> Callable:
+def require_role(role: str, strict: bool, inject_user: bool = False) -> callable:
     def decorator(fn):
         @wraps(fn)
         def wrapper(*args, **kwargs):
             from website.logic.auth import get_user
             user = get_user()
             if not user:
-                return _not_logged_in()
+                return not_logged_in()
 
             active_role = user.role
             denied = not active_role or active_role != role
             if denied and strict:
                 return abort(401)
             elif denied:
-                flash("Hierzu bist du nicht berechtigt!", 'danger')
-                return back_home()
+                return not_allowed()
 
-            return fn(*args, **kwargs)
+            return fn(user, *args, **kwargs) if inject_user else fn(*args, **kwargs)
 
         return wrapper
     return decorator

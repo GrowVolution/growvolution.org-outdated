@@ -1,4 +1,4 @@
-from . import DB
+from shared.data import DB
 from website.utils import normalize_timestamp
 from datetime import datetime
 

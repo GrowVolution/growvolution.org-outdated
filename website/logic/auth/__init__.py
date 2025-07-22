@@ -60,7 +60,7 @@ def verify_token_ownership(name: str = 'token') -> Response | None:
     return None
 
 
-def _decoded_token(token) -> Any | None:
+def decoded_token(token) -> Any | None:
     try:
         return jwt.decode(token, key=APP.config['SECRET_KEY'], algorithms=['HS256'])
     except jwt.ExpiredSignatureError:
@@ -72,31 +72,31 @@ def _decoded_token(token) -> Any | None:
 
 
 def captcha_status() -> str:
-    decoded_token = _decoded_token(request.cookies.get('captcha_token'))
-    return decoded_token.get('status') if decoded_token else 'unverified'
+    decoded = decoded_token(request.cookies.get('captcha_token'))
+    return decoded.get('status') if decoded else 'unverified'
 
 
 def twofa_status() -> bool:
-    decoded_token = _decoded_token(request.cookies.get('token'))
-    return decoded_token.get('twofa_confirmed') if decoded_token else None
+    decoded = decoded_token(request.cookies.get('token'))
+    return decoded.get('twofa_confirmed') if decoded else None
 
 
 def token_owner_hash(name: str = 'token') -> str | None:
-    decoded_token = _decoded_token(request.cookies.get(name))
-    return decoded_token.get('fingerprint') if decoded_token else None
+    decoded = decoded_token(request.cookies.get(name))
+    return decoded.get('fingerprint') if decoded else None
 
 
 def get_user() -> User | None:
-    decoded_token = _decoded_token(request.cookies.get('token'))
-    return User.query.get(decoded_token['id']) if decoded_token else None
+    decoded = decoded_token(request.cookies.get('token'))
+    return User.query.get(decoded['id']) if decoded else None
 
 
 def is_dev() -> bool:
-    decoded = _decoded_token(request.cookies.get('dev_token'))
+    decoded = decoded_token(request.cookies.get('dev_token'))
     token = DevToken.query.get(decoded.get('id')) if decoded else None
     return token and token.valid
 
 
 def authenticated_user_request() -> bool:
-    decoded_token = _decoded_token(request.cookies.get('token'))
-    return decoded_token is not None
+    decoded = decoded_token(request.cookies.get('token'))
+    return decoded is not None

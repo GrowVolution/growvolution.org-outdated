@@ -1,4 +1,3 @@
-from . import random_code
 from .. import APP, DEBUG
 from ..socket import SOCKET
 from ..socket.events import no_handler
@@ -7,10 +6,11 @@ from ..logic.auth import (captcha_status, verify_token_ownership, is_dev,
                           authenticated_user_request, get_user)
 from ..logic.auth.captcha import handle_request as captcha
 from ..logic.auth.twofa import handle_2fa
-from ..data import commit
 from ..routing import back_home, routes
+from shared.data import commit
 from flask import request, abort, render_template, session, send_from_directory, redirect, make_response
-from debugger import log
+from shared.debugger import log
+from shared.utils import random_code
 import sys, traceback, os
 
 
@@ -70,15 +70,6 @@ def before_request():
     if response:
         return response
 
-    safe_path = path.startswith('/socket.io')
-    response = handle_2fa() if not safe_path else None
-    if response:
-        return response
-
-    if authenticated_user_request() and not session.get("token_owner"):
-        return render_template('auth/verify_token_ownership.html',
-                               flag='verify_token')
-
     if is_dev() and not request.cookies.get('dev_token_owner'):
         host = request.host
         origin = f"https://{host}{path}" if not host.startswith('growvolution') else ''
@@ -110,6 +101,19 @@ def before_request():
         return process_debug()
 
 
+@routes.before_request
+def before_route_request():
+    path = request.path
+    safe_path = path.startswith('/socket.io')
+    response = handle_2fa() if not safe_path else None
+    if response:
+        return response
+
+    if authenticated_user_request() and not session.get("token_owner"):
+        return render_template('auth/verify_token_ownership.html',
+                               flag='verify_token')
+
+
 @routes.after_request
 def after_request(response):
     user = get_user()
@@ -135,7 +139,7 @@ def handle_exception(error):
 
 
 @SOCKET.on('default_event')
-def event_handler(data: dict | str | None):
+def event_handler(data: dict):
     event = data['event']
     payload = data.get('payload')
     log('request', f"Socket event: {event} - With data: {payload}")

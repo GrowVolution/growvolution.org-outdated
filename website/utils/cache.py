@@ -1,4 +1,4 @@
-from . import random_code
+from shared.utils import random_code
 from datetime import datetime, timedelta
 from typing import Any
 

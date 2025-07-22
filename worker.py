@@ -1,6 +1,6 @@
 from website.jobs import process_queue
 from apscheduler.schedulers.blocking import BlockingScheduler
-from debugger import log
+from shared.debugger import log
 
 WORKER = BlockingScheduler()
 

@@ -52,4 +52,5 @@ def debug():
         TODO: Debug Stuff
 
     """
+    raise Exception('Bewusst ausgelöster Fehler! - Debug Token Test.')
     return back_home()

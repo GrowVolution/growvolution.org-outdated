@@ -1,6 +1,7 @@
 from website.utils.rendering import render
-from website.data import commit, journal as journal_db, add_model
+from website.data import journal as journal_db
 from website.socket.messages import send_message
+from shared.data import commit, add_model
 from flask import request, redirect
 from datetime import datetime, timedelta
 import json

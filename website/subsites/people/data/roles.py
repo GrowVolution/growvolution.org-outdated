@@ -1,4 +1,4 @@
-from website.data import DB
+from shared.data import DB
 
 PRIMARY_ROLES = DB.Table(
     'primary_roles',
@@ -36,8 +36,9 @@ class PrimaryRole(DB.Model):
     account_type = DB.relationship('UserType', secondary=PRIMARY_ROLE_TYPES, backref='primary_roles', cascade='all')
     permission = DB.relationship('PeoplePermission', back_populates='primary_roles', uselist=False, cascade='all')
 
-    def __init__(self, name: str):
+    def __init__(self, name: str, permission_id: int):
         self.name = name
+        self.permission_id = permission_id
 
 
 class SecondaryRole(DB.Model):
@@ -51,5 +52,6 @@ class SecondaryRole(DB.Model):
     account_type = DB.relationship('UserType', secondary=SECONDARY_ROLE_TYPES, backref='secondary_roles', cascade='all')
     permission = DB.relationship('PeoplePermission', back_populates='secondary_roles', uselist=False, cascade='all')
 
-    def __init__(self, name: str):
+    def __init__(self, name: str, permission_id: int):
         self.name = name
+        self.permission_id = permission_id

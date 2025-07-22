@@ -1,0 +1,24 @@
+{% extends "people/auth/base.html" %}
+
+{% block title %}Anmelden{% endblock %}
+
+{% block form_title %}Intern anmelden{% endblock %}
+
+{% block form %}
+    <div class="mb-3 input-group">
+        <span class="input-group-text"><i class="bi bi-envelope-fill"></i></span>
+        <input type="email" class="form-control" placeholder="E-Mail" name="email" value="{{ email }}" required>
+    </div>
+    <div class="mb-2 input-group">
+        <span class="input-group-text"><i class="bi bi-lock-fill"></i></span>
+        <input type="password" class="form-control" placeholder="Passwort" name="password" required>
+    </div>
+
+    <div class="d-grid mb-2">
+        <button type="submit" class="btn btn-dark">Anmelden</button>
+    </div>
+
+    <div class="text-center">
+        <a id="forgot" class="small">Passwort vergessen?</a>
+    </div>
+{% endblock %}

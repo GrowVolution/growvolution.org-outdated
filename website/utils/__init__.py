@@ -3,10 +3,6 @@ from datetime import datetime, time
 import os, string, random, re
 
 
-def random_code(length: int = 6) -> str:
-    return ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(length))
-
-
 def randomize_username(username_raw: str) -> str:
     new_username = username_raw
     username_raw = username_raw.replace('_', '')

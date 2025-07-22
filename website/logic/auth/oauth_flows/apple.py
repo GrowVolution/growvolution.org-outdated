@@ -2,8 +2,9 @@ from . import start_callback
 from .. import token_response
 from ..login import notify
 from website import DEBUG
-from website.data import user as udb, add_model
+from website.data import user as udb
 from website.routing import back_to_login
+from shared.data import add_model
 from datetime import datetime
 from flask import Response, session, redirect, flash, request
 from urllib.parse import urlencode
