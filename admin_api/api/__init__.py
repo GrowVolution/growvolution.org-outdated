@@ -48,6 +48,7 @@ def process(ident: dict, target: str, data: dict):
             if not timestamp or datetime.now(UTC) - timestamp > timedelta(minutes=1):
                 return deny("Invalid timestamp.")
 
+            data['user'] = user
             return handler(data)
 
         case 'token':

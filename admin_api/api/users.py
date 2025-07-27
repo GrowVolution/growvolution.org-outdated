@@ -1,5 +1,6 @@
 from . import API
 from ..data.admins import AdminToken, Admin
+from ..utils import update_debug_routing
 from shared.data import delete_model, add_model
 from cryptography.hazmat.primitives import serialization
 from cryptography.exceptions import UnsupportedAlgorithm
@@ -45,6 +46,8 @@ def create_user(data):
     user = Admin(username, token_obj.email, pub_key_str.encode())
     add_model(user)
     delete_model(token_obj)
+
+    update_debug_routing()
 
     response['success'] = True
     return response

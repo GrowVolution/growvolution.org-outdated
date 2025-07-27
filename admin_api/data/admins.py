@@ -17,6 +17,10 @@ class Admin(DB.Model):
     pub_key = DB.Column(DB.LargeBinary, nullable=False, unique=True)
     key_timestamp = DB.Column(DB.DateTime, nullable=False)
 
+    container_key = DB.Column(DB.Text, unique=True)
+    container_key_timestamp = DB.Column(DB.DateTime)
+    dev_note = DB.relationship('DevNote', back_populates='user', uselist=False)
+
     def __init__(self, name: str, email: str, pub_key: bytes):
         self.name = name
         self.email = email
@@ -42,6 +46,10 @@ class Admin(DB.Model):
         except InvalidSignature:
             return False
 
+    def update_container_key(self, container_key: str):
+        self.container_key = container_key
+        self.container_key_timestamp = datetime.now(UTC)
+
 
 @DATABASE.register('token')
 class AdminToken(DB.Model):
@@ -53,3 +61,17 @@ class AdminToken(DB.Model):
     def __init__(self, email: str):
         self.token = secrets.token_hex(32)
         self.email = email
+
+
+@DATABASE.register('dev_note')
+class DevNote(DB.Model):
+    __tablename__ = 'dev_notes'
+
+    uid = DB.Column(DB.Integer, DB.ForeignKey('admins.id'), primary_key=True)
+    note = DB.Column(DB.String(128), nullable=False)
+
+    user = DB.relationship('Admin', back_populates='dev_note', uselist=False)
+
+    def __init__(self, user: Admin, note: str):
+        self.user = user
+        self.note = note

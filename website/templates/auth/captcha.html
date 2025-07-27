@@ -32,7 +32,7 @@
         getClientFingerprintHash().then(hash => {
             grecaptcha.enterprise.ready(function () {
                 grecaptcha.enterprise.execute('{{ captcha_id }}', { action: 'verify' }).then(function (token) {
-                  fetch(window.location.href, {
+                  fetch("/captcha/verify", {
                       method: 'POST',
                       headers: { 'Content-Type': 'application/json' },
                       credentials: 'include',
@@ -53,7 +53,7 @@
     <script>
       function onCaptchaSuccess(token) {
           getClientFingerprintHash().then(hash => {
-              fetch(window.location.href, {
+              fetch("/captcha/verify", {
                   method: 'POST',
                   headers: {'Content-Type': 'application/json'},
                   credentials: 'include',

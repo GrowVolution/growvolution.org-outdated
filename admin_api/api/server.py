@@ -1,7 +1,7 @@
 from . import API
 from ..data import DATABASE
 from ..utils import get_latest_log
-from ..utils.server_control import site_online, worker_running
+from ..utils.site_control import site_online, worker_running
 import psutil
 
 _not_running = ['--- not running ---']

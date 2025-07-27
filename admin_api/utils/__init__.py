@@ -10,6 +10,16 @@ LOG_DIR.mkdir(parents=True, exist_ok=True)
 
 _prod_env = {}
 
+_backend_template = """
+    location /{name}/ {{
+        proxy_pass http://localhost:{port}/;
+        include proxy_params;
+        include upgrade_params;
+        
+        error_page 502 504 = @backend_down;
+    }}
+"""
+
 
 def get_fernet():
     key = APP.config['FERNET_KEY']
@@ -30,8 +40,8 @@ def verify_system_id(identifier: str):
     return var and var.value == identifier
 
 
-def exec_unprivileged(args: list[str], **kwargs):
-    cmd = ['sudo', '-u', 'growvolution']
+def _exec_unprivileged(args: list[str], **kwargs):
+    cmd = ['sudo', '-u', 'admin']
     env = kwargs.pop('env', None)
 
     if env:
@@ -42,8 +52,24 @@ def exec_unprivileged(args: list[str], **kwargs):
     return subprocess.Popen(cmd, shell=False, **kwargs)
 
 
-def exec_privileged(args: list[str], **kwargs):
+def _exec_privileged(args: list[str], **kwargs):
     return subprocess.Popen(args, shell=False, **kwargs)
+
+
+def execute(args: list[str], **kwargs):
+    privileged = kwargs.pop('privileged', False)
+    return_as_result = kwargs.pop('return_as_result', False)
+    if return_as_result:
+        kwargs['stdout'] = subprocess.PIPE
+        kwargs['stderr'] = subprocess.STDOUT
+
+    exec_fn = _exec_privileged if privileged else _exec_unprivileged
+    proc = exec_fn(args, **kwargs)
+    if return_as_result:
+        output = proc.communicate()[0]
+        return output, proc.returncode
+
+    return proc
 
 
 def _get_latest_file(folder):
@@ -64,13 +90,14 @@ def get_latest_log(name: str = None):
     return _tail(file) if file else None
 
 
-def _production_db_uri():
-    with open('/root/.psw/db_system.txt', 'r', encoding='utf-8') as file:
-        db_system_pw = file.read().strip()
+def _site_db_uri():
+    sandbox = APP.config['SANDBOX_MODE']
+    with open(f"/root/.psw/db_{'sandbox' if sandbox else 'system'}.txt", 'r') as file:
+        db_pw = file.read().strip()
 
-    db_user = os.getenv("DB_USER").format(password=db_system_pw)
+    db_user = os.getenv("DB_USER").format(password=db_pw)
     db_base = os.getenv("DB_BASE_URI")
-    return db_base.format(user=db_user, database='GrowVolution')
+    return db_base.format(user=db_user, database='SiteSandbox' if sandbox else 'GrowVolution')
 
 
 def load_env(reload: bool = False):
@@ -78,7 +105,31 @@ def load_env(reload: bool = False):
     if _prod_env and not reload:
         return _prod_env
 
-    env_db = DATABASE.resolve('env')
-    _prod_env = { e.key: e.value for e in env_db.query.all() }
-    _prod_env['DB_URI'] = _production_db_uri()
-    return _prod_env
+    with APP.app_context():
+        group_db = DATABASE.resolve('env_group')
+        prod_group = group_db.query.filter_by(production=True).first()
+        _prod_env = { e.key: e.value for e in prod_group.vars }
+        _prod_env['DB_URI'] = _site_db_uri()
+        return _prod_env
+
+
+def update_debug_routing():
+    with APP.app_context():
+        admin_db = DATABASE.resolve('admin')
+        admins = admin_db.query.all()
+
+    api_backends = [_backend_template.format(
+        name=user.name,
+        port=6000 + user.id
+    ) for user in admins]
+    with open('/etc/nginx/api_backends', 'w') as file:
+        file.write('\n\n'.join(api_backends))
+
+    site_backends = [_backend_template.format(
+        name=user.name,
+        port=7000 + user.id
+    ) for user in admins]
+    with open('/etc/nginx/site_backends', 'w') as file:
+        file.write('\n\n'.join(site_backends))
+
+    subprocess.run(['systemctl', 'restart', 'nginx'], check=True)

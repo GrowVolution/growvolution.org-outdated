@@ -44,7 +44,7 @@ def before_request():
     agent = request.headers.get('User-Agent')
     agent = agent if agent else 'no-agent'
 
-    log('request', f"{method} '{path:48}' from {ip:15} via ({agent}).")
+    log('request', f"{method:4} '{path:48}' from {ip:15} via ({agent}).")
 
     if path.startswith('/static'):
         filename = path.removeprefix('/static/')

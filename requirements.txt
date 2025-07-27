@@ -6,7 +6,8 @@ Flask-SocketIO
 
 gunicorn
 eventlet
-gevent
+docker
+gitpython
 
 bcrypt
 pyotp

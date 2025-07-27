@@ -2,6 +2,8 @@
 
 ```bash
 growvolution.org/
+├── admin_api/              # Package der Admin API
+    ├── ...                 # Inspiriert von website/
 ├── website/                # Package der Flask-App
     ├── data/               # Flask SQLAlchemy Daten der Seite
     ├── logic/              # Strukturierte Logik der Routes
@@ -23,10 +25,15 @@ growvolution.org/
     ├── templates/          # HTML Templates (Jinja2)
     ├── utils/              # Tools der App
     ├── ...
-├── setup.*                 # Nur zur Einrichtung des Projekts
+├── shared/                 # Geteilte Basismodule beider Apps
+    ├── ...
+├── docker/                 # Dev Container System
+    ├── ...
+├── .md/                    # Markdown Hilfen & Erklärungen
+    ├── PICTURES.md         # Auf der Seite verwendete Bilder (CC0)
+    ├── ...
 ├── requirements.txt        # Abhängigkeiten
-├── PICTURES.md             # Auf der Seite verwendete Bilder (CC0)
-├── main.py                 # 'python main.py' -> Startet die App
+├── run.sh                  # Wird von systemd geladen -> startet die Admin API
 ├── ...                             
 ```
 

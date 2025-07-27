@@ -1,20 +1,20 @@
-from . import LOG_DIR, exec_unprivileged, load_env
+from . import LOG_DIR, execute, load_env
 from main import ENV_GUNICORN, timestamp
-import subprocess, signal, sys
+import subprocess, signal, sys, os
 
 _main_proc = None
 _worker_proc = None
-
+_port = os.getenv("PORT")
+_port = _port + 1000 if _port else 5001
 
 def start_main():
     global _main_proc
     if _main_proc:
-        _main_proc.terminate()
-        _main_proc.wait()
+        stop_main()
 
     logfile = LOG_DIR / f"{timestamp()}.log"
-    _main_proc = exec_unprivileged(
-        ENV_GUNICORN + ['app:app', '-b', '127.0.0.1:5001', '-k', 'eventlet'],
+    _main_proc = execute(
+        ENV_GUNICORN + ['app:app', '-b', f'127.0.0.1:{_port}', '-k', 'eventlet'],
         env=load_env(),
         stdout=open(logfile, 'w'),
         stderr=subprocess.STDOUT
@@ -25,7 +25,6 @@ def stop_main():
     global _main_proc
     if _main_proc:
         _main_proc.terminate()
-        _main_proc.wait()
         _main_proc = None
 
 
@@ -43,7 +42,7 @@ def start_worker():
     worker_logs = LOG_DIR / "worker"
     worker_logs.mkdir(parents=True, exist_ok=True)
     log_file = worker_logs / f"{timestamp()}.log"
-    _worker_proc = exec_unprivileged(
+    _worker_proc = execute(
         [sys.executable, 'worker.py'],
         env=load_env(),
         stdout=open(log_file, 'w'),
@@ -55,7 +54,6 @@ def stop_worker():
     global _worker_proc
     if _worker_proc:
         _worker_proc.terminate()
-        _worker_proc.wait()
         _worker_proc = None
 
 

@@ -13,7 +13,7 @@ warnings.filterwarnings("ignore", message="Using the in-memory storage for track
 
 APP = Flask(__name__)
 APP.subdomain_matching = True
-APP.wsgi_app = ProxyFix(APP.wsgi_app, x_for=3, x_proto=1, x_host=1)
+APP.wsgi_app = ProxyFix(APP.wsgi_app, x_for=1, x_proto=1, x_host=1)
 LIMITER = Limiter(get_remote_address, default_limits=["500 per day", "100 per hour"])
 
 APP.jinja_loader = ChoiceLoader([
@@ -48,15 +48,7 @@ def _on_shutdown(signum: int, frame: FrameType | None):
 
 
 def init_app(db_manage: bool = False):
-    global DEBUG
-    DEBUG = os.getenv("INSTANCE") == 'debug'
-
-    APP.config['NRS_PASSWORD'] = os.getenv("NRS_PASSWORD")
-    APP.config['SERVER_NAME'] = os.getenv("SERVER_NAME")
-    APP.config['SECRET_KEY'] = os.getenv("SECRET_KEY")
-
     APP.config['SQLALCHEMY_DATABASE_URI'] = os.getenv("DB_URI")
-    APP.config['RATELIMIT_STORAGE_URL'] = os.getenv("REDIS_URI")
 
     from shared.data import DB, BCRYPT, MIGRATE
     from .data import init_models
@@ -69,7 +61,16 @@ def init_app(db_manage: bool = False):
     if db_manage:
         return
 
+    global DEBUG
+    DEBUG = os.getenv("INSTANCE") == 'debug'
+
+    APP.config['NRS_PASSWORD'] = os.getenv("NRS_PASSWORD")
+    APP.config['SERVER_NAME'] = os.getenv("SERVER_NAME")
+    APP.config['SECRET_KEY'] = os.getenv("SECRET_KEY")
+
+    APP.config['RATELIMIT_STORAGE_URL'] = os.getenv("REDIS_URI")
     LIMITER.init_app(APP)
+
     os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = str(
         ROOT_PATH / 'website' / 'auth' / 'google-service-key.json'
     )

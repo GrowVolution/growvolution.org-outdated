@@ -1,4 +1,4 @@
-from . import METHODS
+from . import METHODS, back_to_login
 from website.logic.auth import (login as login_handler, signup as signup_handler, twofa,
                                 confirm as confirm_handler, reset as reset_handler)
 from website.logic.auth.oauth_flows import google, apple, microsoft
@@ -29,6 +29,11 @@ def login_dev():
 @protected.route('/signup', methods=METHODS.ALL)
 def signup():
     return signup_handler.handle_request()
+
+
+@protected.route('/captcha/verify', methods=METHODS.POST)
+def captcha_verify():
+    return back_to_login()
 
 
 @auth.route('/notice/confirm/<code>')

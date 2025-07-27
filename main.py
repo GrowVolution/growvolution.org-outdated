@@ -9,7 +9,7 @@ _log_dir = Path(__file__).parent / 'logs' / 'admin_api'
 _log_dir.mkdir(parents=True, exist_ok=True)
 
 _host = '127.0.0.1'
-_port = 5000
+_port = os.getenv('PORT', 5000)
 
 
 def _port_in_use():

@@ -1,19 +1,15 @@
 from . import API
-from ..utils import load_env, exec_unprivileged
+from ..utils import load_env, execute
 from shared.debugger import log
-import sys, subprocess
+import sys
 
 
 def _exec(*args):
-    proc = exec_unprivileged(
+    return execute(
         [sys.executable, 'dev_tokens.py', *args],
         env=load_env(),
-        stdout=subprocess.PIPE,
-        stderr=subprocess.STDOUT
+        return_as_result=True
     )
-
-    output, _ = proc.communicate()
-    return output.decode().split('\n'), proc.returncode
 
 
 @API.register('dev_tokens')
