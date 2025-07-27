@@ -1,3 +1,4 @@
+from . import execute
 from ..data import DATABASE
 from root_dir import ROOT_PATH
 from shared.debugger import log
@@ -31,7 +32,7 @@ def _create_image():
         log("info", "Image built successfully.")
 
 
-def _set_authorized_key(name: str):
+def _init_container(name: str):
     container = _get_container(name)
     if not container:
         log("warn", f"Container '{name}' not found.")
@@ -45,17 +46,23 @@ def _set_authorized_key(name: str):
         return
 
     try:
-        exec_result = container.exec_run(
+        set_privs_result = container.exec_run(
+            cmd=["chown", "-R", "1000:1000", "/home/admin"],
+            user="root"
+        )
+        set_auth_result = container.exec_run(
             cmd=[
                 "bash", "-c",
                 f"echo '{pubkey.strip()}' >> /home/admin/.ssh/authorized_keys"
             ],
             user="admin"
         )
-        if exec_result.exit_code == 0:
-            log("info", f"Public key for '{name}' added to authorized_keys.")
+        if set_privs_result.exit_code == 0 and set_auth_result.exit_code == 0:
+            log("info", f"Privileges updates and public key for '{name}' added to authorized_keys.")
         else:
-            log("warn", f"Failed to set public key for '{name}': {exec_result.output.decode()}")
+            log("warn", f"Operation failed for '{name}': \n\n"
+                        f"--- Privilege Update ---\n\n{set_privs_result.output.decode()}\n\n"
+                        f"--- Set Authorization ---\n\n{set_auth_result.output.decode()}")
     except docker.errors.APIError as e:
         log("error", f"Docker exec failed for container '{name}': {str(e)}")
 
@@ -71,8 +78,10 @@ def start_container(name: str):
     if not SANDBOX_DIR.exists():
         log("info", f"Cloning branch '{BRANCH}' from GitHub...")
         Repo.clone_from(REPO_URL, SANDBOX_DIR, branch=BRANCH)
+        execute(['chown', '-R', 'admin:sudo', SANDBOX_DIR],
+                privileged=True)
 
-    log("info", f"Starting container '{name}'...").wait()
+    log("info", f"Starting container '{name}'...")
     client.containers.run(
         IMAGE_NAME,
         name=name,
@@ -82,11 +91,10 @@ def start_container(name: str):
             str(CACHE_DIR): {"bind": "/home/admin/.cache", "mode": "rw"},
             str(SANDBOX_DIR): {"bind": "/home/admin/growvolution.org", "mode": "rw"},
 
-        },
-        command=["chown", "-R", "1000:1000", "/home/admin"]
+        }
     )
     log("info", f"Container '{name}' started.")
-    _set_authorized_key(name)
+    _init_container(name)
 
 
 def stop_container(name: str):

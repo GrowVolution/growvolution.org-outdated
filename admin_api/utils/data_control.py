@@ -6,6 +6,7 @@ import sys
 _initialized = {'api': False, 'site': False}
 _cmd_template = [sys.executable, '-m', 'flask', 'db']
 _api_addition = ['-d', 'migrations/admin']
+_site_addition = ['-d', 'migrations/site']
 
 
 def _exec(cmd, **kwargs):
@@ -32,11 +33,11 @@ def _initialize(api: bool):
         return
 
     migrations = ROOT_PATH / "migrations"
-    migrations = migrations / "admin" if api else migrations
+    migrations = migrations / "admin" if api else migrations / "site"
     if not migrations.exists():
         log("info", "Migration folder not found, initializing...")
-        addition = _api_addition if api else []
-        env = {'FLASK_APP': f"db_{'admin' if api else 'main'}.py"}
+        addition = _api_addition if api else _site_addition
+        env = {'FLASK_APP': f"db_{'admin' if api else 'main'}.py", **({} if api else load_env())}
         output = _exec(
             [*_cmd_template, *addition, 'init'],
             env=env
@@ -70,13 +71,13 @@ def update_site_db(message: str = 'Auto update'):
 
     env = {'FLASK_APP': 'db_main.py', **load_env()}
     output = _exec(
-        [*_cmd_template, 'migrate', '-m', message],
+        [*_cmd_template, 'migrate', *_site_addition, '-m', message],
         env=env
     )
     log("info", f"Migration finished:\n{output}.")
 
     output = _exec(
-        [*_cmd_template, 'upgrade'],
+        [*_cmd_template, 'upgrade', *_site_addition],
         env=env
     )
     log("info", f"Upgrade finished:\n{output}.")

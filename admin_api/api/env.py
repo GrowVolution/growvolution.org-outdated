@@ -6,16 +6,16 @@ from shared.data import add_model, commit, delete_model
 @API.register('get_env')
 def get_env(_):
     env = DATABASE.resolve('env')
-    return { 'keys': [v.key for v in env.query.all()] }
+    return { 'vars': { v.id: v.key for v in env.query.order_by(env.key.asc()).all() } }
 
 
 @API.register('get_groups')
 def get_groups(data):
-    key = data.get('key')
+    vid = data.get('vid')
     var = None
-    if key:
+    if vid:
         env = DATABASE.resolve('env')
-        var = env.query.get(key)
+        var = env.query.get(vid)
 
     groups = {}
     group_db = DATABASE.resolve('env_group')
@@ -33,6 +33,7 @@ def set_env(data):
     key = data.get('key')
     value = data.get('value')
     group_names = set(data.get('groups') or [])
+    add = data.get('add', False)
 
     if not key or (value is None and not group_names):
         response['error'] = 'Missing data'
@@ -41,10 +42,10 @@ def set_env(data):
     env_model = DATABASE.resolve('env')
     group_model = DATABASE.resolve('env_group')
 
-    var = env_model.query.get(key)
+    var = env_model.query.get(key) if not add else None
 
     if value:
-        if var:
+        if var and not add:
             var.update_value(value)
         else:
             var = env_model(key, value)
@@ -58,9 +59,11 @@ def set_env(data):
             selected = group.name in group_names
             contains = var in group.vars
 
+            if selected:
+                group_names.remove(group.name)
+
             if selected and not contains:
                 group.add_var(var)
-                group_names.remove(group.name)
             elif not selected and contains:
                 group.pop_var(var)
 
@@ -83,7 +86,7 @@ def delete_env(data):
         return response
 
     env = DATABASE.resolve('env')
-    var = env.query.get(key)
+    var = env.query.filter_by(key=key).first()
     if var:
         delete_model(var)
 

@@ -94,6 +94,10 @@ def init_app(db_manage: bool = False):
     APP.config['SERVER_NAME'] = os.getenv("SERVER_NAME")
     APP.config['SECRET_KEY'] = os.getenv("SECRET_KEY")
 
+    from .utils.data_control import update_api_db, update_site_db
+    update_api_db()
+    update_site_db()
+
     LIMITER.init_app(APP)
     SOCKET.init_app(APP)
 
@@ -102,7 +106,10 @@ def init_app(db_manage: bool = False):
 
     with APP.app_context():
         env = DATABASE.resolve('env')
-        APP.config['NRS_PASSWORD'] = env.query.get('NRS_PASSWORD').value
+        nrs_pass = env.query.filter_by(key='NRS_PASSWORD').first()
+        if not nrs_pass:
+            raise RuntimeError('NRS_PASSWORD is not set')
+        APP.config['NRS_PASSWORD'] = nrs_pass.value
 
     from shared.mail_service import start
     start(APP, True)
@@ -114,11 +121,6 @@ def init_app(db_manage: bool = False):
     SYSTEM.initialize()
     clear = SYSTEM.resolve('clear_logs')
     clear()
-
-
-    from .utils.data_control import update_api_db, update_site_db
-    update_api_db()
-    update_site_db()
 
     from .utils.site_control import start_main, start_worker
     start_main()

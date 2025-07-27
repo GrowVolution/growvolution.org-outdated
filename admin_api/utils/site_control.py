@@ -5,7 +5,7 @@ import subprocess, signal, sys, os
 _main_proc = None
 _worker_proc = None
 _port = os.getenv("PORT")
-_port = _port + 1000 if _port else 5001
+_port = int(_port) + 1000 if _port else 5001
 
 def start_main():
     global _main_proc

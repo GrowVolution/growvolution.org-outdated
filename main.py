@@ -15,7 +15,7 @@ _port = os.getenv('PORT', 5000)
 def _port_in_use():
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
         s.settimeout(0.5)
-        result = s.connect_ex((_host, _port))
+        result = s.connect_ex((_host, int(_port)))
         return result == 0
 
 

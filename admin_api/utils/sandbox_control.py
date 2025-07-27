@@ -2,6 +2,7 @@ from . import execute
 from .watcher import Handler, start_watcher, stop_watcher
 from .dev_containers import SANDBOX_DIR
 from ..data import DATABASE
+from root_dir import ROOT_PATH
 from git import Repo, GitCommandError
 import os
 
@@ -50,9 +51,16 @@ def create_debug_process(name: str, env_group: str):
 
     env = _load_env()
     for var in group.vars:
-        env[var.name] = var.value
+        env[var.key] = var.value
 
     env['PORT'] = _get_port(name)
+
+    venv = SANDBOX_DIR / ".venv"
+    if not venv.exists():
+        execute(
+            ['ln', '-s', ROOT_PATH / '.venv', venv],
+            privileged=True
+        )
 
     execute(
         ['bash', SANDBOX_DIR / "run.sh"],
@@ -99,7 +107,8 @@ def observe():
 
 def sync():
     env = DATABASE.resolve('env')
-    token = env.query.get('GIT_AUTH_TOKEN')
+    token = env.query.filter_by(key='GIT_AUTH_TOKEN').first()
+    token = token.value if token and token.production else None
     if not token:
         raise RuntimeError("GIT_AUTH_TOKEN not in env")
 

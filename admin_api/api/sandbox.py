@@ -18,7 +18,7 @@ def status(data):
             continue
         notes_dict[note.user.name] = note.note
 
-    group_db = DATABASE.resolve('dev_group')
+    group_db = DATABASE.resolve('env_group')
     groups = []
     for group in group_db.query.all():
         if group.production:

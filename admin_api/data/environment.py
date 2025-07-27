@@ -5,7 +5,7 @@ from sqlalchemy.ext.hybrid import hybrid_property
 
 GROUPS = DB.Table(
     'env_groups',
-    DB.Column('key', DB.String(32), DB.ForeignKey('env.key'), primary_key=True),
+    DB.Column('var', DB.Integer, DB.ForeignKey('env.id'), primary_key=True),
     DB.Column('group', DB.String(32), DB.ForeignKey('env_group.name'), primary_key=True)
 )
 
@@ -14,7 +14,8 @@ GROUPS = DB.Table(
 class Environment(DB.Model):
     __tablename__ = 'env'
 
-    key = DB.Column(DB.String(32), nullable=False, unique=True, primary_key=True)
+    id = DB.Column(DB.Integer, primary_key=True, autoincrement=True)
+    key = DB.Column(DB.String(32), nullable=False)
     value_enc = DB.Column(DB.Text, nullable=False)
 
     def __init__(self, key: str, value: str):
