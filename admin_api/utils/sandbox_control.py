@@ -37,36 +37,32 @@ def _perform_push(origin, branch):
         origin.set_url(url)
 
 
-def _commit(repo):
-    repo.git.add(all=True)
-
-    timestamp = datetime.now().strftime("%d/%m/%Y")
-    repo.index.commit(f"{timestamp} - api auto-sync")
-
-
 @UTILS.register('fetch_sandbox')
 def fetch_directory():
     if not SANDBOX_DIR.exists():
         log("info", f"Cloning branch '{BRANCH}' from GitHub...")
         Repo.clone_from(REPO_URL, SANDBOX_DIR, branch=BRANCH)
 
-    execute = UTILS.resolve('exec')
-    output, code = execute(
-        ["git", "config", "--global", "--add", "safe.directory", str(SANDBOX_DIR)],
-        privileged=True,
-        return_as_result=True
-    )
+        execute = UTILS.resolve('exec')
+        output, code = execute(
+            ["git", "config", "--global", "--add", "safe.directory", str(SANDBOX_DIR)],
+            privileged=True,
+            return_as_result=True
+        )
 
-    if code != 0:
-        log("error", f"Error adding sandbox dir as safe.directory: {code}")
-        return
+        if code != 0:
+            log("error", f"Error adding sandbox dir as safe.directory: {code}")
+            return
 
 
 @UTILS.register('sync_sandbox')
 def sync(main: bool = False):
     repo = Repo(ROOT_PATH if main else SANDBOX_DIR)
     if repo.is_dirty(untracked_files=True):
-        _commit(repo)
+        repo.git.add(all=True)
+
+        timestamp = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+        repo.index.commit(f"{timestamp} - api auto-sync")
 
     branch = "main" if main else BRANCH
     _perform_push(repo.remotes.origin, branch)
@@ -75,13 +71,9 @@ def sync(main: bool = False):
 @UTILS.register('merge_branches')
 def merge_branches():
     main_repo = Repo(ROOT_PATH)
-    try:
-        if main_repo.is_dirty(untracked_files=True):
-            log('warn', "Uncommitted changes in 'main' - running auto-sync...")
-            sync(True)
-    except GitCommandError as e:
-        log('warn', f"Failed to check main repo: {e.stderr.strip()}")
-        _commit(main_repo)
+    if main_repo.is_dirty(untracked_files=True):
+        log('warn', "Uncommitted changes in 'main' - running auto-sync...")
+        sync(True)
 
     origin_main = main_repo.remotes.origin
     origin_main.fetch()
@@ -94,19 +86,15 @@ def merge_branches():
     main_repo.git.checkout('main')
 
     sandbox_repo = Repo(SANDBOX_DIR)
-    try:
-        if sandbox_repo.is_dirty(untracked_files=True):
-            log('warn', "Uncommitted changes in 'sandbox' - running auto-sync...")
-            sync()
-    except GitCommandError as e:
-        log('warn', f"Failed to check sandbox repo: {e.stderr.strip()}")
-        _commit(sandbox_repo)
+    if sandbox_repo.is_dirty(untracked_files=True):
+        log('warn', "Uncommitted changes in 'sandbox' - running auto-sync...")
+        sync()
 
     origin_sandbox = sandbox_repo.remotes.origin
     origin_sandbox.fetch()
 
     sandbox_repo.git.checkout('main')
-    sandbox_repo.git.merge('sandbox')
+    sandbox_repo.git.merge('sandbox', strategy_option='theirs')
     _perform_push(origin_sandbox, 'main')
     log("info", "Merged 'sandbox' into 'main' and pushed.")
 
