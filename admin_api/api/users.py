@@ -1,13 +1,15 @@
 from . import API
-from ..data.admins import AdminToken, Admin
-from ..utils import update_debug_routing
+from ..data import DATABASE
+from ..utils import UTILS
 from shared.data import delete_model, add_model
+
 from cryptography.hazmat.primitives import serialization
 from cryptography.exceptions import UnsupportedAlgorithm
 
 
 def _get_token(data):
-    return AdminToken.query.get(data['token'])
+    tokens = DATABASE.resolve('token')
+    return tokens.query.get(data['token'])
 
 
 @API.register('verify_token')
@@ -33,7 +35,8 @@ def create_user(data):
         response['error'] = 'Incomplete data'
         return response
 
-    if Admin.query.filter_by(name=username).first():
+    admins = DATABASE.resolve('admin')
+    if admins.query.filter_by(name=username).first():
         response['error'] = 'Username already exists'
         return response
 
@@ -43,11 +46,12 @@ def create_user(data):
         response['error'] = 'Invalid public key'
         return response
 
-    user = Admin(username, token_obj.email, pub_key_str.encode())
+    user = admins(username, token_obj.email, pub_key_str.encode())
     add_model(user)
     delete_model(token_obj)
 
-    update_debug_routing()
+    update_routing = UTILS.resolve('update_backends')
+    update_routing()
 
     response['success'] = True
     return response

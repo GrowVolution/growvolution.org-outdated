@@ -1,9 +1,14 @@
 from .. import APP
 from ..data import DATABASE
+from shared.packaging import Package
 from root_dir import ROOT_PATH
+
 from cryptography.fernet import Fernet
 from collections import deque
+from pathlib import Path
 import subprocess, os
+
+UTILS = Package(Path(__file__).parent)
 
 LOG_DIR = ROOT_PATH / 'logs'
 LOG_DIR.mkdir(parents=True, exist_ok=True)
@@ -20,24 +25,23 @@ _backend_template = """
     }}
 """
 
+unix_param = "?unix_socket=/var/run/mysqld/mysqld.sock"
 
+
+@UTILS.register('get_fernet')
 def get_fernet():
     key = APP.config['FERNET_KEY']
     return Fernet(key)
 
 
+@UTILS.register('encrypt')
 def fernet_encrypted(data: bytes) -> str:
     return get_fernet().encrypt(data).decode()
 
 
+@UTILS.register('decrypt')
 def fernet_decrypted(data: bytes) -> str:
     return get_fernet().decrypt(data).decode()
-
-
-def verify_system_id(identifier: str):
-    from ..data.environment import Environment
-    var = Environment.query.get('SYSTEM_ID')
-    return var and var.value == identifier
 
 
 def _exec_unprivileged(args: list[str], **kwargs):
@@ -56,12 +60,14 @@ def _exec_privileged(args: list[str], **kwargs):
     return subprocess.Popen(args, shell=False, **kwargs)
 
 
+@UTILS.register('exec')
 def execute(args: list[str], **kwargs):
     privileged = kwargs.pop('privileged', False)
     return_as_result = kwargs.pop('return_as_result', False)
     if return_as_result:
         kwargs['stdout'] = subprocess.PIPE
         kwargs['stderr'] = subprocess.STDOUT
+        kwargs['text'] = True
 
     exec_fn = _exec_privileged if privileged else _exec_unprivileged
     proc = exec_fn(args, **kwargs)
@@ -84,6 +90,7 @@ def _tail(file, lines=100):
         return list(deque(f, maxlen=lines))
 
 
+@UTILS.register('latest_log')
 def get_latest_log(name: str = None):
     folder = LOG_DIR / name if name else LOG_DIR
     file = _get_latest_file(folder)
@@ -97,9 +104,10 @@ def _site_db_uri():
 
     db_user = os.getenv("DB_USER").format(password=db_pw)
     db_base = os.getenv("DB_BASE_URI")
-    return db_base.format(user=db_user, database='SiteSandbox' if sandbox else 'GrowVolution')
+    return db_base.format(user=db_user, database=f'SiteSandbox{unix_param}' if sandbox else 'GrowVolution')
 
 
+@UTILS.register('load_env')
 def load_env(reload: bool = False):
     global _prod_env
     if _prod_env and not reload:
@@ -113,6 +121,7 @@ def load_env(reload: bool = False):
         return _prod_env
 
 
+@UTILS.register('update_backends')
 def update_debug_routing():
     with APP.app_context():
         admin_db = DATABASE.resolve('admin')

@@ -1,12 +1,17 @@
-from . import LOG_DIR, execute, load_env
+from . import SYSTEM
+from ..utils import LOG_DIR, UTILS
 from main import ENV_GUNICORN, timestamp
-import subprocess, signal, sys, os
+
+import subprocess, signal, sys
 
 _main_proc = None
 _worker_proc = None
-_port = os.getenv("PORT")
-_port = int(_port) + 1000 if _port else 5001
 
+execute = UTILS.resolve('exec')
+load_env = UTILS.resolve('load_env')
+
+
+@SYSTEM.register('start_site')
 def start_main():
     global _main_proc
     if _main_proc:
@@ -14,13 +19,14 @@ def start_main():
 
     logfile = LOG_DIR / f"{timestamp()}.log"
     _main_proc = execute(
-        ENV_GUNICORN + ['app:app', '-b', f'127.0.0.1:{_port}', '-k', 'eventlet'],
+        ENV_GUNICORN + ['app:app', '-b', f'127.0.0.1:5001', '-k', 'eventlet'],
         env=load_env(),
         stdout=open(logfile, 'w'),
         stderr=subprocess.STDOUT
     )
 
 
+@SYSTEM.register('stop_site')
 def stop_main():
     global _main_proc
     if _main_proc:
@@ -28,6 +34,7 @@ def stop_main():
         _main_proc = None
 
 
+@SYSTEM.register('restart_site')
 def restart_main(reload: bool = False):
     if _main_proc and reload:
         _main_proc.send_signal(signal.SIGHUP)
@@ -37,6 +44,7 @@ def restart_main(reload: bool = False):
     start_main()
 
 
+@SYSTEM.register('start_worker')
 def start_worker():
     global _worker_proc
     worker_logs = LOG_DIR / "worker"
@@ -50,6 +58,7 @@ def start_worker():
     )
 
 
+@SYSTEM.register('stop_worker')
 def stop_worker():
     global _worker_proc
     if _worker_proc:
@@ -57,14 +66,17 @@ def stop_worker():
         _worker_proc = None
 
 
+@SYSTEM.register('restart_worker')
 def restart_worker():
     stop_worker()
     start_worker()
 
 
+@UTILS.register('site_status')
 def site_online() -> bool:
     return _main_proc is not None and _main_proc.poll() is None
 
 
+@UTILS.register('worker_status')
 def worker_running() -> bool:
     return _worker_proc is not None and _worker_proc.poll() is None

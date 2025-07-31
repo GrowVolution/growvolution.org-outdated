@@ -1,7 +1,8 @@
 from .. import SOCKET
-from ..api import API, deny, emit
+from ..api import API, deny
 from shared.debugger import log
 from shared.utils import random_code
+
 from flask import request
 import sys, traceback
 

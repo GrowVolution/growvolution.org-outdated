@@ -1,5 +1,6 @@
 from . import DATABASE
 from shared.data import DB
+
 from cryptography.hazmat.primitives import serialization, hashes
 from cryptography.hazmat.primitives.asymmetric import padding
 from cryptography.exceptions import InvalidSignature

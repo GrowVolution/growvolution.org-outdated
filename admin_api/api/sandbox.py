@@ -1,8 +1,7 @@
 from . import API
 from .. import APP
 from ..data import DATABASE
-from ..utils.dev_containers import start_container, stop_container
-from ..utils.sandbox_control import create_debug_process, stop_debug_process
+from ..utils import  UTILS
 from shared.data import add_model, delete_model
 
 
@@ -56,8 +55,11 @@ def start_sandbox(data):
 
     if not APP.config['SANDBOX_MODE']:
         name = user.name
+        start_container = UTILS.resolve('start_dev_container')
+        start_backend = UTILS.resolve('start_dev_backend')
+
         start_container(name)
-        create_debug_process(name, group)
+        start_backend(name, group)
 
     response['success'] = True
     return response
@@ -71,7 +73,10 @@ def stop_sandbox(data):
 
     if not APP.config['SANDBOX_MODE']:
         name = user.name
+        stop_container = UTILS.resolve('stop_container')
+        stop_backend = UTILS.resolve('stop_dev_backend')
+
         stop_container(name)
-        stop_debug_process(name)
+        stop_backend(name)
 
     return { 'success': True }

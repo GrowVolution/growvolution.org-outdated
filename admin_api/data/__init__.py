@@ -1,4 +1,5 @@
 from shared.packaging import Package
+
 from pathlib import Path
 
 DATABASE = Package(

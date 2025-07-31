@@ -1,15 +1,16 @@
-from pathlib import Path
+from root_dir import ROOT_PATH
+
 from datetime import datetime
 import sys, subprocess, socket, os
 
 ENV_GUNICORN = [sys.executable, '-m', 'gunicorn']
 BASE_ENV = os.environ.copy()
 
-_log_dir = Path(__file__).parent / 'logs' / 'admin_api'
+_log_dir = ROOT_PATH / 'logs' / 'admin_api'
 _log_dir.mkdir(parents=True, exist_ok=True)
 
 _host = '127.0.0.1'
-_port = os.getenv('PORT', 5000)
+_port = 5000
 
 
 def _port_in_use():
@@ -26,7 +27,7 @@ def timestamp():
 def start_api():
     logfile = _log_dir / f"{timestamp()}.log"
     return subprocess.Popen(
-        ENV_GUNICORN + ['admin:app', '-b', f'{_host}:{_port}', '-k', 'eventlet'],
+        ENV_GUNICORN + ['--chdir', ROOT_PATH, 'admin:app', '-b', f'{_host}:{_port}', '-k', 'eventlet'],
         stdout=open(logfile, 'w'),
         stderr=subprocess.STDOUT
     )

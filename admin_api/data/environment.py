@@ -1,6 +1,7 @@
 from . import DATABASE
+from ..utils import UTILS
 from shared.data import DB
-from admin_api.utils import fernet_encrypted, fernet_decrypted
+
 from sqlalchemy.ext.hybrid import hybrid_property
 
 GROUPS = DB.Table(
@@ -24,10 +25,12 @@ class Environment(DB.Model):
 
     @hybrid_property
     def value(self):
-        return fernet_decrypted(self.value_enc.encode())
+        decrypted = UTILS.resolve('decrypt')
+        return decrypted(self.value_enc.encode())
 
     def update_value(self, new_value: str):
-        self.value_enc = fernet_encrypted(new_value.encode())
+        encrypted = UTILS.resolve('encrypt')
+        self.value_enc = encrypted(new_value.encode())
 
 
 @DATABASE.register('env_group')

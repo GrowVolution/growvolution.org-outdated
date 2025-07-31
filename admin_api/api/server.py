@@ -1,7 +1,7 @@
 from . import API
 from ..data import DATABASE
-from ..utils import get_latest_log
-from ..utils.site_control import site_online, worker_running
+from ..utils import UTILS
+
 import psutil
 
 _not_running = ['--- not running ---']
@@ -9,8 +9,8 @@ _not_running = ['--- not running ---']
 
 @API.register('server_status')
 def server_status(data):
-    site_status = site_online()
-    worker_status = worker_running()
+    site_status = UTILS.resolve('site_status')
+    worker_status = UTILS.resolve('worker_status')
 
     cpu = psutil.cpu_percent(interval=1)
     mem = psutil.virtual_memory()
@@ -21,6 +21,8 @@ def server_status(data):
     worker_log = []
 
     if data.get('logs', False):
+        get_latest_log = UTILS.resolve('latest_log')
+
         api_log = get_latest_log('admin_api') or api_log
         site_log = get_latest_log() or site_log if site_status else _not_running
         worker_log = get_latest_log('worker') or worker_log if worker_status else _not_running
@@ -28,8 +30,8 @@ def server_status(data):
 
     admins = DATABASE.resolve('admin')
     usage = {
-        'site_online': site_status,
-        'worker_running': worker_status,
+        'site_online': site_status(),
+        'worker_running': worker_status(),
 
         'cpu_percent': round(cpu, 2),
         'memory_used': round(mem.used / (1024**3), 2),

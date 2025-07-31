@@ -1,4 +1,5 @@
 from shared.debugger import start_session, log
+
 from flask import Flask
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
@@ -20,33 +21,36 @@ def _on_shutdown(signum, frame):
     log('info', f"Handling signal {signal.Signals(signum).name}, shutting down...")
 
     def do_shutdown():
-        from .utils.site_control import stop_main, stop_worker
+        from .system import SYSTEM
+        stop_main = SYSTEM.resolve('stop_site')
+        stop_worker = SYSTEM.resolve('stop_worker')
         stop_main()
         stop_worker()
 
         if not APP.config['SANDBOX_MODE']:
             from .data import DATABASE
             from .utils import execute
-            from .utils.dev_containers import stop_container
+            from .utils.containers import stop_container
             from shared.data import delete_model
 
             with APP.app_context():
                 note_db = DATABASE.resolve('dev_note')
                 for note in note_db.query.all():
-                    port = 6000 + note.uid
-                    execute(
-                        ["bash", "-c", f"lsof -ti :{port} | xargs --no-run-if-empty kill -15"],
-                        privileged=True
-                    ).wait()
-                    stop_container(note.user.name)
+                    name = note.user.name
+                    stop_container(name)
+                    stop_container(f"{name}s_backend")
+
                     delete_model(note)
 
         SOCKET.stop()
 
+        from .jobs import SCHEDULER
+        SCHEDULER.shutdown()
+
     eventlet.spawn_n(do_shutdown)
 
 
-def _production_init(db_manage):
+def _production_pre_init(db_manage):
     env_file = Path(__file__).parent / ".env"
     load_dotenv(env_file)
 
@@ -64,7 +68,7 @@ def _production_init(db_manage):
         APP.config['FERNET_KEY'] = file.read().strip()
 
 
-def _sandbox_init(db_manage):
+def _sandbox_pre_init(db_manage):
     APP.config['SQLALCHEMY_DATABASE_URI'] = os.getenv("DB_URI")
     if db_manage:
         return
@@ -75,9 +79,9 @@ def init_app(db_manage: bool = False):
     sandbox_mode = os.getenv("SANDBOX_MODE") == "TRUE"
 
     if sandbox_mode:
-        _sandbox_init(db_manage)
+        _sandbox_pre_init(db_manage)
     else:
-        _production_init(db_manage)
+        _production_pre_init(db_manage)
 
     from shared.data import DB, BCRYPT, MIGRATE
     from .data import DATABASE
@@ -94,9 +98,20 @@ def init_app(db_manage: bool = False):
     APP.config['SERVER_NAME'] = os.getenv("SERVER_NAME")
     APP.config['SECRET_KEY'] = os.getenv("SECRET_KEY")
 
-    from .utils.data_control import update_api_db, update_site_db
-    update_api_db()
-    update_site_db()
+    from .utils import UTILS
+    UTILS.initialize()
+
+    if not sandbox_mode:
+        update_routing = UTILS.resolve('update_backends')
+        fetch_sandbox = UTILS.resolve('fetch_sandbox')
+        create_image = UTILS.resolve('create_sandbox_image')
+
+        update_routing()
+        fetch_sandbox()
+        create_image()
+
+    update_database = UTILS.resolve('update_db')
+    update_database()
 
     LIMITER.init_app(APP)
     SOCKET.init_app(APP)
@@ -106,10 +121,12 @@ def init_app(db_manage: bool = False):
 
     with APP.app_context():
         env = DATABASE.resolve('env')
-        nrs_pass = env.query.filter_by(key='NRS_PASSWORD').first()
+        nrs_pass = (os.getenv("NRS_PASSWORD") if sandbox_mode
+                    else env.query.filter_by(key='NRS_PASSWORD').first())
         if not nrs_pass:
             raise RuntimeError('NRS_PASSWORD is not set')
-        APP.config['NRS_PASSWORD'] = nrs_pass.value
+
+        APP.config['NRS_PASSWORD'] = nrs_pass if sandbox_mode else nrs_pass.value
 
     from shared.mail_service import start
     start(APP, True)
@@ -119,15 +136,17 @@ def init_app(db_manage: bool = False):
 
     from .system import SYSTEM
     SYSTEM.initialize()
+
+    main = SYSTEM.resolve('start_site')
+    worker = SYSTEM.resolve('start_worker')
+    main()
+    #worker() // currently not necessary
+
     clear = SYSTEM.resolve('clear_logs')
     clear()
 
-    from .utils.site_control import start_main, start_worker
-    start_main()
-    #start_worker() // currently not needed
-
-    from .utils import processing, update_debug_routing
-    update_debug_routing()
+    from .jobs import SCHEDULER
+    SCHEDULER.start()
 
     signal.signal(signal.SIGINT, _on_shutdown)
     signal.signal(signal.SIGTERM, _on_shutdown)

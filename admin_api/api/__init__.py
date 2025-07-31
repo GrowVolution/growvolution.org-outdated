@@ -1,7 +1,8 @@
 from .. import SOCKET
-from ..data.admins import Admin
+from ..data import DATABASE
 from shared.packaging import Package
 from shared.debugger import log
+
 from pathlib import Path
 from datetime import datetime, UTC, timedelta
 from flask import request
@@ -35,7 +36,8 @@ def process(ident: dict, target: str, data: dict):
 
     match auth_type:
         case 'default':
-            user = Admin.query.filter_by(name=auth).first()
+            admins = DATABASE.resolve('admin')
+            user = admins.query.filter_by(name=auth).first()
             if not user:
                 return deny("Invalid authentication data.")
 

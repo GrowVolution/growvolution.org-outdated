@@ -1,10 +1,12 @@
 from shared.debugger import log
+
 from datetime import datetime
 from email.mime.text import MIMEText
 from email.utils import format_datetime
 from smtplib import SMTP, SMTPException
 from email.mime.multipart import MIMEMultipart
 from flask import Flask
+import os
 
 SMTP_URI = "smtp.strato.de"
 SMTP_PORT = 587
@@ -12,8 +14,8 @@ SMTP_PORT = 587
 def _smtp_service() -> SMTP:
     return SMTP(SMTP_URI, SMTP_PORT)
 
-SENDER = "noreply@growv-mail.org"
-REPLY_TO = "info@growv-mail.org"
+SENDER = os.getenv("NOREPLY_SERVICE", "noreply@growv-mail.org")
+REPLY_TO = os.getenv("NRS_REPLY_TO", "info@growv-mail.org")
 NAME = "Team GrowVolution"
 SERVICE = _smtp_service()
 PASSWORD = ""

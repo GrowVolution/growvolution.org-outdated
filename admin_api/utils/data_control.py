@@ -1,6 +1,7 @@
-from . import execute, load_env
+from . import UTILS
 from root_dir import ROOT_PATH
 from shared.debugger import log
+
 import sys
 
 _initialized = {'api': False, 'site': False}
@@ -8,8 +9,11 @@ _cmd_template = [sys.executable, '-m', 'flask', 'db']
 _api_addition = ['-d', 'migrations/admin']
 _site_addition = ['-d', 'migrations/site']
 
+load_env = UTILS.resolve('load_env')
+
 
 def _exec(cmd, **kwargs):
+    execute = UTILS.resolve('exec')
     output, code = execute(
         cmd,
         return_as_result=True,
@@ -47,7 +51,7 @@ def _initialize(api: bool):
     _initialized[flag] = True
 
 
-def update_api_db(message: str = 'Auto update'):
+def _update_api_db(message: str = 'Auto update'):
     log("info", f"Running api database update '{message}'.")
     _initialize(True)
 
@@ -65,7 +69,7 @@ def update_api_db(message: str = 'Auto update'):
     log("info", f"Upgrade finished:\n{output}.")
 
 
-def update_site_db(message: str = 'Auto update'):
+def _update_site_db(message: str = 'Auto update'):
     log("info", f"Running site database update '{message}'.")
     _initialize(False)
 
@@ -81,3 +85,9 @@ def update_site_db(message: str = 'Auto update'):
         env=env
     )
     log("info", f"Upgrade finished:\n{output}.")
+
+
+@UTILS.register('update_db')
+def update_database():
+    _update_api_db()
+    _update_site_db()

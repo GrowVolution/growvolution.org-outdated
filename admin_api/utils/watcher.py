@@ -1,29 +1,18 @@
-from .dev_containers import SANDBOX_DIR
+from . import UTILS
+from .containers import SANDBOX_DIR
+
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
 from threading import Timer
 
-"""
-env = os.environ.copy()
-env['INSTANCE'] = 'debug'
-env['SERVER_NAME'] = f"debug.{env['SERVER_NAME']}"
-DEBUG_SUBROUTING = ''
-env['DEBUG_SUBROUTING'] = DEBUG_SUBROUTING
 
-def set_debug_routing(subsite: str):
-    global DEBUG_SUBROUTING
-    DEBUG_SUBROUTING = subsite
-    env['DEBUG_SUBROUTING'] = subsite
-"""
-
-
+@UTILS.register('watcher')
 class Handler(FileSystemEventHandler):
-    reload_blocked = False
-    reload_scheduled = False
-
     def __init__(self, reload_fn: callable):
         super().__init__()
         self.reload_fn = reload_fn
+        self.reload_blocked = False
+        self.reload_scheduled = False
 
     def reload(self):
         self.reload_fn()
@@ -50,6 +39,7 @@ class Handler(FileSystemEventHandler):
         self.reload()
 
 
+@UTILS.register('watch_sandbox')
 def start_watcher(handler: Handler) -> Observer:
     observer = Observer()
     observer.schedule(handler, str(SANDBOX_DIR), recursive=True)
@@ -57,6 +47,7 @@ def start_watcher(handler: Handler) -> Observer:
     return observer
 
 
+@UTILS.register('unwatch_sandbox')
 def stop_watcher(observer: Observer):
     observer.stop()
     observer.join()

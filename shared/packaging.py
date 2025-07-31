@@ -5,7 +5,7 @@ import importlib
 
 
 class Package:
-    def __init__(self, path: Path, wrapper=lambda *a: lambda o: lambda *args: o(*args)):
+    def __init__(self, path: Path, wrapper=lambda *a: lambda o: lambda *args, **kwargs: o(*args, **kwargs)):
         self.storage = {}
         self.wrapper = wrapper
 
@@ -17,14 +17,24 @@ class Package:
         self.import_base = ".".join(path.relative_to(ROOT_PATH).parts)
         self.initialized = False
 
-    def initialize(self):
-        log('info', f"Initializing package {self.import_base}")
-        for file in self.path.glob("*.py"):
-            if file.name == "__init__.py":
+    def _init_dir(self, path):
+        import_base = self.import_base if path == self.path else ".".join(path.relative_to(ROOT_PATH).parts)
+
+        for obj in path.iterdir():
+            if obj.is_dir():
+                self._init_dir(obj)
                 continue
-            module_name = f"{self.import_base}.{file.stem}"
+
+            if path == self.path and obj.name == "__init__.py" or not obj.name.endswith('.py'):
+                continue
+
+            module_name = f"{import_base}.{obj.stem}"
             log('info', f"Loading module {module_name}")
             importlib.import_module(module_name)
+
+    def initialize(self):
+        log('info', f"Initializing package {self.import_base}")
+        self._init_dir(self.path)
 
     def register(self, key: str, *args) -> callable:
         def decorator(obj):

@@ -1,10 +1,14 @@
 from . import API
-from ..utils import load_env, execute
+from ..utils import UTILS
 from shared.debugger import log
+
 import sys
 
 
 def _exec(*args):
+    execute = UTILS.resolve('exec')
+    load_env = UTILS.resolve('load_env')
+
     return execute(
         [sys.executable, 'dev_tokens.py', *args],
         env=load_env(),
@@ -42,11 +46,10 @@ def manage_tokens(data):
 
     if code != 0:
         response['error'] = f"Process exited with code: {code}"
-        traceback = '\n'.join(output)
         log('error', f"Error occurred while dev_token action: {cmd}\n"
-                     f"{traceback}")
+                     f"{output}")
         return response
 
     response['success'] = True
-    response['output'] = output
+    response['output'] = output.split('\n')
     return response

@@ -1,3 +1,4 @@
+from . import UTILS
 from shared.mail_service import send
 
 BASE_HTML = """<DOCTYPE html>
@@ -13,6 +14,7 @@ BASE_HTML = """<DOCTYPE html>
 """
 
 
+@UTILS.register('token_mail')
 def token_mail(receiver: str, name: str, token: str):
     content = f"""
         Hey {name}!<br><br>
