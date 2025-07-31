@@ -76,7 +76,7 @@ def _sandbox_pre_init(db_manage):
 
 
 def init_app(db_manage: bool = False):
-    sandbox_mode = os.getenv("SANDBOX_MODE") == "TRUE"
+    sandbox_mode = os.getenv("SANDBOX_MODE", '').lower() == "true"
 
     if sandbox_mode:
         _sandbox_pre_init(db_manage)

@@ -2,7 +2,7 @@
 set -e
 
 apt-get update
-apt-get install -y openssh-server sudo git curl
+apt-get install -y openssh-server redis-server sudo git curl
 
 useradd -ms /bin/bash admin
 echo 'admin ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers

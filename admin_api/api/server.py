@@ -1,6 +1,7 @@
 from . import API
 from ..data import DATABASE
 from ..utils import UTILS
+from ..system import SYSTEM
 
 import psutil
 
@@ -9,8 +10,8 @@ _not_running = ['--- not running ---']
 
 @API.register('server_status')
 def server_status(data):
-    site_status = UTILS.resolve('site_status')
-    worker_status = UTILS.resolve('worker_status')
+    site_status = UTILS.resolve('site_status')()
+    worker_status = UTILS.resolve('worker_status')()
 
     cpu = psutil.cpu_percent(interval=1)
     mem = psutil.virtual_memory()
@@ -30,8 +31,8 @@ def server_status(data):
 
     admins = DATABASE.resolve('admin')
     usage = {
-        'site_online': site_status(),
-        'worker_running': worker_status(),
+        'site_online': site_status,
+        'worker_running': worker_status,
 
         'cpu_percent': round(cpu, 2),
         'memory_used': round(mem.used / (1024**3), 2),
@@ -49,3 +50,45 @@ def server_status(data):
     }
 
     return usage
+
+
+@API.register('server_upgrade')
+def upgrade(_):
+    execute = UTILS.resolve('exec')
+    execute(
+        ["bash", "-c", "apt update && apt full-upgrade"],
+        privileged=True
+    ).wait()
+
+    return { 'success': True }
+
+
+@API.register('sandbox_sync')
+def sandbox_sync(_):
+    response = { 'success': False }
+
+    try:
+        sync = UTILS.resolve('sync_sandbox')
+        sync()
+    except RuntimeError as e:
+        response['error'] = f"Sync failed: {e}"
+        return response
+
+    response['success'] = True
+    return response
+
+
+# Just for now!!!
+@API.register('production_update')
+def update_self(_):
+    response = { 'success': False }
+
+    try:
+        update = SYSTEM.resolve('deploy_update')
+        update()
+    except RuntimeError as e:
+        response['error'] = f"Sync failed: {e}"
+        return response
+
+    response['success'] = True
+    return response
