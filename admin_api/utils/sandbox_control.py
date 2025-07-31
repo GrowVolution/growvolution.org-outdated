@@ -50,6 +50,9 @@ def fetch_directory():
         log("info", f"Cloning branch '{BRANCH}' from GitHub...")
         Repo.clone_from(REPO_URL, SANDBOX_DIR, branch=BRANCH)
 
+    execute = UTILS.resolve('exec')
+    execute(["git", "config", "--global", "--add", "safe.directory", str(SANDBOX_DIR)])
+
 
 @UTILS.register('sync_sandbox')
 def sync(main: bool = False):
