@@ -37,6 +37,13 @@ def _perform_push(origin, branch):
         origin.set_url(url)
 
 
+def _commit(repo):
+    repo.git.add(all=True)
+
+    timestamp = datetime.now().strftime("%d/%m/%Y")
+    repo.index.commit(f"{timestamp} - api auto-sync")
+
+
 @UTILS.register('fetch_sandbox')
 def fetch_directory():
     if not SANDBOX_DIR.exists():
@@ -48,10 +55,7 @@ def fetch_directory():
 def sync(main: bool = False):
     repo = Repo(ROOT_PATH if main else SANDBOX_DIR)
     if repo.is_dirty(untracked_files=True):
-        repo.git.add(all=True)
-
-        timestamp = datetime.now().strftime("%d/%m/%Y")
-        repo.index.commit(f"{timestamp} - api auto-sync")
+        _commit(repo)
 
     branch = "main" if main else BRANCH
     _perform_push(repo.remotes.origin, branch)
@@ -60,9 +64,13 @@ def sync(main: bool = False):
 @UTILS.register('merge_branches')
 def merge_branches():
     main_repo = Repo(ROOT_PATH)
-    if main_repo.is_dirty(untracked_files=True):
-        log('warn', "Uncommitted changes in 'main' - running auto-sync...")
-        sync(True)
+    try:
+        if main_repo.is_dirty(untracked_files=True):
+            log('warn', "Uncommitted changes in 'main' - running auto-sync...")
+            sync(True)
+    except GitCommandError as e:
+        log('warn', f"Failed to check main repo: {e.stderr.strip()}")
+        _commit(main_repo)
 
     origin_main = main_repo.remotes.origin
     origin_main.fetch()
@@ -75,9 +83,13 @@ def merge_branches():
     main_repo.git.checkout('main')
 
     sandbox_repo = Repo(SANDBOX_DIR)
-    if sandbox_repo.is_dirty(untracked_files=True):
-        log('warn', "Uncommitted changes in 'sandbox' - running auto-sync...")
-        sync()
+    try:
+        if sandbox_repo.is_dirty(untracked_files=True):
+            log('warn', "Uncommitted changes in 'sandbox' - running auto-sync...")
+            sync()
+    except GitCommandError as e:
+        log('warn', f"Failed to check sandbox repo: {e.stderr.strip()}")
+        _commit(sandbox_repo)
 
     origin_sandbox = sandbox_repo.remotes.origin
     origin_sandbox.fetch()
