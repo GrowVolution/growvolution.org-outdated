@@ -61,7 +61,7 @@ if not APP.config['SANDBOX_MODE']:
             return
 
         log("info", f"Stopping container '{name}'...")
-        container.kill(signal="SIGTERM")
+        container.stop(timeout=60)
 
         log("info", "Committing container changes to image...")
         container.commit(repository=IMAGE_NAME)
