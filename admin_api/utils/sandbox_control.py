@@ -51,7 +51,15 @@ def fetch_directory():
         Repo.clone_from(REPO_URL, SANDBOX_DIR, branch=BRANCH)
 
     execute = UTILS.resolve('exec')
-    execute(["git", "config", "--global", "--add", "safe.directory", str(SANDBOX_DIR)])
+    output, code = execute(
+        ["git", "config", "--global", "--add", "safe.directory", str(SANDBOX_DIR)],
+        privileged=True,
+        return_as_result=True
+    )
+
+    if code != 0:
+        log("error", f"Error adding sandbox dir as safe.directory: {code}")
+        return
 
 
 @UTILS.register('sync_sandbox')
