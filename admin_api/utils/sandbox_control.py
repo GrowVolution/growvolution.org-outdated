@@ -58,22 +58,34 @@ def fetch_directory():
 @UTILS.register('sync_sandbox')
 def sync(main: bool = False):
     repo = Repo(ROOT_PATH if main else SANDBOX_DIR)
+    branch = "main" if main else BRANCH
+    
+    origin = repo.remotes.origin
+    origin.fetch()
+
+    try:
+        repo.git.checkout(branch)
+    except GitCommandError:
+        log("error", f"Branch '{branch}' not found.")
+        return
+
+    try:
+        repo.git.pull("origin", branch)
+    except GitCommandError as e:
+        log("warn", f"Pull conflict or error: {e.stderr.strip()}")
+
     if repo.is_dirty(untracked_files=True):
         repo.git.add(all=True)
-
         timestamp = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
         repo.index.commit(f"{timestamp} - api auto-sync")
 
-    branch = "main" if main else BRANCH
-    _perform_push(repo.remotes.origin, branch)
+    _perform_push(origin, branch)
 
 
 @UTILS.register('merge_branches')
 def merge_branches():
+    sync(True)
     main_repo = Repo(ROOT_PATH)
-    if main_repo.is_dirty(untracked_files=True):
-        log('warn', "Uncommitted changes in 'main' - running auto-sync...")
-        sync(True)
 
     origin_main = main_repo.remotes.origin
     origin_main.fetch()
@@ -85,10 +97,8 @@ def merge_branches():
 
     main_repo.git.checkout('main')
 
+    sync()
     sandbox_repo = Repo(SANDBOX_DIR)
-    if sandbox_repo.is_dirty(untracked_files=True):
-        log('warn', "Uncommitted changes in 'sandbox' - running auto-sync...")
-        sync()
 
     origin_sandbox = sandbox_repo.remotes.origin
     origin_sandbox.fetch()

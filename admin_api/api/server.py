@@ -52,6 +52,9 @@ def server_status(data):
     return usage
 
 
+
+
+
 @API.register('server_upgrade')
 def upgrade(_):
     execute = UTILS.resolve('exec')
