@@ -1,111 +1,105 @@
 from . import UTILS
-from .containers import SANDBOX_DIR
+from .containers import SANDBOX_DIR, DOCKER_PATH
 from .. import APP
 from ..data import DATABASE
 from shared.debugger import log
 from root_dir import ROOT_PATH
 
-from git import Repo, GitCommandError
 from datetime import datetime
 
 REPO_URL = "https://github.com/GrowVolution/growvolution.org"
 BRANCH = "sandbox"
 
 
-def _inject_token(origin):
+def _get_token_url():
     env = DATABASE.resolve('env')
     with APP.app_context():
         token = env.query.filter_by(key='GIT_AUTH_TOKEN').first()
         token = token.value if token else None
         if not token:
             raise RuntimeError("GIT_AUTH_TOKEN not in env")
-
-    url = origin.config_reader.get("url")
-    token_url = url.replace("https://", f"https://oauth2:{token}@")
-    origin.set_url(token_url)
-    return origin, url
+    return REPO_URL.replace("https://", f"https://oauth2:{token}@")
 
 
-def _perform_push(origin, branch):
-    origin, url = _inject_token(origin)
-    try:
+def _git(args, cwd):
+    execute = UTILS.resolve('exec')
+    output, code = execute(
+        ["git"] + args,
+        cwd=str(cwd),
+        return_as_result=True
+    )
+    if code != 0:
+        raise RuntimeError(f"Git error: {output}")
+    return output
 
-        origin.push(refspec=f"{branch}:{branch}")
-    except GitCommandError as e:
-        raise RuntimeError(f"Push failed: {e.stderr.strip()}")
-    finally:
-        origin.set_url(url)
+
+def _commit_if_dirty(cwd):
+    status = _git(["status", "--porcelain"], cwd)
+    if status:
+        _git(["add", "-A"], cwd)
+        timestamp = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+        _git(["commit", "-m", f"{timestamp} - api auto-sync"], cwd)
 
 
 @UTILS.register('fetch_sandbox')
 def fetch_directory():
     if not SANDBOX_DIR.exists():
         log("info", f"Cloning branch '{BRANCH}' from GitHub...")
-        Repo.clone_from(REPO_URL, SANDBOX_DIR, branch=BRANCH)
-
-        execute = UTILS.resolve('exec')
-        output, code = execute(
-            ["git", "config", "--global", "--add", "safe.directory", str(SANDBOX_DIR)],
-            privileged=True,
-            return_as_result=True
-        )
-
-        if code != 0:
-            log("error", f"Error adding sandbox dir as safe.directory: {code}")
-            return
+        repo_url = _get_token_url()
+        _git(["clone", "-b", BRANCH, repo_url, str(SANDBOX_DIR)], cwd=DOCKER_PATH)
 
 
 @UTILS.register('sync_sandbox')
 def sync(main: bool = False):
-    repo = Repo(ROOT_PATH if main else SANDBOX_DIR)
+    cwd = ROOT_PATH if main else SANDBOX_DIR
     branch = "main" if main else BRANCH
-    
-    origin = repo.remotes.origin
-    origin.fetch()
 
     try:
-        repo.git.checkout(branch)
-    except GitCommandError:
+        _git(["checkout", branch], cwd)
+    except RuntimeError:
         log("error", f"Branch '{branch}' not found.")
         return
 
     try:
-        repo.git.pull("origin", branch)
-    except GitCommandError as e:
-        log("warn", f"Pull conflict or error: {e.stderr.strip()}")
+        _git(["pull", _get_token_url(), branch], cwd)
+    except RuntimeError as e:
+        log("warn", str(e))
 
-    if repo.is_dirty(untracked_files=True):
-        repo.git.add(all=True)
-        timestamp = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
-        repo.index.commit(f"{timestamp} - api auto-sync")
+    try:
+        _commit_if_dirty(cwd)
+    except RuntimeError as e:
+        log("warn", str(e))
 
-    _perform_push(origin, branch)
+    try:
+        _git(["push", _get_token_url(), branch], cwd)
+    except RuntimeError as e:
+        log("error", str(e))
 
 
 @UTILS.register('merge_branches')
 def merge_branches():
     sync(True)
-    main_repo = Repo(ROOT_PATH)
+    main_repo = ROOT_PATH
 
-    origin_main = main_repo.remotes.origin
-    origin_main.fetch()
+    try:
+        _git(["checkout", BRANCH], main_repo)
+        _git(["merge", "main"], main_repo)
+        _git(["push", _get_token_url(), BRANCH], main_repo)
+        log("info", "Merged 'main' into 'sandbox' and pushed.")
 
-    main_repo.git.checkout(BRANCH)
-    main_repo.git.merge('main')
-    _perform_push(origin_main, BRANCH)
-    log("info", "Merged 'main' into 'sandbox' and pushed.")
-
-    main_repo.git.checkout('main')
+        _git(["checkout", "main"], main_repo)
+    except RuntimeError as e:
+        log("error", str(e))
 
     sync()
-    sandbox_repo = Repo(SANDBOX_DIR)
+    sandbox_repo = SANDBOX_DIR
 
-    origin_sandbox = sandbox_repo.remotes.origin
-    origin_sandbox.fetch()
+    try:
+        _git(["checkout", "main"], sandbox_repo)
+        _git(["merge", BRANCH, "-X", "theirs"], sandbox_repo)
+        _git(["push", _get_token_url(), "main"], sandbox_repo)
+        log("info", "Merged 'sandbox' into 'main' and pushed.")
 
-    sandbox_repo.git.checkout('main')
-    sandbox_repo.git.merge('sandbox', strategy_option='theirs')
-    _perform_push(origin_sandbox, 'main')
-    log("info", "Merged 'sandbox' into 'main' and pushed.")
-
-    sandbox_repo.git.checkout(BRANCH)
+        _git(["checkout", BRANCH], sandbox_repo)
+    except RuntimeError as e:
+        log("error", str(e))
